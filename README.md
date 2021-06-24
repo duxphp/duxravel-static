@@ -1,0 +1,1 @@
+# duxravel-static
