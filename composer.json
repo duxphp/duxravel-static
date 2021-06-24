@@ -13,10 +13,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\": "src/"
+            "Duxravel\\UI\\Providers\\": "providers/"
         }
     },
     "extra": {
+        "laravel": {
+            "providers": [
+                "Duxravel\\UI\\Providers\\UIServiceProvider"
+            ]
+        },
         "duxravel": {
             "type": "static",
             "name": "system"
