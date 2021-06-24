@@ -1,0 +1,37 @@
+.notify {
+    @apply fixed z-50 top-5;
+    & .notify-item {
+        @apply flex items-center space-x-3 shadow-md rounded p-4  mb-4;
+    }
+}
+
+.notify-center {
+    @apply w-80 -ml-40;
+    left: 50%;
+}
+
+.notify-left {
+    @apply right-5 top-5;
+}
+
+.notify-right {
+    @apply left-5 top-5;
+}
+
+.notify-info {
+    & .notify-item {
+        @apply bg-blue-900  text-white;
+    }
+}
+
+.notify-success {
+    & .notify-item {
+        @apply bg-green-900  text-white;
+    }
+}
+
+.notify-error {
+    & .notify-item {
+        @apply bg-red-900  text-white;
+    }
+}

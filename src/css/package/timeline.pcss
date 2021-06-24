@@ -1,0 +1,35 @@
+.timeline {
+    & li {
+        @apply flex items-start space-x-2 relative pb-6;
+        &:before {
+            content: '';
+            @apply w-3 h-3 bg-gray-400 rounded-full ring ring-gray-200 mt-1;
+            z-index: 1;
+        }
+        & .timeline-time {
+            @apply text-gray-500;
+        }
+        & .timeline-title {
+
+        }
+        &:after {
+            content: '';
+            z-index: 0;
+            @apply w-px absolute top-6 bottom-1 left-1.5 bg-gray-300;
+        }
+        &:last-child {
+            @apply pb-0;
+            &:after {
+                @apply hidden;
+            }
+        }
+        & .timeline-item {
+            @apply flex flex-col space-y-1 pl-6;
+        }
+        &:first-child {
+            &:before {
+                @apply bg-blue-900 ring-blue-300;
+            }
+        }
+    }
+}

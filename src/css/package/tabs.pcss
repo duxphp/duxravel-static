@@ -1,0 +1,20 @@
+.tabs {
+    @apply bg-white rounded shadow ;
+    & .tabs-nav {
+        @apply bg-gray-300  rounded-t flex flex-nowrap overflow-x-auto h-12;
+        & li {
+            @apply flex-shrink-0;
+            & .tabs-item {
+                @apply block text-gray-600 border-white px-4 justify-center flex items-center h-full;
+            }
+            &:first-child {
+                & .tabs-item {
+                    @apply rounded-tl;
+                }
+            }
+        }
+        & .tabs-active {
+            @apply text-blue-900 bg-white;
+        }
+    }
+}

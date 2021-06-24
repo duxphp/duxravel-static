@@ -1,0 +1,34 @@
+.pagination {
+    @apply flex flex-col gap-2 lg:flex-row lg:gap-0 rounded;
+    & li, & .page-item {
+        @apply border border-gray-300 lg:border-r-0 rounded lg:rounded-none bg-white block text-center hidden lg:block;
+        & a, & .page-link {
+            @apply py-1.5 px-4 block hover:text-blue-900;
+        }
+        &:last-child {
+            @apply lg:border-r lg:rounded-r;
+        }
+        &:first-child {
+            @apply lg:rounded-l;
+        }
+        &.active {
+            @apply z-0 ring-2 ring-offset-1 ring-blue-900 rounded border-white text-blue-900;
+        }
+        &.disabled {
+            @apply text-gray-500 hover:text-gray-500;
+        }
+
+        &.prev {
+            @apply block;
+        }
+        &.next {
+            @apply block;
+        }
+        &.first {
+            @apply hidden lg:block;
+        }
+        &.last {
+            @apply hidden lg:block;
+        }
+    }
+}

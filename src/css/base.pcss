@@ -1,0 +1,155 @@
+@import "package/btn.pcss";
+@import "package/select2.pcss";
+@import "package/pages.pcss";
+@import "package/notify.pcss";
+@import "package/tabs.pcss";
+@import "package/step.pcss";
+@import "package/timeline.pcss";
+@import "package/map.pcss";
+@import "package/table.pcss";
+@import "package/other.pcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none !important;
+}
+.form-textarea {
+    @apply border-gray-400 px-3 py-2 rounded text-sm shadow-sm w-full block break-normal;
+}
+
+.form-input {
+    @apply border-gray-400 px-3 py-2 rounded text-sm shadow-sm w-full block break-normal;
+    &[type="color"] {
+        @apply h-10;
+    }
+}
+
+.form-select {
+    @apply border-gray-400 px-3 py-2 rounded text-sm shadow-sm w-full block break-normal;
+}
+.form-input-group {
+    @apply shadow-sm flex;
+    & .form-input {
+        @apply shadow-none z-0;
+    }
+}
+.form-input-group-after {
+    & .form-input {
+        @apply rounded-r-none;
+    }
+}
+
+.form-input-label-before, .form-input-label-after {
+    @apply inline-flex items-center px-3 border border-gray-400 bg-gray-50 text-gray-700 text-sm whitespace-nowrap;
+}
+
+.form-input-label-after {
+    @apply rounded-r  border-l-0;
+}
+
+.form-input-group-before {
+    & .form-input {
+        @apply rounded-l-none;
+    }
+}
+
+.form-input-label-before {
+    @apply rounded-l  border-r-0;
+}
+
+
+.form-input-suffix {
+    @apply relative;
+    & .form-input-icon {
+        @apply z-10 absolute inset-y-0 left-0 flex items-center text-gray-500 px-2 w-8;
+        & ~ .form-input {
+            @apply pl-8;
+        }
+    }
+    & .form-input {
+        @apply pr-8;
+        &  ~ .form-input-icon {
+            @apply left-auto right-0;
+        }
+    }
+}
+
+.form-radiobox {
+    @apply flex gap-2 flex-col lg:flex-row;
+    & .form-radiobox-item {
+        @apply block;
+        & .form-radiobox-radio {
+            @apply hidden;
+            &:checked + .form-radiobox-label {
+                @apply border-blue-900 bg-blue-200 bg-opacity-50;
+                & .form-radio,
+                & .form-checkbox {
+                    @apply bg-blue-900;
+                    border-color: transparent;
+                    background-size: 100% 100%;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+                & .form-checkbox {
+                    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+                }
+                & .form-radio {
+                    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+                }
+                & .form-radiobox-title {
+                    @apply text-blue-900;
+                }
+            }
+        }
+        & .form-radiobox-label {
+            @apply flex items-center border border-gray-400 rounded px-4 py-3;
+            & .form-radiobox-title {
+                @apply font-bold;
+            }
+        }
+    }
+}
+
+.form-color {
+    @apply flex items-center space-x-2;
+    & input[type='radio'] {
+        @apply hidden;
+        &:checked + .form-color-show {
+            @apply ring ring-offset-2;
+        }
+    }
+    & .form-color-show {
+        @apply  block w-6 h-6 rounded-full border border-black border-opacity-20;
+    }
+}
+
+.form-toggle {
+    @apply relative inline-block w-10 align-middle select-none h-6 flex items-center;
+    & .form-toggle-label {
+        z-index: 0;
+        @apply absolute w-10 block overflow-hidden h-6 rounded-full bg-white border border-gray-300  duration-300 ease-in-out;
+    }
+    & .form-toggle-input {
+        z-index: 1;
+        @apply absolute outline-none focus:outline-none left-1 block w-4 h-4  duration-300 ease-in-out rounded-full bg-gray-300 appearance-none  cursor-pointer ;
+        &:checked {
+            @apply  bg-white left-5;
+            & ~ .form-toggle-label {
+                @apply bg-blue-900;
+            }
+        }
+    }
+}
+.form-label {
+    @apply relative;
+    &.required {
+        &:before {
+            content: '*';
+            @apply text-red-900 inline-block absolute -left-4 top-0.5;
+        }
+    }
+}
+

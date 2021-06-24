@@ -1,0 +1,40 @@
+.app-step-num {
+    counter-reset: step;
+    @apply flex relative;
+
+    & li {
+        @apply text-gray-900 relative text-center text-sm flex-grow;
+        & p {
+            @apply mt-1 text-gray-500;
+        }
+        &:before {
+            content: counter(step);
+            counter-increment: step;
+            @apply z-10 mx-auto mb-4 text-gray-500 text-sm rounded-full border-2 border-gray-500 bg-white flex items-center justify-center w-8 h-8 relative;
+        }
+
+        &:after {
+            content: '';
+            left: 50%;
+            width: calc(100% - theme('width.8'));
+            @apply h-px border-b-2 border-dashed border-gray-300 absolute right-0 top-4 z-0;
+        }
+
+        &.active:after {
+            @apply border-blue-900;
+        }
+
+        &.active:before {
+            @apply bg-blue-900 text-white border-blue-900;
+        }
+
+        &:last-child {
+            &:after {
+                @apply hidden;
+            }
+        }
+
+    }
+
+
+}

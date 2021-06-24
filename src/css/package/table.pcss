@@ -1,0 +1,24 @@
+
+.table-box {
+    @apply table-auto min-w-full divide-y divide-gray-300 text-left;
+    & th {
+        @apply px-6 py-3 font-normal text-gray-600  whitespace-nowrap bg-gray-200;
+    }
+    & td {
+        @apply  px-6 py-4;
+    }
+    & tbody {
+        @apply divide-y divide-gray-300;
+    }
+}
+
+.table-nesting {
+    & > tbody {
+        @apply divide-none;
+        & > tr {
+            & > td {
+                @apply px-0 pb-0;
+            }
+        }
+    }
+}

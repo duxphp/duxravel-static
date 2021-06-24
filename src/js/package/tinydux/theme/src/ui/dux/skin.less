@@ -1,0 +1,246 @@
+/**
+ * Copyright (c) Tiny Technologies, Inc. All rights reserved.
+ * Licensed under the LGPL or a commercial license.
+ * For LGPL see License.txt in the project root for license information.
+ * For commercial licenses see https://www.tiny.cloud/
+ */
+
+@import 'src/less/theme/theme';
+
+//
+// Place your variables here
+//
+
+@background-color: #fff;
+@base-value: 14px;
+@color-black: #131523;
+@color-tint: #1E5EFF;
+@color-white: #fff;
+@color-error: #F0142F;
+@color-success: #06A561;
+
+@border-color: #E6E9F4;
+@text-color: contrast(@background-color, @color-black, @color-white);
+@text-color-muted: #5A607F;
+
+@panel-border-radius: 8px;
+@control-border-radius: 3px;
+
+@line-height-base: 1.3;
+@font-weight-normal: normal;
+@font-weight-bold: bold;
+@font-size-base: @base-value;
+@font-size-xs: 12px;
+@font-size-sm: @font-size-base;
+@font-size-md: 16px;
+@font-size-lg: 18px;
+
+@pad-xs: @base-value / 4;
+@pad-sm: @base-value / 2;
+@pad-md: @base-value;
+@pad-lg: @base-value * 1.5;
+@pad-xl: @base-value * 2;
+
+@z-index-loading: 40;
+@z-index-dialogs: 42;
+@z-index-menu: 44;
+@z-index-fullscreen: 46;
+@z-index-throbber: 48;
+@z-index-sink: 50;
+
+@button-padding-y: @pad-sm;
+@button-font-weight: normal;
+
+@dialog-footer-padding: @pad-md;
+
+@button-hover-background-color: #336DFF;
+@button-focus-background-color: #336DFF;
+@button-active-background-color: #336DFF;
+@button-secondary-background-color: #fff;
+@button-secondary-hover-background-color: #F5F6FA;
+@button-secondary-focus-background-color: #F5F6FA;
+@button-secondary-active-background-color: #F5F6FA;
+@button-secondary-border-color: @border-color;
+@button-secondary-hover-border-color: @border-color;
+@button-secondary-focus-border-color: @border-color;
+@button-secondary-active-border-color: @border-color;
+@button-naked-disabled-background-color: transparent;
+@button-naked-disabled-border-color: transparent;
+@button-naked-disabled-box-shadow: none;
+@button-naked-hover-background-color: transparent;
+@button-naked-hover-border-color: transparent;
+@button-naked-hover-box-shadow: none;
+@button-naked-active-background-color: transparent;
+@button-naked-active-border-color: transparent;
+@button-naked-active-box-shadow: none;
+@button-naked-focus-background-color: transparent;
+@button-naked-focus-border-color: transparent;
+@button-naked-focus-box-shadow: none;
+
+.tox {
+  .tox-button {
+    &:active:not(:disabled),
+    &:focus:not(:disabled) {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px @color-tint;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+  }
+
+  .tox-button--secondary {
+    &:active:not(:disabled),
+    &:focus:not(:disabled) {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px @color-black;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+  }
+
+  .tox-button--naked {
+    outline: none;
+
+    &:active,
+    &:focus,
+    &:hover {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+
+  .tox-textfield {
+    &:active:not(:disabled),
+    &:focus:not(:disabled) {
+      box-shadow: 0 0 0 1px @color-tint;
+    }
+  }
+
+  .tox-listbox {
+    &:active:not(:disabled),
+    &:focus:not(:disabled) {
+      box-shadow: 0 0 0 1px @color-tint;
+    }
+  }
+
+  .tox-collection--list {
+    .tox-collection__item--active {
+      background-color: #f5f6fa;
+    }
+  }
+
+  .tox-label,
+  .tox-label-label {
+    padding: 0;
+    padding-bottom: @pad-sm;
+  }
+
+  .tox-dialog__body-nav {
+    align-items: normal;
+
+    .tox-dialog__body-nav-item--active {
+      background-color: #ecf2ff;
+      border: none;
+      border-radius: 3px;
+      color: @color-tint;
+    }
+  }
+
+  .tox-dialog__body-nav-item {
+    border: none;
+    padding: @pad-sm @pad-md;
+  }
+
+  .tox-statusbar {
+    padding: @pad-sm;
+  }
+
+  .tox-notification {
+    border-width: 0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+
+    .tox-icon {
+      svg {
+        color: @color-white;
+      }
+    }
+
+    .tox-notification__icon {
+      margin-right: 5px;
+    }
+  }
+
+  .tox-dialog--width-lg {
+    height: auto;
+    min-height: 650px;
+  }
+}
+
+.tox-form__controls-h-stack {
+  column-gap: 10px;
+}
+
+@textfield-border-color: #D7DBEC;
+@textfield-pad-y: @pad-sm;
+@textfield-pad-x: 10px;
+@textfield-font-size: @base-value;
+
+@dialog-backdrop-background-color: fade(#000, 50);
+@dialog-box-shadow: 0 20px 25px -5px rgba(0, 0, 0, .1), 0 10px 10px -5px rgba(0, 0, 0, .04);
+@dialog-border-color: @border-color;
+@dialog-header-padding: @pad-md;
+@dialog-header-separator-border: 1px solid @border-color;
+
+@form-group-vertical-spacing: @pad-md;
+
+.tox-form {
+  > .tox-form__group {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@tinymce-border-radius: 7px;
+@tinymce-border-color: #d7dbec;
+@tinymce-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+
+@toolbar-group-separator-color: none;
+@toolbar-row-separator-color: @border-color;
+@toolbar-button-spacing-y: 5px;
+@toolbar-button-spacing-x: 5px;
+@toolbar-button-hover-background-color: @border-color;
+@toolbar-button-focus-background-color: @border-color;
+@toolbar-button-active-background-color: @border-color;
+@toolbar-button-enabled-background-color: @border-color;
+
+.tox:not([dir=rtl]) {
+  .tox-toolbar__group:not(:last-of-type) {
+    margin-right: 10px;
+  }
+}
+
+.tox[dir=rtl] {
+  .tox-toolbar__group:not(:last-of-type) {
+    margin-left: 10px;
+  }
+}
+
+@statusbar-height: auto;
+
+@notification-success-background-color: tint(@color-success, 80%);
+@notification-success-border-color: tint(@color-success, 70%);
+@notification-success-text-color: @color-white;
+@notification-success-link-color: @color-white;
+
+@notification-warn-background-color: #fffaea;
+@notification-warn-border-color: darken(@notification-warn-background-color, 15%);
+@notification-warn-text-color: @color-white;
+@notification-warn-link-color: @color-white;
+
+@notification-error-background-color: tint(@color-error, 87%);
+@notification-error-border-color: tint(@color-error, 75%);
+@notification-error-text-color: @color-white;
+@notification-error-link-color: @color-white;
+
+@notification-info-background-color: @color-tint;
+@notification-info-text-color: @color-white;
+@notification-info-link-color: @color-white;
