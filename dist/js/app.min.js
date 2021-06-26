@@ -2049,6 +2049,7 @@
 
                 xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
+                xhr.setRequestHeader('Accept','application/json');
                 xhr.open('POST', config.uploadUrl);
 
                 xhr.onload = function () {
