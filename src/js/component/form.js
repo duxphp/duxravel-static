@@ -540,11 +540,11 @@
                         return;
                     }
                     json = JSON.parse(xhr.responseText);
-                    if (!json || !json.data.data.length) {
+                    if (!json || !json.data.length) {
                         failure('Invalid JSON: ' + xhr.responseText);
                         return;
                     }
-                    json.data.data.map(info => {
+                    json.data.map(info => {
                         success(info.url)
                     })
                 };
