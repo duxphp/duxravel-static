@@ -531,7 +531,6 @@
 
                 xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
-                xhr.setRequestHeader('Accept','application/json');
                 xhr.open('POST', config.uploadUrl);
 
                 xhr.onload = function () {
@@ -541,17 +540,18 @@
                         return;
                     }
                     json = JSON.parse(xhr.responseText);
-                    if (!json || !json.result.length) {
+                    if (!json || !json.data.data.length) {
                         failure('Invalid JSON: ' + xhr.responseText);
                         return;
                     }
-                    json.result.map(info => {
+                    json.data.data.map(info => {
                         success(info.url)
                     })
                 };
                 formData = new FormData();
                 formData.append('file', blobInfo.blob(), blobInfo.filename());
                 let token = document.head.querySelector('meta[name="csrf-token"]')
+                xhr.setRequestHeader('Accept','application/json');
                 xhr.setRequestHeader('X-CSRF-TOKEN', token.content);
                 xhr.send(formData);
             },
