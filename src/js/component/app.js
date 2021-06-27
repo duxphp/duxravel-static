@@ -48,6 +48,9 @@
                     let url = response.headers['x-location'];
                     let msg = response.data.message || '系统暂无响应内容';
                     let result = response.data.data;
+
+                    if (response.data)
+
                     resolve({
                         message: msg,
                         result: result,

@@ -390,6 +390,9 @@
                     let url = response.headers['x-location'];
                     let msg = response.data.message || '系统暂无响应内容';
                     let result = response.data.data;
+
+                    if (response.data)
+
                     resolve({
                         message: msg,
                         result: result,
@@ -1558,7 +1561,12 @@
                 data: formData,
                 notify: false,
             }).then(data => {
-                $($el).find("button").attr("disabled", false);
+                $($el).find("button").attr("disabled", false)
+                if (!data.response instanceof Object) {
+                    notify.error('数据返回异常，详情请查看调试', 3)
+                    return;
+                }
+
                 if (config.notify) {
                     if (config.successNotify) {
                         notify.success(data.message, 3)
