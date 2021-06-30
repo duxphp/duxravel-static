@@ -211,7 +211,7 @@
                                                             </div>
                                                             添加
                                                         </span>
-                                                        <div class="dropdown mt-1 left-0 relative lg:absolute" x-cloak x-spread="dropdown">
+                                                        <div class="dropdown mt-1 left-0 relative lg:absolute" x-cloak x-bind="dropdown">
                                                             <div class="flex space-x-2 ">
                                                                     <input type="text" style="width: 120px;" class="flex-grow form-input">
                                                                     <button type="button" class="flex-grow-0 btn-blue" data-item-add>确定</button>
