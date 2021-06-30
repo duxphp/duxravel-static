@@ -2191,7 +2191,7 @@
             <div class="flex-grow  pr-4 ${config.multiple ? 'flex flex-col gap-2' : 'truncate'}" data-list><span class="text-gray-500">${config.placeholder}</span></div>
             <div class="flex-none w-4 h-4 text-red-900 mr-4" hidden cascader-clear><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div></div>
         <div x-show="open"
-        @click.away="open = false"
+        @click.outside="open = false"
         x-transition:enter-start="opacity-0 transform duration-100"
         x-transition:enter-end="opacity-100 transform duration-100"
         x-transition:leave-start="opacity-100 transform duration-100"
@@ -3166,7 +3166,7 @@
                 ['x-show']() {
                     return this.open
                 },
-                ['@click.away']() {
+                ['@click.outside']() {
                     this.open = false
                 },
             },
@@ -3231,7 +3231,7 @@
     /**
      * alpine 加载区域
      * @param config
-     * @returns {boolean|{select(*=): void, data, el: {"@click"(): void}, active, loadData(*=): void, menu: {"x-show"(): boolean, "@click.away"(): void}, open: boolean}}
+     * @returns {boolean|{select(*=): void, data, el: {"@click"(): void}, active, loadData(*=): void, menu: {"x-show"(): boolean, "@click.outside"(): void}, open: boolean}}
      */
     owner.loadArea = function (config) {
 
@@ -3248,7 +3248,7 @@
                 ['x-show']() {
                     return this.open
                 },
-                ['@click.away']() {
+                ['@click.outside']() {
                     this.open = false
                 },
             },
@@ -3379,8 +3379,8 @@
                                                         </div>`
                                                  }).join('')}
                                                 <div>
-                                                    <div class="relative" x-data="show.dropdown()">
-                                                        <span class="btn bg-white flex gap-2 justify-center items-center block" x-on:click="open = true">
+                                                    <div class="relative" x-data="{open: false}">
+                                                        <span class="btn bg-white flex gap-2 justify-center items-center block" @click="open = !open">
                                                             <div class="w-4 h-4">
                                                                 <svg class="stroke-current w-full h-full" style="" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -3388,7 +3388,7 @@
                                                             </div>
                                                             添加
                                                         </span>
-                                                        <div class="dropdown mt-1 left-0 relative lg:absolute" x-cloak x-bind="dropdown">
+                                                        <div class="dropdown mt-1 left-0 relative lg:absolute" x-cloak @click.outside="open = false" x-show="open">
                                                             <div class="flex space-x-2 ">
                                                                     <input type="text" style="width: 120px;" class="flex-grow form-input">
                                                                     <button type="button" class="flex-grow-0 btn-blue" data-item-add>确定</button>

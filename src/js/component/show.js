@@ -59,7 +59,7 @@
                 ['x-show']() {
                     return this.open
                 },
-                ['@click.away']() {
+                ['@click.outside']() {
                     this.open = false
                 },
             },
