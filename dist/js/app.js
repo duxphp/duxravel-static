@@ -2189,7 +2189,7 @@
 
         let $body = $(`<div class="select-none" x-data="{open: false}"><div class="form-select items-center" style="display: flex!important;" :class="{'border-blue-900 ring-1 ring-blue-900': open}" cascader-input @click="open = !open">
             <div class="flex-grow  pr-4 ${config.multiple ? 'flex flex-col gap-2' : 'truncate'}" data-list><span class="text-gray-500">${config.placeholder}</span></div>
-            <div class="flex-none w-4 h-4 text-red-900 mr-4" hidden cascader-clear><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div></div>
+            <div class="flex-none w-4 h-4 text-red-900" hidden cascader-clear><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div></div>
         <div x-show="open"
         @click.outside="open = false"
         x-transition:enter-start="opacity-0 transform duration-100"
