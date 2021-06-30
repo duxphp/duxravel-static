@@ -95,7 +95,7 @@
                             </div>
                             <div class="flex-none flex flex-col lg:flex-row gap-2">
                                 <div class=" ${config.type != 'all' ? 'hidden' : ''}"">
-                                    <select class="form-select filter-type ${config.type != 'all' ? 'disabled' : ''}>
+                                    <select class="form-select filter-type ${config.type != 'all' ? 'disabled' : ''}">
                                         <option value="all">全部类型</option>
                                         <option value="image" ${config.type == 'image' ? 'selected' : ''}>图片</option>
                                         <option value="video" ${config.type == 'video' ? 'selected' : ''}>视频</option>
