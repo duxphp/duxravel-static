@@ -2330,7 +2330,7 @@
             }
             // 渲染菜单
             renderData.map((column, key) => {
-                menuHtml += `<div cascader-column style="max-height: 300px;"  class="${key ? 'border-l border-gray-400' : ''}">`
+                menuHtml += `<div cascader-column  style="max-height: 300px;"  class="overflow-auto ${key ? 'border-l border-gray-400' : ''}">`
                 column.forEach(item => {
                     item.sortId = selectTreeMaps.indexOf(item.id)
                 })
