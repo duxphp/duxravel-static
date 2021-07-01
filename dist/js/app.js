@@ -1560,8 +1560,8 @@
                 notify: false,
             }).then(data => {
                 $($el).find("button").attr("disabled", false)
-                if (!data.response instanceof Object) {
-                    notify.error('数据返回异常，详情请查看调试', 3)
+                if (!(data.response instanceof Object)) {
+                    notify.error(data.message, 3)
                     return;
                 }
 
