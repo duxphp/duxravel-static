@@ -668,16 +668,14 @@
         })
 
 
-        let $body = $(`<div class="select-none" x-data="{open: false}"><div class="form-select items-center" style="display: flex!important;" :class="{'border-blue-900 ring-1 ring-blue-900': open}" cascader-input @click="open = !open">
-            <div class="flex-grow  pr-4 ${config.multiple ? 'flex flex-col gap-2' : 'truncate'}" data-list><span class="text-gray-500">${config.placeholder}</span></div>
-            <div class="flex-none w-4 h-4 text-red-900" hidden cascader-clear><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div></div>
+        let $body = $(`<div class="select-none" x-data="{open: false}" @set-close="open = false">
+            <div class="form-select items-center" style="display: flex!important;" :class="{'border-blue-900 ring-1 ring-blue-900': open}" cascader-input>
+                <div class="flex-grow  pr-4 ${config.multiple ? 'flex flex-col gap-2' : 'truncate'}"  @click="open = true" data-list><span class="text-gray-500">${config.placeholder}</span></div>
+                <div class="flex-none w-4 h-4 text-red-900" hidden cascader-clear><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div>
+            </div>
         <div x-show="open"
-        @click.outside="open = false"
-        x-transition:enter-start="opacity-0 transform duration-100"
-        x-transition:enter-end="opacity-100 transform duration-100"
-        x-transition:leave-start="opacity-100 transform duration-100"
-        x-transition:leave-end="opacity-0 transform duration-100"
-        class="mt-1 lg:absolute z-10 " x-cloak><div class="flex items-stretch bg-white overflow-y-auto shadow rounded border border-gray-400 " cascader-layout></div></div></div>`)
+        class="mt-1 lg:absolute z-10 "
+        @click.outside="open = false" x-cloak><div class="flex items-stretch bg-white overflow-y-auto shadow rounded border border-gray-400 " cascader-layout></div></div></div>`)
         let $input = $body.find('[cascader-input]')
         let $layout = $body.find('[cascader-layout]')
         $($el).hide()
@@ -916,7 +914,7 @@
             renderData.push(groupData)
             renderInput()
             renderMenu()
-            $body.find('.form-select').click()
+            $body[0].dispatchEvent(new Event('set-close'))
         })
 
         // 菜单选择
@@ -946,7 +944,7 @@
                 renderInput()
                 // 选择隐藏
                 if (info.hasChildren === false) {
-                    $body.find('.form-select').click()
+                    $body[0].dispatchEvent(new Event('set-close'))
                 }
             }
             renderData.splice(info.level)
