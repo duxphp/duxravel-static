@@ -146,6 +146,10 @@
                         data: config.params,
                         notify: false,
                     }).then(data => {
+                        if (!(data.response instanceof Object)) {
+                            notify.error(data.message, 3)
+                            return;
+                        }
                         window.location.reload()
                     }).catch(err => {
                         notify.msg(err.message)
