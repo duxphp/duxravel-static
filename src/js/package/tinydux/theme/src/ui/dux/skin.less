@@ -17,6 +17,7 @@
 @color-tint: #1E5EFF;
 @color-white: #fff;
 @color-error: #F0142F;
+@color-warn: #FF9900;
 @color-success: #06A561;
 
 @border-color: #E6E9F4;
@@ -226,17 +227,17 @@
 
 @statusbar-height: auto;
 
-@notification-success-background-color: tint(@color-success, 80%);
-@notification-success-border-color: tint(@color-success, 70%);
+@notification-success-background-color: @color-success;
+@notification-success-border-color: tint(@color-success, 75%);
 @notification-success-text-color: @color-white;
 @notification-success-link-color: @color-white;
 
-@notification-warn-background-color: #FF9900;
-@notification-warn-border-color: darken(@notification-warn-background-color, 15%);
+@notification-warn-background-color: @color-warn;
+@notification-warn-border-color: tint(@color-warn, 75%);
 @notification-warn-text-color: @color-white;
 @notification-warn-link-color: @color-white;
 
-@notification-error-background-color: tint(@color-error, 87%);
+@notification-error-background-color: @color-error;
 @notification-error-border-color: tint(@color-error, 75%);
 @notification-error-text-color: @color-white;
 @notification-error-link-color: @color-white;
