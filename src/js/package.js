@@ -3,6 +3,16 @@
  */
 (function (win, doc) {
 
+
+    /**
+     * 解析标识
+     */
+    var jsSelf = (function () {
+        var files = doc.getElementsByTagName('script');
+        return files[files.length - 1];
+    })();
+    window.appManage = jsSelf.getAttribute('data-manage');
+
     /**
      * 设置全局变量
      * @type {string}

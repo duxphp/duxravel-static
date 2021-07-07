@@ -2217,7 +2217,7 @@ body.tox-dialog__disable-scroll {
   opacity: 1;
 }
 .tox .tox-notification--success {
-  background-color: #cdeddf;
+  background-color: #06A561;
   border-color: #b4e4d0;
   color: #fff;
 }
@@ -2231,7 +2231,7 @@ body.tox-dialog__disable-scroll {
   fill: #fff;
 }
 .tox .tox-notification--error {
-  background-color: #fde0e4;
+  background-color: #F0142F;
   border-color: #fbc4cb;
   color: #fff;
 }
@@ -2246,7 +2246,7 @@ body.tox-dialog__disable-scroll {
 }
 .tox .tox-notification--warn,
 .tox .tox-notification--warning {
-  background-color: #fffaea;
+  background-color: #FF9900;
   border-color: #ffe89d;
   color: #fff;
 }

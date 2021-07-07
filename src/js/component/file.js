@@ -2,7 +2,7 @@
 
     owner.upload = function ($el, config) {
         let defaultConfig = {
-            url: '/admin/upload',
+            url: `/${window.appManage}/upload`,
             loading: true,
             params: null,
             image: {
@@ -73,8 +73,8 @@
      */
     owner.manage = function (config) {
         let defaultConfig = {
-            url: '/admin/fileManage',
-            uploadUrl: '/admin/upload',
+            url: `/${window.appManage}/fileManage`,
+            uploadUrl: `/${window.appManage}/upload`,
             multiple: false,
             type: 'all',
             image: {},

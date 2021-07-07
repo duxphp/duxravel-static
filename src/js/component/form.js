@@ -461,8 +461,8 @@
      */
     owner.editor = function ($el, config) {
         let defaultConfig = {
-            uploadUrl: '/admin/upload',
-            attrUrl: '/admin/fileManage'
+            uploadUrl: `/${window.appManage}/upload`,
+            attrUrl: `/${window.appManage}/fileManage`
         };
         config = $.extend(defaultConfig, config);
 
@@ -490,7 +490,6 @@
                         file.manage({
                             url: config.attrUrl,
                             uploadUrl: config.uploadUrl,
-                            //'/admin/uploadRemote'
                             multiple: true,
                             callback: function (list) {
                                 list.map(info => {
@@ -583,15 +582,16 @@
             },
             file_picker_types: 'file image media',
 
-            init_instance_callback : function(editor){
+            init_instance_callback: function (editor) {
                 // 图片本地化
                 editor.on('paste', (e) => {
                     let remoteImages = [];
                     const doc = editor.getDoc();
-                    const items = doc.getElementsByTagName('img');
+                    const items = $(doc).find('img');
+
                     let test = function test(url) {
-                        const localDomains = [document.domain];
-                        if (url.indexOf(location.host) !== -1 || /(^\.)|(^\/)/.test(url)) {
+                        const localDomains = [];
+                        if (url.indexOf(location.host) !== -1 || url.indexOf(document.domain) !== -1 || /(^\.)|(^\/)/.test(url)) {
                             return !0;
                         }
                         // 白名单
@@ -606,22 +606,58 @@
                     };
 
                     if (items.length) {
-                        for (img of items) {
-                            var src = img.getAttribute('_src') || img.src || '';
+                        items.each(function () {
+                            var src = $(this).attr('_src') || $(this).attr('src') || ''
                             if (/^(https?|ftp):/img.test(src) && !test(src)) {
                                 remoteImages.push(src);
                             }
-                        }
+                        })
                     }
 
                     if (remoteImages.length) {
-                        let $notify = $(`发现${remoteImages.length}张远程图片，是否保存？ <a data-save href="javascript:;">[保存]</a>`);
                         var notification = editor.notificationManager.open({
-                            text: $notify,
-                            timeout: 10000,
+                            text: `发现${remoteImages.length}张远程图片，是否保存？ <a data-save href="javascript:;" class="cursor-pointer">[保存]</a>`,
+                            closeButton: true,
                             type: 'warning',
                         });
-                        console.log($(notification).find('[data-save]'))
+                        $(notification.getEl()).on('click', '[data-save]', function () {
+
+                            top.tinymce.activeEditor.notificationManager.close();
+                            editor.notificationManager.open({
+                                text: '保存远程图片中...',
+                                closeButton: false,
+                                type: 'info',
+                            });
+                            app.ajax({
+                                type: 'post',
+                                url: `/${window.appManage}/uploadRemote`,
+                                data: {
+                                    files: remoteImages
+                                },
+                                notify: false,
+                            }).then(info => {
+                                top.tinymce.activeEditor.notificationManager.close();
+                                let data = info.result
+                                let content = editor.getContent()
+                                for (i in data) {
+                                    content = content.replace($('<div/>').text(remoteImages[i]).html(), data[i])
+                                    content = content.replace(remoteImages[i], data[i])
+                                }
+                                editor.setContent(content)
+                                editor.notificationManager.open({
+                                    text: '图片保存成功并替换内容',
+                                    type: 'success',
+                                    timeout: 2000,
+                                });
+                            }).catch(err => {
+                                top.tinymce.activeEditor.notificationManager.close();
+                                editor.notificationManager.open({
+                                    text: err.message,
+                                    type: 'info',
+                                    timeout: 2000,
+                                });
+                            })
+                        })
 
                     }
 
