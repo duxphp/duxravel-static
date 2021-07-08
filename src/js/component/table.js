@@ -170,7 +170,7 @@
                             let formId = $(evt.item).data('tr')
                             let parent = $(toEl).data('parent')
 
-                            var before = evt.newIndex - 1
+                            let before = evt.newIndex - 1
                             let beforeId = before > -1 ? $(toEl).find(' > [data-tr]').eq(before).data('tr') : 0
                             app.ajax({
                                 url: config.sortable,
