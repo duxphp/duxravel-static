@@ -1,12 +1,15 @@
 
 .table-box {
     @apply table-auto min-w-full divide-y divide-gray-300 text-left;
+
     & th {
         @apply px-6 py-3 font-normal text-gray-600  whitespace-nowrap bg-gray-200;
     }
+
     & td {
-        @apply  px-6 py-4;
+        @apply px-6 py-4;
     }
+
     & tbody {
         @apply divide-y divide-gray-300;
     }
@@ -15,6 +18,7 @@
 .table-nesting {
     & > tbody {
         @apply divide-none;
+
         & > tr {
             & > td {
                 @apply px-0 pb-0;
@@ -23,34 +27,73 @@
     }
 }
 
+.table-list {
 
-.sortable-group .sortable-group [data-td] {
-    margin-left: 20px;
-}
-.sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 40px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 60px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 80px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 100px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 120px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 140px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 160px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 180px;
-}
-.sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group .sortable-group [data-td] {
-    margin-left: 200px;
+    [data-td] {
+        @apply border-t border-gray-300;
+    }
+
+
+    & .sortable-group {
+        & .sortable-group {
+            & [data-td] {
+                margin-left: 20px;
+            }
+
+            & .sortable-group {
+                & [data-td] {
+                    margin-left: 40px;
+                }
+
+                & .sortable-group {
+                    & [data-td] {
+                        margin-left: 60px;
+                    }
+
+                    & .sortable-group {
+                        & [data-td] {
+                            margin-left: 80px;
+                        }
+
+                        & .sortable-group {
+                            & [data-td] {
+                                margin-left: 100px;
+                            }
+
+                            & .sortable-group {
+                                & [data-td] {
+                                    margin-left: 120px;
+                                }
+
+                                & .sortable-group {
+                                    & [data-td] {
+                                        margin-left: 140px;
+                                    }
+
+                                    & .sortable-group {
+                                        & [data-td] {
+                                            margin-left: 160px;
+                                        }
+
+                                        & .sortable-group {
+                                            & [data-td] {
+                                                margin-left: 180px;
+                                            }
+
+                                            & .sortable-group {
+                                                & [data-td] {
+                                                    margin-left: 200px;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
