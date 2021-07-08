@@ -139,10 +139,10 @@
     });
 
     /**
-     * 拖动
+     * 拖动排序
      */
     Do.add('sortable', {
-        path: 'https://lib.baomitu.com/jquery-sortable/0.9.13/jquery-sortable-min.js',
+        path: 'https://lib.baomitu.com/Sortable/1.14.0/Sortable.min.js',
         type: 'js'
     });
 
@@ -189,7 +189,7 @@
     });
 
     /**
-     * 属性表格
+     * 树形表格
      */
     Do.add('treetableCss', {
         path: commonPath + 'treetable/jquery.treetable.css',

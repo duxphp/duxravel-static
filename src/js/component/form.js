@@ -452,6 +452,14 @@
             })
         }
 
+        Do('sortable', function () {
+            new Sortable($el, {
+                swap: true,
+                swapClass: 'highlight',
+                animation: 150
+            });
+        })
+
     }
 
     /**
