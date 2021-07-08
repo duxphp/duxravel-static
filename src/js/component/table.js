@@ -164,6 +164,9 @@
                         fallbackOnBody: true,
                         emptyInsertThreshold: 2,
                         swapThreshold: 0.65,
+                        onChange: function(/**Event*/evt) {
+                            console.log(evt)
+                        }
                         onEnd: function (evt) {
                             let toEl = evt.to
                             toEl.dispatchEvent(new Event('notify'))
