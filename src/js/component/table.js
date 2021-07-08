@@ -151,16 +151,43 @@
             return false
         })
 
-        // 表格树
-        if (config.tree) {
-            Do('treetable', function () {
-                $table.treetable({
-                    expandable: true,
-                    initialState: "expanded",
-                    clickableNodeNames: true,
-                    stringCollapse: '折叠',
-                    stringExpand: '展开'
-                });
+        // 表格排序
+        if (config.sortable) {
+            Do('sortable', function () {
+                var nestedSortables = [].slice.call($el.querySelectorAll('.sortable-group'));
+                for (var i = 0; i < nestedSortables.length; i++) {
+                    new Sortable(nestedSortables[i], {
+                        group: 'nested',
+                        swap: false,
+                        dragClass: 'bg-white',
+                        handle: '.drag',
+                        fallbackOnBody: true,
+                        emptyInsertThreshold: 2,
+                        swapThreshold: 0.65,
+                        onEnd: function (evt) {
+                            let toEl = evt.to
+                            toEl.dispatchEvent(new Event('notify'))
+                            if (evt.oldIndex == evt.newIndex) {
+                                return false;
+                            }
+                            let formId = $(evt.item).data('tr')
+                            let parent = $(toEl).data('parent')
+
+                            var before = evt.newIndex - 1
+                            let beforeId = before > -1 ? $(toEl).find(' > [data-tr]').eq(before).data('tr') : 0
+                            app.ajax({
+                                url: config.sortable,
+                                type: 'post',
+                                data: {
+                                    id: formId,
+                                    parent: parent,
+                                    before: beforeId
+                                }
+                            })
+
+                        }
+                    });
+                }
             })
         }
     }
