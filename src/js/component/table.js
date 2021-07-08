@@ -164,15 +164,9 @@
                         fallbackOnBody: true,
                         emptyInsertThreshold: 2,
                         swapThreshold: 0.65,
-                        onChange: function(/**Event*/evt) {
-                            console.log(evt)
-                        },
-                        onEnd: function (evt) {
+                        onChange: function (evt) {
                             let toEl = evt.to
                             toEl.dispatchEvent(new Event('notify'))
-                            if (evt.oldIndex == evt.newIndex) {
-                                return false;
-                            }
                             let formId = $(evt.item).data('tr')
                             let parent = $(toEl).data('parent')
 
