@@ -180,6 +180,7 @@
                             app.ajax({
                                 url: config.sortable,
                                 type: 'post',
+                                notify: false,
                                 data: {
                                     id: formId,
                                     parent: parent,
