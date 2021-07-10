@@ -36,7 +36,6 @@ mix.copyDirectory('src/js/package/pagination', 'dist/js/pagination');
 mix.copyDirectory('src/js/package/password', 'dist/js/password');
 mix.copyDirectory('src/js/package/prompt', 'dist/js/prompt');
 mix.copyDirectory('src/js/package/toast', 'dist/js/toast');
-mix.copyDirectory('src/js/package/treetable', 'dist/js/treetable');
 mix.copyDirectory('src/js/package/tinymce', 'dist/js/tinymce');
 mix.copyDirectory('src/js/package/tinydux/theme/build/ui/dux', 'dist/js/tinymce/skins/ui/dux');
 mix.copyDirectory('src/js/package/tinydux/theme/build/content/dux', 'dist/js/tinymce/skins/content/dux');

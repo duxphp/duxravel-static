@@ -189,19 +189,6 @@
     });
 
     /**
-     * 树形表格
-     */
-    Do.add('treetableCss', {
-        path: commonPath + 'treetable/jquery.treetable.css',
-        type: 'css'
-    });
-    Do.add('treetable', {
-        path: commonPath + 'treetable/jquery.treetable.js',
-        type: 'js',
-        requires: ['treetableCss']
-    });
-
-    /**
      * 编辑器
      */
     Do.add('tinymceSrc', {
@@ -222,7 +209,7 @@
 
 
     /**
-     * 编辑器
+     * 提醒
      */
     Do.add('tooltipHas', {
         path: commonPath + 'tippy/popper.min.js',
@@ -236,6 +223,14 @@
         path: commonPath + 'tippy/tippy.min.js',
         type: 'js',
         requires: ['tooltipHas', 'tooltipCss']
+    });
+
+    /**
+     * tree
+     */
+    Do.add('tree', {
+        path: 'https://lib.baomitu.com/zTree.v3/3.5.42/js/jquery.ztree.all.min.js',
+        type: 'js',
     });
 
 

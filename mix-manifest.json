@@ -27,8 +27,6 @@
     "/dist/js/prompt/message.js": "/dist/js/prompt/message.js",
     "/dist/js/toast/toast.min.css": "/dist/js/toast/toast.min.css",
     "/dist/js/toast/toast.min.js": "/dist/js/toast/toast.min.js",
-    "/dist/js/treetable/jquery.treetable.css": "/dist/js/treetable/jquery.treetable.css",
-    "/dist/js/treetable/jquery.treetable.js": "/dist/js/treetable/jquery.treetable.js",
     "/dist/js/tinymce/jquery.tinymce.min.js": "/dist/js/tinymce/jquery.tinymce.min.js",
     "/dist/js/tinymce/license.txt": "/dist/js/tinymce/license.txt",
     "/dist/js/tinymce/tinymce.d.ts": "/dist/js/tinymce/tinymce.d.ts",
