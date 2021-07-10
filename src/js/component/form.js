@@ -1686,17 +1686,15 @@
                 },
                 "plugins": ["checkbox"]
             },
-            target: ''
+            target: '',
+            callback: null
         }
         config = $.extend(defaultConfig, config)
         Do('tree', () => {
             $($el).jstree(config.tree)
             $($el).on("changed.jstree", function (e, data) {
-                console.log(data.selected)
-                let values = [];
-                data.selected.map((item) => {
-                    values.push(item.value)
-                })
+                base.callback(config.callback, data.selected)
+                $(config.target).val(data.selected.join(','))
             })
         })
     };
