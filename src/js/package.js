@@ -229,7 +229,7 @@
      * tree
      */
     Do.add('tree', {
-        path: 'https://lib.baomitu.com/zTree.v3/3.5.42/js/jquery.ztree.all.min.js',
+        path: 'https://lib.baomitu.com/jstree/3.3.11/jstree.min.js',
         type: 'js',
     });
 
