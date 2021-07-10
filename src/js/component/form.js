@@ -1670,4 +1670,35 @@
         loadScript();
     };
 
+    /**
+     * 树形表格
+     * @param $el
+     * @param config
+     */
+    owner.tree = function ($el, config) {
+        let defaultConfig = {
+            tree: {
+                'core': {
+                    'data': config.data
+                },
+                "checkbox": {
+                    "keep_selected_style": false
+                },
+                "plugins": ["checkbox"]
+            },
+            target: ''
+        }
+        config = $.extend(defaultConfig, config)
+        Do('tree', () => {
+            $($el).jstree(config.tree)
+            $($el).on("changed.jstree", function (e, data) {
+                console.log(data.selected)
+                let values = [];
+                data.selected.map((item) => {
+                    values.push(item.value)
+                })
+            })
+        })
+    };
+
 }(jQuery, window.form = {}));
