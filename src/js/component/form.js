@@ -1694,7 +1694,12 @@
             $($el).jstree(config.tree)
             $($el).on("changed.jstree", function (e, data) {
                 base.callback(config.callback, data.selected)
-                $(config.target).val(data.selected.join(','))
+                if (config.target) {
+                    $(config.target).val(data.selected.join(','))
+                }else {
+                    $($el).prev().val(data.selected.join(','))
+                }
+
             })
         })
     };
