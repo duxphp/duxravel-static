@@ -12,6 +12,10 @@
                 water: false,
                 alpha: 80,
             },
+            tipEl: '',
+            textLoading: '',
+            textFail: '',
+            textSuccess: '',
             callback: null
         }
         config = $.extend(defaultConfig, config)
@@ -47,6 +51,7 @@
             })
             lock()
             $progress.text('0%')
+            $($el).find(config.tipEl).text(config.textLoading)
             let params = typeof config.params === "function" ? config.params() : config.params
             params = $.extend({}, params, config.image)
             app.ajax({
@@ -63,10 +68,14 @@
                 notify: false
             }).then(function (data) {
                 unlock()
+                $($el).find(config.tipEl).text(config.textSuccess)
                 base.callback(config.callback, data.result)
             }).catch(function (error) {
                 unlock()
-                app.error(error.message)
+                $($el).find(config.tipEl).text(config.textFail)
+                if (!config.tipEl) {
+                    app.error(error.message)
+                }
             })
         });
     }
