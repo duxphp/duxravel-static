@@ -343,7 +343,7 @@
     }
 
     /**
-     * 文件选择
+     * 文件上传
      * @param $el
      * @param config
      */
@@ -351,14 +351,14 @@
         let defaultConfig = {
             mode: 'manage',
             target: '',
+            loading: true,
             callback: function (data) {
-                let $text = config.target ? $(config.target) : $($el).parents('.form-input-group').find('input[type="text"]')
+                let $text = config.target ? $(config.target) : $($el).parents('[data-js]').find('input[type="text"]')
                 $text.val(data[0].url)
             }
         }
         config = $.extend(defaultConfig, config)
         if (config.mode == 'upload') {
-            config.loading = true;
             file.upload($el, config)
         }
         if (config.mode == 'manage') {
@@ -1694,12 +1694,13 @@
             $($el).jstree(config.tree)
             $($el).on("changed.jstree", function (e, data) {
                 base.callback(config.callback, data.selected)
-                if (config.target) {
-                    $(config.target).val(data.selected.join(','))
-                }else {
-                    $($el).prev().val(data.selected.join(','))
+                for (let i in data.selected) {
+                    if (config.target) {
+                        $(config.target).val(data.selected[i])
+                    }else {
+                        $($el).prev().val(data.selected[i])
+                    }
                 }
-
             })
         })
     };

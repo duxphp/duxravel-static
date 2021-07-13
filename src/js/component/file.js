@@ -23,7 +23,11 @@
         let $progress = $('<span class="ml-2" progress></span>')
         let lock = function () {
             if (config.loading) {
-                $($el).append($progress)
+                if (typeof(config.loading)=='string') {
+                    $($el).find(config.loading).html($progress)
+                }else {
+                    $($el).append($progress)
+                }
             }
             $file.attr('disabled', true)
             $($el).attr('disabled', true)
