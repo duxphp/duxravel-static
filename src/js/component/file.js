@@ -22,7 +22,7 @@
         let $file = $(`<input class="sr-only" type="file" multiple>`)
         $($el).css('position', 'relative')
         $($el).css('overflow', 'hidden')
-        $($el).append($file)
+        $($el).prepend($file)
 
         let $progress = $('<span class="ml-2" progress></span>')
         let lock = function () {

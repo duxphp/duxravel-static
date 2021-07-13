@@ -353,7 +353,7 @@
             target: '',
             loading: true,
             callback: function (data) {
-                let $text = config.target ? $(config.target) : $($el).parents('[data-js="form-file"]').find('input[type="text"]')
+                let $text = config.target ? $(config.target) : $($el).parents('[data-js="form-file"]').find('input[type="hidden"]')
                 $text.val(data[0].url)
             }
         }
@@ -362,7 +362,7 @@
             file.upload($el, config)
         }
         if (config.mode == 'manage') {
-            $($el).on('click', function () {
+            $($el).off('click').on('click', function () {
                 config.multiple = false
                 config.type = 'all'
                 file.manage(config)
