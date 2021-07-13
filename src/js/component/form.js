@@ -353,7 +353,7 @@
             target: '',
             loading: true,
             callback: function (data) {
-                let $text = config.target ? $(config.target) : $($el).parents('[data-js="form-file"]').find('input[type="hidden"]')
+                let $text = config.target ? $(config.target) : $($el).parent().find('input[type="hidden"]')
                 $text.val(data[0].url)
             }
         }
