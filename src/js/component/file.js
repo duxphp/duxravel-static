@@ -6,10 +6,10 @@
             loading: true,
             params: null,
             image: {
-                thumb: false,
+                thumb: 0,
                 width: 0,
                 height: 0,
-                water: false,
+                water: 0,
                 alpha: 80,
             },
             tipEl: '',
