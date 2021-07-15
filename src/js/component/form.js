@@ -1368,7 +1368,7 @@
                     <ul pagination="" class="pagination py-2"></ul>
                 </div>
             </div>
-            <div class="mt-3 flex items-center justify-end gap-2 flex-col-reverse lg:flex-row ">
+            <div class="mt-3 flex items-center justify-end gap-2 flex-col-reverse lg:flex-row p-5">
                 <button type="button" class="btn w-full lg:w-auto" modal-close>取消</button>
                 <button type="button" class="btn-blue  w-full lg:w-auto" data-submit disabled>添加</button>
             </div>
