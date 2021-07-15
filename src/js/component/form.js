@@ -1338,18 +1338,18 @@
 
         // 渲染弹窗数据
         let modal = `<div class=" bg-light">
-                <div class="modal-body pb-0">
+                <div class="p-5">
                 <div class="mb-3">
-                    <div class="row">
-                        <div class="col-auto">
+                    <div class="flex gap-2">
+                        <div>
                             <input class="form-input" type="text" data-keyword name="keyword" value="" placeholder="请输入关键词搜索">
                         </div>
-                        <div class="col-auto">
-                            <button class="btn btn-primary" data-search>搜索</button>
+                        <div>
+                            <button class="btn-blue" data-search>搜索</button>
                         </div>
                     </div>
                 </div>
-                <table class="table-box border border-gray-300 border border-gray-300">
+                <table class="table-box border border-gray-300">
                 <thead>
                     <tr>
                         ${ajaxColumn.map(item => {
@@ -1364,11 +1364,13 @@
                     </tr>
                 </tbody>
                 </table>
-                <ul pagination="" class="pagination py-2"></ul>
+                <div class="flex justify-center mt-2">
+                    <ul pagination="" class="pagination py-2"></ul>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn me-auto" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-submit disabled data-bs-dismiss="modal">添加</button>
+            <div class="mt-3 flex items-center justify-end gap-2 flex-col-reverse lg:flex-row ">
+                <button type="button" class="btn w-full lg:w-auto" modal-close>取消</button>
+                <button type="button" class="btn-blue  w-full lg:w-auto" data-submit disabled>添加</button>
             </div>
             </div>`
         let $modal
