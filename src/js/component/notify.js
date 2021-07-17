@@ -18,22 +18,26 @@
             $obj.find('.loading-msg').html(config.msg);
             return true;
         }
-        let $html = $(`<div id="app-loading" class="fixed z-50 inset-0 overflow-y-auto pointer-events-none"><div class="flex items-center justify-center min-h-screen text-center">
+        let $html = $(`<div id="app-loading" class="fixed z-50 inset-0 overflow-y-auto ease-in-out duration-300 opacity-0 pointer-events-none" style="display: none"><div class="flex items-center justify-center min-h-screen text-center">
                     <div class="bg-black bg-opacity-60 rounded p-3">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                    </div>
-                    <div class="text-white">${config.msg}</div></div></div>`);
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <div class="text-white">${config.msg}</div>
+                    </div></div></div>`);
         $('body').append($html);
+        $html.show().addClass('opacity-100');
     };
 
     /**
      * 关闭加载遮罩
      */
     owner.loading.close = function () {
-        $('#app-loading').remove();
+        $('#app-loading').removeClass('opacity-100');
+        setTimeout(() => {
+            $('#app-loading').remove()
+        }, 200);
     }
 
     /**

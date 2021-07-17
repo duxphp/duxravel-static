@@ -313,7 +313,7 @@
             setTimeout(() => {
                 $modal.remove()
                 base.callback(dispose, $modal)
-            }, 300);
+            }, 200);
         })
         // close
         $modal.on('click', '[modal-close]', function () {
