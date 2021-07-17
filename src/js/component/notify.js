@@ -18,11 +18,13 @@
             $obj.find('.loading-msg').html(config.msg);
             return true;
         }
-        let $html = $(`<div id="app-loading" class="fixed z-50 inset-0 overflow-y-auto"><div class="flex items-center justify-center min-h-screen text-center bg-black bg-opacity-60">
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+        let $html = $(`<div id="app-loading" class="fixed z-50 inset-0 overflow-y-auto"><div class="flex items-center justify-center min-h-screen text-center">
+                    <div class="bg-black bg-opacity-60 rounded p-3">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
                     <div class="text-white">${config.msg}</div></div></div>`);
         $('body').append($html);
     };
@@ -57,9 +59,9 @@
 
     /**
      * 消息提醒
-     * @param {*} msg 
-     * @param {*} time 
-     * @param {*} callback 
+     * @param {*} msg
+     * @param {*} time
+     * @param {*} callback
      */
     owner.info = function (msg, time, callback) {
         owner.toast('info', 'center', msg, time || 3, callback)
@@ -67,9 +69,9 @@
 
     /**
      * 消息提醒
-     * @param {*} msg 
-     * @param {*} time 
-     * @param {*} callback 
+     * @param {*} msg
+     * @param {*} time
+     * @param {*} callback
      */
     owner.success = function (msg, time, callback) {
         owner.toast('success', 'center', msg, time || 3, callback)
@@ -77,21 +79,21 @@
 
     /**
      * 消息提醒
-     * @param {*} msg 
-     * @param {*} time 
-     * @param {*} callback 
-     */    
+     * @param {*} msg
+     * @param {*} time
+     * @param {*} callback
+     */
     owner.error = function (msg, time, callback) {
         owner.toast('error', 'center', msg, time || 3, callback)
     }
 
     /**
      * 自定义提醒
-     * @param {*} type 
-     * @param {*} position 
-     * @param {*} msg 
-     * @param {*} time 
-     * @param {*} callback 
+     * @param {*} type
+     * @param {*} position
+     * @param {*} msg
+     * @param {*} time
+     * @param {*} callback
      */
     owner.toast = function (type, position, msg, time, callback) {
         type = type || 'info';
@@ -99,7 +101,7 @@
         time = time || 0;
         msg = msg || '消息提醒';
 
-        let typeClass,typeIcon
+        let typeClass, typeIcon
         switch (type) {
             case 'success':
                 typeClass = 'notify-success'
@@ -116,7 +118,7 @@
                 break
         }
 
-        let positionClass,positionId;
+        let positionClass, positionId;
         switch (position) {
             case 'left':
                 positionId = 'app-notify-left'
