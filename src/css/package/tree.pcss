@@ -249,15 +249,19 @@
 .jstree-default .jstree-disabled.jstree-clicked {
     @apply bg-gray-300;
 }
-.jstree-default .jstree-checkbox {
+.jstree-default .jstree-checkbox,
+.tree-checkbox {
     @apply w-4 h-4 border border-gray-500 bg-white;
 }
 .jstree-default.jstree-checkbox-selection .jstree-clicked > .jstree-checkbox,
-.jstree-default .jstree-checked > .jstree-checkbox {
+.jstree-default .jstree-checked > .jstree-checkbox,
+.tree-checkbox-checked
+{
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
     @apply border border-blue-900 bg-blue-900;
 }
-.jstree-default .jstree-anchor > .jstree-undetermined {
+.jstree-default .jstree-anchor > .jstree-undetermined,
+.tree-checkbox-half {
     @apply border border-blue-900 bg-blue-900;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3E%3C/svg%3E");
 }
