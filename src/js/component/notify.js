@@ -18,7 +18,7 @@
             $obj.find('.loading-msg').html(config.msg);
             return true;
         }
-        let $html = $(`<div id="app-loading" class="fixed z-50 inset-0 overflow-y-auto"><div class="flex items-center justify-center min-h-screen text-center">
+        let $html = $(`<div id="app-loading" class="fixed z-50 inset-0 overflow-y-auto pointer-events-none"><div class="flex items-center justify-center min-h-screen text-center">
                     <div class="bg-black bg-opacity-60 rounded p-3">
                         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
