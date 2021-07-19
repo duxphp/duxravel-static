@@ -1862,36 +1862,7 @@
         }
 
         vueApp.mount($el)
-        return;
 
-
-        let defaultConfig = {
-            tree: {
-                'core': {
-                    'data': config.data
-                },
-                "checkbox": {
-                    "keep_selected_style": false
-                },
-                "plugins": ["checkbox"]
-            },
-            target: '',
-            callback: null
-        }
-        config = $.extend(defaultConfig, config)
-        Do('tree', () => {
-            $($el).jstree(config.tree)
-            $($el).on("changed.jstree", function (e, data) {
-                base.callback(config.callback, data.selected)
-                for (let i in data.selected) {
-                    if (config.target) {
-                        $(config.target).val(data.selected[i])
-                    } else {
-                        $($el).prev().val(data.selected[i])
-                    }
-                }
-            })
-        })
     };
 
 }(jQuery, window.form = {}));
