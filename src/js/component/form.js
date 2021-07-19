@@ -1771,6 +1771,7 @@
                 </div>`,
                 mounted() {
                     this.select = this.value ? this.value.split(',') : []
+                    console.log(this.select)
                     if (this.url) {
                         app.ajax({
                             url: this.url
