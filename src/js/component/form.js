@@ -1765,7 +1765,7 @@
                 template: `<div class="mb-4 jstree-default">
                     <label class="form-label block mb-2 text-gray-700 ">{{text}}</label>
                     <input type='hidden' :name="name" :value="select.toString()" />
-                    <div class="h-96 overflow-auto form-input">
+                    <div class="max-h-96 overflow-auto form-input">
                         <form-tree-item :list="list" @select="selectIds"></form-tree-item>
                     </div>
                 </div>`,
