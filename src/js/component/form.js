@@ -1690,23 +1690,23 @@
                     }
                 },
                 template: `<div v-for="(item, index) in list" :key="item.id" >
-            <div
-                class="flex items-center mb-4"
-                :class="'ml-'+(level * 4) + (item.open?' jstree-open':' jstree-closed')"
-            >
-                <i class="tree-ctrl" :class="{'tree-ctrl-close': item.child && item.child.length && !item.open, 'tree-ctrl-open': item.child && item.child.length && item.open}" @click="item.open = !item.open"></i>
-                <div
-                    class="tree-checkbox mr-4"
-                    :class="{
-                        'tree-checkbox-half': item.select === 1,
-                        'tree-checkbox-checked': item.select === 2
-                    }"
-                    @click="click(index, item.select)"
-                ></div>
-                {{item.text}}
-            </div>
-            <form-tree-item v-if="item.open && item.child && item.child.length" @select="$emit('select', $event)" :level="level + 1" :list="item.child"></form-tree-item>
-        </div>`,
+                    <div
+                        class="flex items-center mb-4"
+                        :class="'ml-'+(level * 4) + (item.open?' jstree-open':' jstree-closed')"
+                    >
+                        <i class="tree-ctrl" :class="{'tree-ctrl-close': item.child && item.child.length && !item.open, 'tree-ctrl-open': item.child && item.child.length && item.open}" @click="item.open = !item.open"></i>
+                        <div
+                            class="tree-checkbox mr-4"
+                            :class="{
+                                'tree-checkbox-half': item.select === 1,
+                                'tree-checkbox-checked': item.select === 2
+                            }"
+                            @click="click(index, item.select)"
+                        ></div>
+                        {{item.text}}
+                    </div>
+                    <form-tree-item v-if="item.open && item.child && item.child.length" @select="$emit('select', $event)" :level="level + 1" :list="item.child"></form-tree-item>
+                </div>`,
                 methods: {
                     getSelectId(list, type, ids = []) {
                         list.forEach(item => {
@@ -1749,7 +1749,7 @@
                     },
                     childKey: {
                         type: String,
-                        default: 'child'
+                        default: 'children'
                     },
                     value: {
                         type: String,
@@ -1763,12 +1763,12 @@
                     }
                 },
                 template: `<div class="mb-4 jstree-default">
-            <label class="form-label block mb-2 text-gray-700 ">{{text}}</label>
-            <input type='hidden' :name="name" :value="select.toString()" />
-            <div class="h-96 overflow-auto form-input">
-                <form-tree-item :list="list" @select="selectIds"></form-tree-item>
-            </div>
-        </div>`,
+                    <label class="form-label block mb-2 text-gray-700 ">{{text}}</label>
+                    <input type='hidden' :name="name" :value="select.toString()" />
+                    <div class="h-96 overflow-auto form-input">
+                        <form-tree-item :list="list" @select="selectIds"></form-tree-item>
+                    </div>
+                </div>`,
                 mounted() {
                     this.select = this.value ? this.value.split(',') : []
                     if (this.url) {
@@ -1779,26 +1779,8 @@
                             this.markSelect(list)
                             this.list = list
                         })
-                    } else {
-                        // 创建模拟数据
-                        const list = []
-                        const getList = (num = 10, level = 0, current = list, indexs = []) => {
-                            for (let i = 0; i < num; i++) {
-                                const id = [...indexs, i]
-                                const item = {
-                                    text: '项目-' + id.join('-'),
-                                    id: id.join('-'),
-                                    child: []
-                                }
-                                if (level < 2) {
-                                    getList(num, level + 1, item.child, id)
-                                }
-                                current.push(item)
-                            }
-                        }
-                        getList()
-                        this.markSelect(list)
-                        this.list = list
+                    }else {
+                        this.list = config.data
                     }
                 },
                 methods: {
