@@ -49,7 +49,6 @@
                 $($obj).text('显示')
             }
         });
-
     }
 
     owner.dropdown = function (config) {
