@@ -1691,7 +1691,7 @@
                 },
                 template: `<div v-for="(item, index) in list" :key="item.id" >
                     <div
-                        class="flex items-center mb-4"
+                        class="flex items-center mb-2"
                         :class="'ml-'+(level * 4) + (item.open?' jstree-open':' jstree-closed')"
                     >
                         <i class="tree-ctrl" :class="{'tree-ctrl-close': item.child && item.child.length && !item.open, 'tree-ctrl-open': item.child && item.child.length && item.open}" @click="item.open = !item.open"></i>
