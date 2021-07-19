@@ -1782,6 +1782,7 @@
                         })
                     }else {
                         this.list = this.toTree(config.data)
+                        this.markSelect()
                     }
                 },
                 methods: {
