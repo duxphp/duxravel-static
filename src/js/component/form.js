@@ -1678,6 +1678,194 @@
      * @param config
      */
     owner.tree = function ($el, config) {
+
+
+        const vueFormComps = {
+            'form-tree-item': {
+                props: {
+                    list: Array,
+                    level: {
+                        type: Number,
+                        default: 0
+                    }
+                },
+                template: `<div v-for="(item, index) in list" :key="item.id" >
+            <div
+                class="flex items-center mb-4"
+                :class="'ml-'+(level * 4) + (item.open?' jstree-open':' jstree-closed')"
+            >
+                <i class="tree-ctrl" :class="{'tree-ctrl-close': item.child && item.child.length && !item.open, 'tree-ctrl-open': item.child && item.child.length && item.open}" @click="item.open = !item.open"></i>
+                <div
+                    class="tree-checkbox mr-4"
+                    :class="{
+                        'tree-checkbox-half': item.select === 1,
+                        'tree-checkbox-checked': item.select === 2
+                    }"
+                    @click="click(index, item.select)"
+                ></div>
+                {{item.text}}
+            </div>
+            <form-tree-item v-if="item.open && item.child && item.child.length" @select="$emit('select', $event)" :level="level + 1" :list="item.child"></form-tree-item>
+        </div>`,
+                methods: {
+                    getSelectId(list, type, ids = []) {
+                        list.forEach(item => {
+                            type.includes(item.select) && ids.push(item.id)
+                            if (item.child && item.child.length) {
+                                this.getSelectId(item.child, type, ids)
+                            }
+                        })
+                        return ids
+                    },
+                    click(index, select) {
+                        const item = this.list[index]
+                        const ids = []
+                        ids.push(item.id)
+                        if (select === 2) {
+                            // 取消选择
+                            this.getSelectId(item.child, [2], ids)
+                            this.$emit('select', {ids, type: 'unselect'})
+                        } else {
+                            // 选中
+                            this.getSelectId(item.child, [0, 1], ids)
+                            this.$emit('select', {ids, type: 'select'})
+                        }
+                    }
+                }
+            },
+            // 树形选择器
+            'form-tree': {
+                props: {
+                    text: String,
+                    url: String,
+                    name: String,
+                    textKey: {
+                        type: String,
+                        default: 'text'
+                    },
+                    idKey: {
+                        type: String,
+                        default: 'id'
+                    },
+                    childKey: {
+                        type: String,
+                        default: 'child'
+                    },
+                    value: {
+                        type: String,
+                        default: ''
+                    }
+                },
+                data() {
+                    return {
+                        list: [],
+                        select: []
+                    }
+                },
+                template: `<div class="mb-4 jstree-default">
+            <label class="form-label block mb-2 text-gray-700 ">{{text}}</label>
+            <input type='hidden' :name="name" :value="select.toString()" />
+            <div class="h-96 overflow-auto form-input">
+                <form-tree-item :list="list" @select="selectIds"></form-tree-item>
+            </div>
+        </div>`,
+                mounted() {
+                    this.select = this.value ? this.value.split(',') : []
+                    if (this.url) {
+                        app.ajax({
+                            url: this.url
+                        }).then(res => {
+                            const list = this.toTree(res.result)
+                            this.markSelect(list)
+                            this.list = list
+                        })
+                    } else {
+                        // 创建模拟数据
+                        const list = []
+                        const getList = (num = 10, level = 0, current = list, indexs = []) => {
+                            for (let i = 0; i < num; i++) {
+                                const id = [...indexs, i]
+                                const item = {
+                                    text: '项目-' + id.join('-'),
+                                    id: id.join('-'),
+                                    child: []
+                                }
+                                if (level < 2) {
+                                    getList(num, level + 1, item.child, id)
+                                }
+                                current.push(item)
+                            }
+                        }
+                        getList()
+                        this.markSelect(list)
+                        this.list = list
+                    }
+                },
+                methods: {
+                    toTree(list) {
+                        return list.map(item => ({
+                            text: item[this.textKey],
+                            id: item[this.idKey],
+                            child: this.toTree(item[this.childKey] || [])
+                        }))
+                    },
+                    // 标记选中状态
+                    markSelect(list = this.list) {
+                        // 0 未选中 1部分选中 2全选
+                        return list.map(item => {
+                            if (item.child && item.child.length) {
+                                const childStatus = this.markSelect(item.child)
+                                if (childStatus.includes(1) || (childStatus.includes(0) && childStatus.includes(2))) {
+                                    item.select = 1
+                                    return 1
+                                } else if (!childStatus.includes(0)) {
+                                    item.select = 2
+                                    return 2
+                                } else {
+                                    item.select = 0
+                                    return 0
+                                }
+                            } else if (this.select.includes(item.id)) {
+                                item.select = 2
+                                return 2
+                            } else {
+                                item.select = 0
+                                return 0
+                            }
+                        })
+                    },
+                    selectIds({ids, type}) {
+                        if (type === 'select') {
+                            this.select.push(...ids)
+                        } else {
+                            ids.forEach(id => {
+                                const index = this.select.indexOf(id)
+                                ~index && this.select.splice(index, 1)
+                            })
+                        }
+                        this.markSelect()
+                        this.$emit('form-input', this.select.toString())
+                    }
+                }
+            },
+        }
+
+        const Counter = {
+
+        }
+
+        const vueApp = Vue.createApp(Counter)
+
+        for (const key in vueFormComps) {
+            if (Object.hasOwnProperty.call(vueFormComps, key)) {
+                vueApp.component(key, vueFormComps[key])
+            }
+        }
+
+        vueApp.mount($el)
+
+
+
         let defaultConfig = {
             tree: {
                 'core': {
