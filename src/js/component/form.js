@@ -1780,7 +1780,7 @@
                             this.list = list
                         })
                     }else {
-                        this.list = config.data
+                        this.list = this.toTree(config.data)
                     }
                 },
                 methods: {
