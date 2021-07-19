@@ -1850,9 +1850,8 @@
             },
         }
 
-        const Counter = {
 
-        }
+        const Counter = {}
 
         const vueApp = Vue.createApp(Counter)
 
@@ -1863,7 +1862,7 @@
         }
 
         vueApp.mount($el)
-
+        return;
 
 
         let defaultConfig = {
@@ -1887,7 +1886,7 @@
                 for (let i in data.selected) {
                     if (config.target) {
                         $(config.target).val(data.selected[i])
-                    }else {
+                    } else {
                         $($el).prev().val(data.selected[i])
                     }
                 }
