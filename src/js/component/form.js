@@ -1696,7 +1696,7 @@
                     >
                         <i class="tree-ctrl" :class="{'tree-ctrl-close': item.child && item.child.length && !item.open, 'tree-ctrl-open': item.child && item.child.length && item.open}" @click="item.open = !item.open"></i>
                         <div
-                            class="tree-checkbox mr-4"
+                            class="tree-checkbox mr-2"
                             :class="{
                                 'tree-checkbox-half': item.select === 1,
                                 'tree-checkbox-checked': item.select === 2
