@@ -1,0 +1,30 @@
+{
+    "name": "duxphp/duxravel-static",
+    "type":"duxravel-app",
+    "description": "Duxravel 前端库",
+    "authors": [
+        {
+            "name": "duxphp"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Duxravel\\UI\\Providers\\": "providers/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Duxravel\\UI\\Providers\\UIServiceProvider"
+            ]
+        },
+        "duxravel": {
+            "type": "static",
+            "name": "system"
+        }
+    }
+}

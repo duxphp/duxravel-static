@@ -31,7 +31,8 @@ class UIServiceProvider extends ServiceProvider
     public function boot(Router $router)
     {
         $this->publishes([
-            __DIR__.'/../dist' => public_path('static/system'),
+            __DIR__.'/../dist/resource' => public_path('static/manage'),
+            __DIR__.'/../dist/views' => base_path('resources/manage/views'),
         ], 'duxravel-system');
     }
 }
