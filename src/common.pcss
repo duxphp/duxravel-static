@@ -1,0 +1,59 @@
+
+/*! @import */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.n-data-table.n-data-table--bordered .n-data-table-wrapper {
+    @apply overflow-hidden;
+}
+
+.n-menu .n-menu-item {
+    @apply h-10;
+}
+
+.n-menu .n-submenu .n-menu-item-content {
+    @apply h-10;
+}
+
+.n-tree .n-tree-node-switcher {
+    height:38px;
+}
+
+.n-tree .n-tree-node-content {
+    min-height: 38px;
+}
+
+.n-tree .n-tree-node-checkbox {
+    height:38px;
+}
+
+
+
+.n-data-table.n-data-table--bordered .n-data-table-wrapper {
+    @apply shadow overflow-hidden rounded-md border-0;
+}
+.n-data-table .n-data-table-empty {
+    @apply bg-white;
+}
+
+.table-tree {
+  @apply flex flex-col;
+}
+
+.table-tree .n-tree-node-wrapper {
+  @apply p-2 bg-white rounded shadow mb-2;
+}
+
+.table-tree .n-tree-node-content__text {
+  @apply flex flex-row flex-grow gap-4;
+}
+.table-tree .n-tree-node-content__text .tree-line {
+  @apply flex-none;
+}
+.table-tree .n-tree-node-content__text .tree-line:last-child {
+  @apply flex-grow flex justify-end;
+}
+.table-tree .n-tree-node-content {
+  text-decoration-line:none;
+}
