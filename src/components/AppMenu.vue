@@ -12,11 +12,8 @@
       flex-none
       w-40
       bg-white
-      border-gray-200
-      border-solid
-      border-r
-      shadow-sm
-      z-10
+      shadow
+      z-20
     "
     :native-scrollbar="false"
   >
