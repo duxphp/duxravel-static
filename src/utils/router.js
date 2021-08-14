@@ -1,6 +1,6 @@
 import * as Vue from 'vue'
 import qs from 'qs'
-import { requestCache } from "./request";
+import { request } from "./request";
 import event from './event'
 window.addEventListener('popstate', e => {
   routerChange(e.state || {
@@ -29,7 +29,7 @@ export const pageReload = () => {
 
 let currentState = {}
 const routerChange = (state = {}) => {
-  if (!state.url || (currentState.url === state.url && state.agree !== 'routerPush')) {
+  if (!state.url) {
     return
   }
 
@@ -61,7 +61,7 @@ export const getPage = (url, type) => {
   const callback = []
   const promise = new Promise((resolve, reject) => {
     callback.push(resolve, reject)
-    requestCache({
+    request({
       header: {
         'x-dux-sfc': '1',
         ...(type === 'dialog' ? { 'x-dialog': '1' } : {})
