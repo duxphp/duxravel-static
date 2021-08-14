@@ -77,14 +77,9 @@ export const request = window.ajax = async params => {
   }
 
   if (result.code === 401) {
-    if (result.data.code === 4011) {
-      // token过期 刷新token
-      await reloadToken()
-    } else {
-      // token失效 登录重新获取token
-      clearUserInfo()
-      await login()
-    }
+    // token失效 登录重新获取token
+    clearUserInfo()
+    await login()
     return request(params)
   }
   if (result.code === 200 && isJson) {

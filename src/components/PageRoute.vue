@@ -13,7 +13,7 @@
 <script>
 import * as Vue from "vue";
 import Create from "./Create";
-import ErrorPage from "./Error.vue";
+import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage } from "../utils/router";
 import event from "../utils/event";
 
