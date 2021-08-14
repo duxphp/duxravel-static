@@ -1,18 +1,21 @@
 <template>
   <component
-    v-if="!uninstall && pageType === 'vue' && currentUrl"
+    v-if="!uninstall && !errorMessage && pageType === 'vue' && currentUrl"
     :is="innerComp"
   ></component>
   <Create
-    v-if="!uninstall && pageType === 'node' && currentUrl"
+    v-if="!uninstall && !errorMessage && pageType === 'node' && currentUrl"
     v-bind="createData"
   ></Create>
+  <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode" />
 </template>
 
 <script>
 import * as Vue from "vue";
 import Create from "./Create";
+import ErrorPage from "./Error.vue";
 import { getComp, getPage } from "../utils/router";
+import event from "../utils/event";
 
 export default {
   name: "PageRoute",
@@ -28,6 +31,7 @@ export default {
   },
   components: {
     Create,
+    ErrorPage,
   },
   data() {
     return {
@@ -40,6 +44,8 @@ export default {
       },
       // 路由改变卸载页面
       uninstall: false,
+      // 页面错误消息
+      errorMessage: "",
     };
   },
   computed: {
@@ -53,6 +59,10 @@ export default {
   },
   created() {
     this.getPage(this.currentUrl);
+    event.add("router-change", this.routeChange);
+  },
+  beforeUnmount() {
+    event.remove("router-change", this.routeChange);
   },
   watch: {
     currentUrl(url) {
@@ -60,6 +70,14 @@ export default {
     },
   },
   methods: {
+    routeChange(data) {
+      if (
+        data.url === this.currentUrl &&
+        ["push", "replace"].includes(data.agree)
+      ) {
+        this.getPage(data.url);
+      }
+    },
     getPage(url) {
       if (this.pageStatus) {
         // 取消请求
@@ -70,6 +88,7 @@ export default {
       }, 100);
       this.pageStatus = getPage(url, this.windowType)
         .then(({ type, data }) => {
+          this.errorMessage = "";
           this.pageType = type;
           this.uninstall = true;
           this.$nextTick(() => {
@@ -83,7 +102,9 @@ export default {
           this.$emit("load-status", { type: "end" });
           this.pageStatus = null;
         })
-        .catch(() => {
+        .catch((err) => {
+          this.errorCode = err.code;
+          this.errorMessage = err.data?.message || err.message;
           this.pageStatus = null;
           this.$emit("load-status", { type: "error" });
         });
