@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     routeChange(data) {
+      // 监听用于刷新页面
       if (
         data.url === this.currentUrl &&
         ["push", "replace"].includes(data.agree)
