@@ -128,5 +128,9 @@ export default {
   "Switch": {},
   "Pagination": {
     "itemSize": "38px"
+  },
+  "Tree": {
+    "nodeColorHover": "rgba(0,0,0, 0)",
+    "nodeColorActive": colors.blue["50"]
   }
 }

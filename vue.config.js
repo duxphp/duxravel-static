@@ -5,7 +5,7 @@
  */
 module.exports = {
     // 选项...
-    publicPath: '/manage/',
+    publicPath: '/',
     outputDir: './dist/resource',
 
     indexPath: process.env.NODE_ENV === 'production'

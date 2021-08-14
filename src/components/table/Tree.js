@@ -155,17 +155,8 @@ export default defineComponent({
         draggable={true}
         onDrop={this.handleDrop}
       />
-      <div vShow={this.data.length === 0} class="flex justify-center">
-        <div class="flex items-start gap-4">
-          <div class="flex-none text-gray-400">
-              <svg viewBox="0 0 1024 1024" class="w-12 h-12 fill-current" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <path d="M831.7 369.4H193.6L64 602v290.3h897.2V602L831.7 369.4zM626.6 604.6c0 62.9-51 113.9-114 113.9s-114-51-114-113.9H117.5l103.8-198h582.5l103.8 198h-281zM502.2 131h39.1v140.6h-39.1zM236.855 200.802l27.647-27.647 99.419 99.418-27.648 27.648zM667.547 272.637l99.418-99.419 27.648 27.648-99.418 99.418z"  p-id="1342"></path>
-              </svg></div>
-          <div class=" flex-grow">
-            <div class="text-base mb-1">暂未找到数据</div>
-            <div class="text-gray-400">暂时未找到数据，您可以尝试重新加载</div>
-          </div>
-        </div>
+      <div vShow={this.data.length === 0} class="flex justify-center bg-white p-4 shadow">
+        <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className=""/>
       </div>
 
     </div>
