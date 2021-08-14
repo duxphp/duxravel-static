@@ -6,10 +6,7 @@
       @load-status="loadStatus"
     />
   </template>
-  <n-modal
-    v-else
-    :show="dialogShow"
-  >
+  <n-modal v-else display-directive="show" :show="dialogShow">
     <n-card class="max-w-xl" content-style="padding: 0;">
       <PageRoute
         :windowType="windowType"
@@ -18,13 +15,11 @@
       />
     </n-card>
   </n-modal>
-
 </template>
 
 <script>
 import PageRoute from "./PageRoute.vue";
 import { router } from "../utils/router";
-import { useMessage } from "naive-ui";
 
 export default {
   name: "PageContent",
@@ -46,7 +41,6 @@ export default {
       // 弹出加载消息
       dialogMsg: null,
       dialogShow: false,
-      message: useMessage(),
     };
   },
   watch: {
@@ -57,19 +51,23 @@ export default {
       }
     },
   },
-  mounted() {
-    this.dialogShow = true
-  },
   created() {
     this.url = this.currentUrl;
     this.urls.push(this.currentUrl);
   },
+  mounted() {
+    this.dialogShow = true
+  },
   methods: {
     closeWindow() {
-      this.dialogShow = false;
-      setTimeout(() => {
+      if (this.dialogShow) {
+        this.dialogShow = false;
+        setTimeout(() => {
+          this.$emit("close");
+        }, 200);
+      } else {
         this.$emit("close");
-      }, 200);
+      }
     },
     changeRouter(url, type) {
       if (this.windowType === "page") {
@@ -97,22 +95,17 @@ export default {
       }
     },
     closeLoading() {
-      setTimeout(() => {
-        this.dialogMsg.destroy();
-        this.dialogMsg = null;
-        setTimeout(() => {
-          this.dialogShow = true;
-        }, 200);
-      }, 1000);
+      this.dialogMsg?.destroy?.();
+      this.dialogMsg = null;
     },
     loadStatus({ type }) {
-      console.log('dsad')
       if (type === "start") {
         this.windowType === "page" && window.loadingBar.start();
         if (this.windowType !== "page") {
-          this.dialogMsg = this.message.loading("加载页面中，请稍等...");
+          this.dialogMsg = window.message.loading("加载页面中，请稍等...");
         }
       } else if (type === "end") {
+        // 加载完成显示页面
         this.windowType === "page"
           ? window.loadingBar.finish()
           : this.closeLoading();

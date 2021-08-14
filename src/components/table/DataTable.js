@@ -153,8 +153,8 @@ export default defineComponent({
       })
     }
 
-    const routerChange = ({ params }) => {
-      getList(params)
+    const routerChange = ({ params, agree }) => {
+      agree === 'routerPush' && getList(params)
     }
 
     // url自动跟随参数
@@ -227,7 +227,7 @@ export default defineComponent({
     }
   },
 
-  unmounted() {
+  beforeUnmount() {
     event.remove('router-change', this.routerChange)
   },
 

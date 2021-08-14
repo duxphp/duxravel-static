@@ -25,7 +25,7 @@
             <span class="text-blue-900"> 欢迎使用后台管理系统 </span>
           </p>
         </div>
-        <form class="mt-8 space-y-6">
+        <form class="mt-8 space-y-6" @submit="login">
           <input type="hidden" name="remember" value="true" />
           <div class="rounded-md flex flex-col gap-2">
             <div>
@@ -48,9 +48,9 @@
 
           <div>
             <n-button
+              attr-type="submit"
               type="primary"
               size="large"
-              @click="login"
               :loading="data.status"
               class="w-full"
               >登录</n-button
@@ -90,7 +90,8 @@ export default {
       handleCheckedChange(checked) {
         data.value.post.remember = checked ? 1 : 0;
       },
-      login() {
+      login(e) {
+        e.preventDefault();
         if (data.value.status) {
           return;
         }
@@ -108,6 +109,7 @@ export default {
           .finally(() => {
             data.value.status = false;
           });
+        return false;
       },
     };
   },

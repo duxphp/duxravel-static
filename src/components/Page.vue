@@ -1,7 +1,16 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <div class="text-white w-16 bg-gray-800 px-2 flex-none flex flex-col">
-      <div class="flex-none cursor-pointer flex flex-col items-center justify-center mb-4">
+      <div
+        class="
+          flex-none
+          cursor-pointer
+          flex flex-col
+          items-center
+          justify-center
+          mb-4
+        "
+      >
         <n-dropdown
           trigger="click"
           :options="avatarMenu"
@@ -10,16 +19,27 @@
           placement="bottom-start"
           :show-arrow="true"
         >
-        <div class="rounded-full h-8 w-8 flex items-center justify-center bg-white mt-5">
-          <img
-            class="w-6 h-6"
-            :src="appInfo.logo || require('../assets/images/logo.svg')"
-          />
-        </div>
+          <div
+            class="
+              rounded-full
+              h-8
+              w-8
+              flex
+              items-center
+              justify-center
+              bg-white
+              mt-5
+            "
+          >
+            <img
+              class="w-6 h-6"
+              :src="appInfo.logo || require('../assets/images/logo.svg')"
+            />
+          </div>
         </n-dropdown>
       </div>
 
-      <n-layout-content class="flex-grow  bg-gray-800" :native-scrollbar="false">
+      <n-layout-content class="flex-grow bg-gray-800" :native-scrollbar="false">
         <div
           v-show="!item.hidden || currentIndexs[0] === index"
           v-for="(item, index) in menu"
@@ -33,9 +53,24 @@
           >
             <template #trigger>
               <div
-                class="cursor-pointer rounded-sm py-1.5 text-center flex items-center justify-center gap-1 text-gray-200 hover:text-white hover:bg-gray-700 relative mb-2"
+                class="
+                  cursor-pointer
+                  rounded-sm
+                  py-1.5
+                  text-center
+                  flex
+                  items-center
+                  justify-center
+                  gap-1
+                  text-gray-200
+                  hover:text-white
+                  hover:bg-gray-700
+                  relative
+                  mb-2
+                "
                 :class="{
-                  'bg-blue-600 hover:bg-blue-600 text-white': currentIndexs[0] === index,
+                  'bg-blue-600 hover:bg-blue-600 text-white':
+                    currentIndexs[0] === index,
                 }"
               >
                 <span
@@ -62,7 +97,22 @@
             :show-arrow="false"
           >
             <template #trigger>
-              <div class="cursor-pointer rounded-sm py-1.5 text-center flex items-center justify-center gap-1 hover:text-white hover:bg-gray-700 relative mb-2">
+              <div
+                class="
+                  cursor-pointer
+                  rounded-sm
+                  py-1.5
+                  text-center
+                  flex
+                  items-center
+                  justify-center
+                  gap-1
+                  hover:text-white
+                  hover:bg-gray-700
+                  relative
+                  mb-2
+                "
+              >
                 <span
                   class="w-5 h-6 flex items-center justify-center"
                   v-if="item.icon"
@@ -91,8 +141,7 @@
                   class="
                     w-10
                     h-10
-                    border
-                    border-gray-300
+                    border border-gray-300
                     p-2
                     rounded
                     flex
@@ -161,7 +210,7 @@ import AppMenu from "./AppMenu.vue";
 import DataDialog from "./utils/Dialog";
 import FileManage from "./utils/FileManage";
 import { router, pageReload } from "../utils/router";
-import {getUrl, request} from "../utils/request";
+import { getUrl, request } from "../utils/request";
 import event from "../utils/event";
 import { getLocalUserInfo, onUserLogin, clearUserInfo } from "../utils/user";
 
@@ -178,21 +227,21 @@ export default {
     PageContent,
     AppMenu,
     DataDialog,
-    FileManage
+    FileManage,
   },
   data() {
     return {
       avatarMenu: [
         {
-          label: '返回首页',
+          label: "返回首页",
           key: 0,
         },
         {
-          label: '修改资料',
+          label: "修改资料",
           key: 1,
         },
         {
-          label: '退出登录',
+          label: "退出登录",
           key: 2,
         },
       ],
@@ -257,18 +306,19 @@ export default {
     avatarSelect(key) {
       switch (key) {
         case 2:
-          clearUserInfo()
-          window.location.reload()
+          clearUserInfo();
+          window.location.replace(
+            window.location.pathname.split("/")[0] || "/"
+          );
           break;
         case 1:
-          router.push(getUrl('/userInfo/page'))
+          router.push(getUrl("/userInfo/page"));
           break;
         case 0:
         default:
-          window.open('/')
+          window.open("/");
           break;
       }
-
     },
     // 菜单点击
     target(e) {

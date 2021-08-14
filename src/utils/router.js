@@ -57,21 +57,34 @@ const routerChange = (state = {}) => {
  * @param {*} url 路由地址
  * @param {*} type 类型 page 页面 dialog 弹窗
  */
-export const getPage = async (url, type) => {
-  const data = await requestCache({
-    header: {
-      'x-dux-sfc': '1',
-      ...(type === 'dialog' ? { 'x-dialog': '1' } : {})
-    },
-    // 删除模块名称
-    url: url.split('/').slice(2).join('/')
-  }, true);
-
-  return {
-    type: typeof data === 'string' ? 'vue' : 'node',
-    data
+export const getPage = (url, type) => {
+  const callback = []
+  const promise = new Promise((resolve, reject) => {
+    callback.push(resolve, reject)
+    requestCache({
+      header: {
+        'x-dux-sfc': '1',
+        ...(type === 'dialog' ? { 'x-dialog': '1' } : {})
+      },
+      // 删除模块名称
+      url: url.split('/').slice(2).join('/')
+    }, true).then(data => {
+      resolve({
+        type: typeof data === 'string' ? 'vue' : 'node',
+        data
+      })
+    }).catch(reject)
+  })
+  promise.abort = () => {
+    callback[1]?.({
+      message: '取消请求',
+      status: 1
+    })
   }
+  return promise
 }
+
+
 
 /**
  * 将url和data参数进行合并 转换为新的url

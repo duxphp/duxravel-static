@@ -1,7 +1,7 @@
 import qs from 'qs'
 import { deepCopy } from './object'
 import { router } from './router'
-import { clearUserInfo, getLocalUserInfo, login, reloadToken } from './user'
+import { clearUserInfo, getLocalUserInfo, login, reloadToken, setLocalUserInfo } from './user'
 
 /**
  * 转换当前url为真实URL
@@ -29,14 +29,14 @@ export const request = window.ajax = async params => {
   // 请求头
   const headers = new Headers({
     'Accept': 'application/json',
-    Authorization: `bearer ${getLocalUserInfo().token || ''}`,
+    Authorization: getLocalUserInfo().token || '',
     ...header
   })
 
   const init = {
     method,
     credentials: 'omit',
-    headers: headers
+    headers
   }
   if (method.toUpperCase() === 'POST') {
     init.body = JSON.stringify(data)
@@ -57,6 +57,12 @@ export const request = window.ajax = async params => {
   }
   const contentType = res.headers.get("Content-Type").toLowerCase()
   const isJson = contentType.indexOf('application/json') === 0
+
+  // 设置新的验证值
+  const token = res.headers.get('authorization')
+  if (token) {
+    setLocalUserInfo({ token })
+  }
 
   if (isJson) {
     result.data = await res.json()

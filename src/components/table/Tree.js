@@ -1,9 +1,8 @@
 import { h, defineComponent, resolveDynamicComponent, watch } from 'vue'
 import classnames from 'classnames'
-import { request, requestCache, searchQuick } from '../../utils/request'
+import { request, searchQuick } from '../../utils/request'
 import { router } from '../../utils/router'
 import { vExec } from '../Create'
-import './Tree.scss'
 import event from '../../utils/event'
 
 function findSiblingsAndIndex(node, nodes) {
@@ -58,8 +57,8 @@ export default defineComponent({
     event.remove('router-change', this.getList)
   },
   methods: {
-    getList({ params }) {
-      searchQuick({
+    getList({ params, agree }) {
+      agree === 'routerPush' && searchQuick({
         url: this.url,
         method: 'get',
         data: params
@@ -156,7 +155,7 @@ export default defineComponent({
         onDrop={this.handleDrop}
       />
       <div vShow={this.data.length === 0} class="flex justify-center bg-white p-4 shadow">
-        <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className=""/>
+        <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className="" />
       </div>
 
     </div>

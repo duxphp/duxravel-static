@@ -61,22 +61,30 @@ export default {
   },
   methods: {
     getPage(url) {
-      this.$emit("load-status", { type: "start" });
-      getPage(url, this.windowType)
+      if (this.pageStatus) {
+        // 取消请求
+        this.pageStatus.abort();
+      }
+      setTimeout(() => {
+        this.pageStatus && this.$emit("load-status", { type: "start" });
+      }, 100);
+      this.pageStatus = getPage(url, this.windowType)
         .then(({ type, data }) => {
-          if (type === "vue") {
-            this.vueTemplate = data;
-          } else {
-            this.createData = data;
-          }
           this.pageType = type;
           this.uninstall = true;
           this.$nextTick(() => {
+            if (type === "vue") {
+              this.vueTemplate = data;
+            } else {
+              this.createData = data;
+            }
             this.uninstall = false;
           });
           this.$emit("load-status", { type: "end" });
+          this.pageStatus = null;
         })
         .catch(() => {
+          this.pageStatus = null;
           this.$emit("load-status", { type: "error" });
         });
     },
