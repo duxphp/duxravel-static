@@ -53,7 +53,7 @@ export default defineComponent({
     // 默认跳转到默认的filter选项
     router.routerPush(void 0, Object.fromEntries(Object.keys(this.filter).filter(key => this.filter[key] !== null).map(key => [key, this.filter[key]])))
   },
-  unmounted() {
+  beforeUnmount() {
     event.remove('router-change', this.getList)
   },
   methods: {
