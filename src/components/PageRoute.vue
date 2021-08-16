@@ -83,21 +83,21 @@ export default {
       setTimeout(() => {
         this.pageStatus && this.$emit("load-status", { type: "start" });
       }, 100);
+      this.vueTemplate = "";
       this.pageStatus = getPage(url, this.windowType);
       this.pageStatus
         .then(({ type, data }) => {
           this.errorMessage = "";
           this.uninstall = true;
-          setTimeout(() => {
+          this.$nextTick(() => {
             this.pageType = type;
             this.uninstall = false;
             if (type === "vue") {
               this.vueTemplate = data;
             } else {
-              this.vueTemplate = "";
               this.createData = data;
             }
-          }, 10);
+          });
           this.$emit("load-status", { type: "end" });
           this.pageStatus = null;
         })
