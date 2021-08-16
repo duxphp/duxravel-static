@@ -24,7 +24,7 @@ export const request = window.ajax = async params => {
       url: params
     }
   }
-  let { url, data = {}, method = 'GET', header = {}, successMsg } = params
+  let { url, data = {}, method = 'GET', header = {}, successMsg, errorMsg = true } = params
 
   // 请求头
   const headers = new Headers({
@@ -77,14 +77,9 @@ export const request = window.ajax = async params => {
   }
 
   if (result.code === 401) {
-    if (result.data.code === 4011) {
-      // token过期 刷新token
-      await reloadToken()
-    } else {
-      // token失效 登录重新获取token
-      clearUserInfo()
-      await login()
-    }
+    // token失效 登录重新获取token
+    clearUserInfo()
+    await login()
     return request(params)
   }
   if (result.code === 200 && isJson) {
@@ -94,7 +89,7 @@ export const request = window.ajax = async params => {
     successMsg && window.message.success(result.message)
     return result.data
   }
-  window.message.error(result.data?.error?.message || result.data?.message || result.message)
+  errorMsg && window.message.error(result.data?.error?.message || result.data?.message || result.message)
   throw result
 }
 

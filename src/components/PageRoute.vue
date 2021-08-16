@@ -12,7 +12,7 @@
 <script>
 import * as Vue from "vue";
 import Create from "./Create";
-import ErrorPage from "./Error.vue";
+import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage } from "../utils/router";
 import event from "../utils/event";
 
@@ -86,7 +86,8 @@ export default {
       setTimeout(() => {
         this.pageStatus && this.$emit("load-status", { type: "start" });
       }, 100);
-      this.pageStatus = getPage(url, this.windowType)
+      this.pageStatus = getPage(url, this.windowType);
+      this.pageStatus
         .then(({ type, data }) => {
           this.errorMessage = "";
           this.pageType = type;
@@ -103,10 +104,12 @@ export default {
           this.pageStatus = null;
         })
         .catch((err) => {
-          this.errorCode = err.code;
-          this.errorMessage = err.data?.message || err.message;
-          this.pageStatus = null;
-          this.$emit("load-status", { type: "error" });
+          if (err.code !== 1) {
+            this.errorCode = err.code;
+            this.errorMessage = err.data?.message || err.message;
+            this.$emit("load-status", { type: "error" });
+            this.pageStatus = null;
+          }
         });
     },
   },
