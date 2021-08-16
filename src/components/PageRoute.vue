@@ -105,7 +105,6 @@ export default {
           this.pageStatus = null;
         })
         .catch((err) => {
-          console.log(err.code);
           if (err.code !== 1) {
             this.errorCode = err.code;
             this.errorMessage = err.data?.message || err.message;
