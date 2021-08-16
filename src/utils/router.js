@@ -165,14 +165,7 @@ export const sfcLoaderOption = {
 const { loadModule } = window["vue3-sfc-loader"];
 
 // 获取异步模板
-export const getComp = url => {
-  console.time()
-  loadModule(url, sfcLoaderOption).then(res => {
-    console.timeEnd()
-    console.log(res)
-    return res
-  })
-}
+export const getComp = url => loadModule(url, sfcLoaderOption)
 
 /**
  * 获取路由上的query参数

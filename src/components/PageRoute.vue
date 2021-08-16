@@ -12,7 +12,6 @@ import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage } from "../utils/router";
 import event from "../utils/event";
-import { pageData } from "./testdata";
 
 export default {
   name: "PageRoute",
@@ -93,7 +92,7 @@ export default {
             this.pageType = type;
             this.uninstall = false;
             if (type === "vue") {
-              this.vueTemplate = pageData;
+              this.vueTemplate = data;
             } else {
               this.vueTemplate = "";
               this.createData = data;
