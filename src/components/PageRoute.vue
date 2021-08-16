@@ -1,6 +1,5 @@
 <template>
   <component
-    v-if="!uninstall && !errorMessage && pageType === 'vue' && currentUrl"
     :is="innerComp"
   ></component>
   <Create
