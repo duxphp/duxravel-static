@@ -16,7 +16,7 @@
       <div class="max-w-md w-full space-y-8">
         <div>
           <div class="mx-auto h-16 w-16 text-blue-900">
-            <img :src="appInfo.logo || require('../assets/images/logo.svg')" />
+            <img :src="appInfo.logo || logo" />
           </div>
           <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {{ appInfo.name }}
@@ -67,10 +67,12 @@ import { ref } from "vue";
 import { request } from "../utils/request";
 import event from "../utils/event";
 import { isLogin, setLocalUserInfo } from "../utils/user";
+import logo from "../assets/images/logo.svg";
 
 export default {
   setup() {
     const data = ref({
+      logo: logo,
       post: {},
       show: !isLogin(),
       status: false,

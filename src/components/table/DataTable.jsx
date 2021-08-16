@@ -112,14 +112,6 @@ export default defineComponent({
 
     }
 
-    // 绑定在page插槽上的数据
-    const childData = {
-      checkedRowKeys,
-      checkRow,
-      getList,
-      checkAction
-    }
-
     const pagination = ref({
       prefix: () => renderNodeList.call({}, props.pagePrefix, childData).default?.(),
       suffix: () => renderNodeList.call({}, props.pageSuffix, childData).default?.(),
@@ -151,6 +143,14 @@ export default defineComponent({
       }).catch(() => {
         loding.value = false
       })
+    }
+
+    // 绑定在page插槽上的数据
+    const childData = {
+      checkedRowKeys,
+      checkRow,
+      getList,
+      checkAction
     }
 
     const routerChange = ({ params, agree }) => {

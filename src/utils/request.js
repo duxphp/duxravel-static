@@ -12,7 +12,7 @@ export const getUrl = url => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `/${location.pathname.split('/')[1] || 'admin'}${!url.startsWith('/') ? '/' : ''}${url}`
+  return `http://dev.test/${location.pathname.split('/')[1] || 'admin'}${!url.startsWith('/') ? '/' : ''}${url}`
 }
 
 /**

@@ -33,7 +33,7 @@
           >
             <img
               class="w-6 h-6"
-              :src="appInfo.logo || require('../assets/images/logo.svg')"
+              :src="appInfo.logo || logo"
             />
           </div>
         </n-dropdown>
@@ -209,10 +209,11 @@ import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
 import DataDialog from "./utils/Dialog";
 import FileManage from "./utils/FileManage";
-import { router, pageReload } from "../utils/router";
+import { router } from "../utils/router";
 import { getUrl, request } from "../utils/request";
 import event from "../utils/event";
 import { getLocalUserInfo, onUserLogin, clearUserInfo } from "../utils/user";
+import logo from "../assets/images/logo.svg";
 
 export default {
   name: "Page",
@@ -231,6 +232,7 @@ export default {
   },
   data() {
     return {
+      logo: logo,
       avatarMenu: [
         {
           label: "返回首页",

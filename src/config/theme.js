@@ -1,5 +1,5 @@
 import theme from "tailwindcss/defaultTheme"
-const colors = require('tailwindcss/colors')
+import colors from "tailwindcss/colors"
 
 export default {
   "common": {
