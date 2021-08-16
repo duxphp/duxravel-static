@@ -2,30 +2,12 @@ import * as Vue from 'vue'
 import qs from 'qs'
 import { request } from "./request";
 import event from './event'
+
 window.addEventListener('popstate', e => {
   routerChange(e.state || {
     url: location.href.substr(location.origin.length)
   })
 })
-
-// 尝试通过 pushState 创建历史条目,然后再刷新页面查看state状态对象变化;
-window.addEventListener('load', () => {
-  if (history.state === null) {
-    pageReload()
-  } else {
-    routerChange(history.state)
-  }
-})
-
-/**
- * 页面刷新重新加载路由
- */
-export const pageReload = () => {
-  routerChange({
-    url: location.href.substr(location.origin.length)
-  })
-}
-
 
 let currentState = {}
 const routerChange = (state = {}) => {
@@ -176,7 +158,6 @@ export const sfcLoaderOption = {
       type: '.vue',
       getContentData: () => data
     }
-
   },
   addStyle() { },
 }
@@ -185,7 +166,14 @@ export const sfcLoaderOption = {
 const { loadModule } = window["vue3-sfc-loader"];
 
 // 获取异步模板
-export const getComp = url => loadModule(url, sfcLoaderOption)
+export const getComp = url => {
+  console.time()
+  loadModule(url, sfcLoaderOption).then(res => {
+    console.timeEnd()
+    console.log(res)
+    return res
+  })
+}
 
 /**
  * 获取路由上的query参数

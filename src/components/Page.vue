@@ -250,7 +250,7 @@ export default {
       // app
       apps: [],
       // 当前路由
-      currentUrl: "",
+      currentUrl: location.pathname + location.search,
       // 弹出路由合集
       dialogRouter: [],
       // 当前选中的菜单
@@ -280,7 +280,6 @@ export default {
     });
 
     // 重新加载组件
-    pageReload();
     onUserLogin((status) => {
       if (status) {
         // 菜单

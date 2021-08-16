@@ -59,6 +59,8 @@ export default defineComponent({
 
   setup(props) {
 
+    console.log(props.url)
+
     // 选中的列
     const checkedRowKeys = ref([])
     // 列表数据

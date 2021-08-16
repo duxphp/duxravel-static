@@ -1,12 +1,8 @@
 <template>
-  <component
-    v-if="!uninstall && !errorMessage && pageType === 'vue' && currentUrl"
-    :is="innerComp"
-  ></component>
-  <Create
-    v-if="!uninstall && !errorMessage && pageType === 'node' && currentUrl"
-    v-bind="createData"
-  ></Create>
+  <template v-if="!uninstall && !errorMessage && currentUrl">
+    <component v-if="pageType === 'vue'" :is="innerComp"></component>
+    <Create v-else v-bind="createData" />
+  </template>
   <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode" />
 </template>
 
@@ -16,6 +12,7 @@ import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage } from "../utils/router";
 import event from "../utils/event";
+import { pageData } from "./testdata";
 
 export default {
   name: "PageRoute",
@@ -53,7 +50,7 @@ export default {
     innerComp() {
       const currentUrl = this.currentUrl;
       return currentUrl
-        ? Vue.defineAsyncComponent(() => getComp(this.vueTemplate))
+        ? Vue.defineAsyncComponent(() => getComp(this.vueTemplate || ""))
         : "";
     },
   },
@@ -91,16 +88,17 @@ export default {
       this.pageStatus
         .then(({ type, data }) => {
           this.errorMessage = "";
-          this.pageType = type;
           this.uninstall = true;
-          this.$nextTick(() => {
+          setTimeout(() => {
+            this.pageType = type;
+            this.uninstall = false;
             if (type === "vue") {
-              this.vueTemplate = data;
+              this.vueTemplate = pageData;
             } else {
+              this.vueTemplate = "";
               this.createData = data;
             }
-            this.uninstall = false;
-          });
+          }, 10);
           this.$emit("load-status", { type: "end" });
           this.pageStatus = null;
         })
