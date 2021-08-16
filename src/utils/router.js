@@ -162,7 +162,6 @@ export const sfcLoaderOption = {
   addStyle() { },
 }
 
-
 const { loadModule } = window["vue3-sfc-loader"];
 
 // 获取异步模板
