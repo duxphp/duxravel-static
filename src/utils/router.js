@@ -66,6 +66,7 @@ export const getPage = (url, type) => {
         'x-dux-sfc': '1',
         ...(type === 'dialog' ? { 'x-dialog': '1' } : {})
       },
+      errorMsg: false,
       // 删除模块名称
       url: url.split('/').slice(2).join('/')
     }, true).then(data => {
@@ -78,7 +79,7 @@ export const getPage = (url, type) => {
   promise.abort = () => {
     callback[1]?.({
       message: '取消请求',
-      status: 1
+      code: 1
     })
   }
   return promise

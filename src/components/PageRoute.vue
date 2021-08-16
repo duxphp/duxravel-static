@@ -87,7 +87,8 @@ export default {
       setTimeout(() => {
         this.pageStatus && this.$emit("load-status", { type: "start" });
       }, 100);
-      this.pageStatus = getPage(url, this.windowType)
+      this.pageStatus = getPage(url, this.windowType);
+      this.pageStatus
         .then(({ type, data }) => {
           this.errorMessage = "";
           this.pageType = type;
@@ -104,10 +105,13 @@ export default {
           this.pageStatus = null;
         })
         .catch((err) => {
-          this.errorCode = err.code;
-          this.errorMessage = err.data?.message || err.message;
-          this.pageStatus = null;
-          this.$emit("load-status", { type: "error" });
+          console.log(err.code);
+          if (err.code !== 1) {
+            this.errorCode = err.code;
+            this.errorMessage = err.data?.message || err.message;
+            this.$emit("load-status", { type: "error" });
+            this.pageStatus = null;
+          }
         });
     },
   },

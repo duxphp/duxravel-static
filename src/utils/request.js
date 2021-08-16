@@ -24,7 +24,7 @@ export const request = window.ajax = async params => {
       url: params
     }
   }
-  let { url, data = {}, method = 'GET', header = {}, successMsg } = params
+  let { url, data = {}, method = 'GET', header = {}, successMsg, errorMsg = true } = params
 
   // 请求头
   const headers = new Headers({
@@ -89,7 +89,7 @@ export const request = window.ajax = async params => {
     successMsg && window.message.success(result.message)
     return result.data
   }
-  window.message.error(result.data?.error?.message || result.data?.message || result.message)
+  errorMsg && window.message.error(result.data?.error?.message || result.data?.message || result.message)
   throw result
 }
 
