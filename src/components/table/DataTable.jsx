@@ -215,6 +215,7 @@ export default defineComponent({
       })
     }
 
+    console.log(props.columns, 'columns')
     return {
       checkedRowKeys,
       sorter,

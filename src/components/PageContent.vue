@@ -7,7 +7,7 @@
     />
   </template>
   <n-modal v-else display-directive="show" :show="dialogShow">
-    <n-card class="max-w-xl" content-style="padding: 0;">
+    <n-card class="max-w-2xl my-4" content-style="padding: 0;">
       <PageRoute
         :windowType="windowType"
         :currentUrl="url"
