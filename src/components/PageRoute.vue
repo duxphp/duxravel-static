@@ -3,15 +3,17 @@
     <component v-if="pageType === 'vue'" :is="innerComp"></component>
     <Create v-else v-bind="createData" />
   </template>
+  <!-- <component :is="innerComp"></component> -->
   <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode" />
 </template>
 
 <script>
-import * as Vue from "vue";
+import { defineAsyncComponent } from "vue";
 import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage } from "../utils/router";
 import event from "../utils/event";
+import { getArr } from "./testdata";
 
 export default {
   name: "PageRoute",
@@ -47,10 +49,9 @@ export default {
   computed: {
     // 组件创建去刷新路由
     innerComp() {
-      const currentUrl = this.currentUrl;
-      return currentUrl
-        ? Vue.defineAsyncComponent(() => getComp(this.vueTemplate || ""))
-        : "";
+      return defineAsyncComponent(
+        this.currentUrl ? () => getComp(this.vueTemplate) : ""
+      );
     },
   },
   created() {

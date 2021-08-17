@@ -1,7 +1,10 @@
 import * as Vue from 'vue'
 import qs from 'qs'
+import { compile } from 'vue/dist/vue.cjs.js'
+
 import { request } from "./request";
 import event from './event'
+import { getXmlByTagName, getXmlByTagNames } from './xml'
 
 window.addEventListener('popstate', e => {
   routerChange(e.state || {
@@ -162,15 +165,66 @@ export const sfcLoaderOption = {
   addStyle() { },
 }
 
-const { loadModule } = window["vue3-sfc-loader"];
+
+const getCompObj = script => {
+
+  return (new Function(script.replace('export default', 'return ')))()
+}
+
+// 异步加载js
+const loadScriptOld = new Set()
+const loadScript = list => {
+  const arr = list.filter(src => !loadScriptOld.has(src))
+  if (!arr.length) {
+    return Promise.resolve()
+  }
+
+  return new Promise((resolve, reject) => {
+    let success = 0
+    arr.forEach(src => {
+      const script = document.createElement('script')
+      script.type = 'text/javascript';
+      if (script.readyState) {
+        script.onreadystatechange = function () {
+          if (script.readyState == 'loaded' || script.readyState == 'complete') {
+            script.onreadystatechange = null;
+            success++
+            if (success === arr.length) {
+              resolve()
+            }
+          }
+        };
+      } else {
+        //其他浏览器
+        script.onload = function () {
+          success++
+          if (success === arr.length) {
+            resolve()
+          }
+        }
+        script.onerror = () => {
+          reject(src + '加载失败')
+        }
+      }
+      script.src = src
+      document.getElementsByTagName('head')[0].appendChild(script);
+    })
+  })
+}
 
 // 获取异步模板
-export const getComp = url => {
-  console.time()
-  return loadModule(url, sfcLoaderOption).then(res => {
-    console.timeEnd()
-    return res
-  })
+export const getComp = async data => {
+
+  const scripts = getXmlByTagNames(data, 'script')
+
+  // 加载远程js
+  await loadScript(scripts.filter(item => item.attr.src).map(item => item.attr.src))
+
+  const compScript = (scripts.find(item => Object.keys(item.attr).length === 0)?.child || 'return {}').replace('export default', 'return ')
+
+  const comp = (new Function(compScript))()
+  comp.render = compile(getXmlByTagName(data, 'template')?.child || '')
+  return comp
 }
 
 /**

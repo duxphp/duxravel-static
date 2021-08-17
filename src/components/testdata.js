@@ -1,5 +1,110 @@
+import {
+  baseCompile
+} from "@vue/compiler-dom";
+import { parse as babelParse } from '@babel/parser'
+import { compile } from 'vue/dist/vue.cjs.js'
+import { render, hydrate, } from '@vue/runtime-dom'
+import { getComp } from '../utils/router'
+import { asyncTimeOut } from '../utils/util'
+
+const getCompObj = script => {
+  const ast = babelParse(script, {
+    sourceType: 'module',
+  }).program.body
+
+  let comp
+  for (const node of ast) {
+    if (
+      node.type === 'ExportDefaultDeclaration' &&
+      node.declaration.type === 'ObjectExpression'
+    ) {
+      comp = node.declaration
+    }
+  }
+  if (!comp) {
+    return {}
+  }
+  return (new Function('return ' + script.substr(comp.start, comp.end - comp.start)))()
+}
+
+const getXmlByTagName = (xml, name, cursor = 0) => {
+  const startIndex = xml.indexOf('<' + name, cursor)
+  if (!~startIndex) {
+    return
+  }
+  cursor = startIndex + 1
+  let endIndex = -1
+  let level = 0
+  while (!~endIndex) {
+    // 查找下一个开始和结束标签
+    const nextEnd = xml.indexOf('</' + name, cursor)
+    const nextStart = xml.indexOf('<' + name, cursor)
+    if (~nextEnd && ~nextStart) {
+      // 下一个开始标签在结束标签之后
+      if (nextEnd < nextStart) {
+        if (level === 0) {
+          endIndex = nextEnd
+        } else {
+          cursor = nextEnd + 1
+          level--
+        }
+      } else {
+        cursor = nextStart + 1
+        level++
+      }
+    } else if (~nextStart) {
+      console.error('xml结构错误')
+      return
+    } else if (~nextEnd) {
+      if (level === 0) {
+        endIndex = nextEnd
+      } else {
+        console.error('xml结构错误')
+        return
+      }
+    } else {
+      return
+    }
+  }
+  // 获取标签属性
+  const attrEnd = pageData.indexOf('>', startIndex)
+  const attr = pageData.substr(startIndex + name.length + 2, attrEnd - (startIndex + name.length + 2))
+  const data = {
+    attr: attr ? Object.fromEntries(attr
+      .split(' ')
+      .map(item => item
+        .split('=')
+        .map((name, index) => index === 1 ? name.replace(/[\"\']/g, '') : name)
+      )
+    ) : {},
+    child: pageData.substr(attrEnd + 1, endIndex - startIndex - 1),
+    nextStart: attrEnd
+  }
+  return data
+}
+
+const getXmlByTagNames = (xml, name, cursor, arr = []) => {
+  const data = getXmlByTagName(xml, name, cursor)
+  if (data) {
+    arr.push(data)
+    return getXmlByTagNames(xml, name, data.nextStart, arr)
+  }
+  return arr
+}
+
+export const getArr = async () => {
+
+  console.time()
+  // const comp = getCompObj(arr[1])
+  console.log(getXmlByTagNames(pageData, 'template'))
+  console.timeEnd()
+  // return comp
+}
+
+
+
 export const pageData = `
-<template>
+<template a="1" b="2" test>
   <n-layout class="bg-gray-100 h-screen" :native-scrollbar="false">
     <div class="p-5">
       <div class="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-2 gap-5 whitespace-nowrap">
@@ -326,7 +431,9 @@ export const pageData = `
   </n-layout>
 
 </template>
+<script src="//cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
 <script>
+  import a from 'abc'
   export default {
     data: function () {
       return {
