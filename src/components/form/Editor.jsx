@@ -85,7 +85,7 @@ export default defineComponent({
                 language: 'zh_CN',  //语言类型
 
                 skin_url: `${this.baseUrl}/tinymce/skins/ui/dux`,
-                content_css: `${this.baseUrl}/tinymce/skins/content/dux`,
+                content_css: `${this.baseUrl}/tinymce/skins/content/dux/content.css`,
                 emoticons_database_url: `${this.baseUrl}/tinymce/emojis.min.js`,
                 
                 plugins: this.plugins,

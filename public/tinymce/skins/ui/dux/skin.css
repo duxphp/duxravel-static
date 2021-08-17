@@ -85,7 +85,7 @@
 }
 .tox-tinymce-aux {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  z-index: 50;
+  z-index: 2050;
 }
 .tox-tinymce *:focus,
 .tox-tinymce-aux *:focus {
@@ -1126,7 +1126,7 @@ button::-moz-focus-inner {
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 42;
+  z-index: 2042;
 }
 .tox .tox-dialog-wrap__backdrop {
   background-color: rgba(0, 0, 0, 0.5);
@@ -1164,7 +1164,7 @@ button::-moz-focus-inner {
   }
 }
 .tox .tox-dialog-inline {
-  z-index: 42;
+  z-index: 2042;
 }
 .tox .tox-dialog__header {
   align-items: center;
@@ -1402,7 +1402,7 @@ button::-moz-focus-inner {
 .tox .tox-dialog__popups {
   position: absolute;
   width: 100%;
-  z-index: 42;
+  z-index: 2042;
 }
 .tox .tox-dialog__body-iframe {
   display: flex;
@@ -1936,14 +1936,14 @@ body.tox-dialog__disable-scroll {
 }
 .tox.tox-tinymce.tox-fullscreen {
   background-color: transparent;
-  z-index: 46;
+  z-index: 2046;
 }
 .tox-shadowhost.tox-fullscreen {
-  z-index: 46;
+  z-index: 2046;
 }
 .tox-fullscreen .tox.tox-tinymce-aux,
 .tox-fullscreen ~ .tox.tox-tinymce-aux {
-  z-index: 47;
+  z-index: 2047;
 }
 .tox .tox-help__more-link {
   list-style: none;
@@ -2093,7 +2093,7 @@ body.tox-dialog__disable-scroll {
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
-  z-index: 44;
+  z-index: 2044;
 }
 .tox .tox-menu.tox-collection.tox-collection--list {
   padding: 0;
@@ -2652,7 +2652,7 @@ body.tox-dialog__disable-scroll {
   margin-left: 3.5px;
 }
 .tox .tox-throbber {
-  z-index: 48;
+  z-index: 2048;
 }
 .tox .tox-throbber__busy-spinner {
   align-items: center;
@@ -3016,7 +3016,7 @@ body.tox-dialog__disable-scroll {
   height: 100%;
   position: absolute;
   width: 100%;
-  z-index: 40;
+  z-index: 2040;
 }
 .tox .tox-tab {
   cursor: pointer;

@@ -299,8 +299,8 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <div class="flex flex-col lg:flex-row items-stretch border-b border-gray-400">
-          <div class="flex-none manage-sidebar border-b bg-gray-100 lg:bg-white lg:w-40 lg:border-b-0 lg:border-r border-gray-400 lg:h-96 lg:overflow-y-auto lg:block hidden">
+        <div class="flex flex-col lg:flex-row items-stretch border-b border-gray-300">
+          <div class="flex-none manage-sidebar border-b bg-gray-100 lg:bg-white lg:w-40 lg:border-b-0 lg:border-r border-gray-300 lg:h-96 lg:overflow-y-auto lg:block hidden">
             <ul>
               {
                 this.cate.map((item, index) => <li
