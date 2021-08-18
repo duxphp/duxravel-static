@@ -28,6 +28,43 @@
     height:38px;
 }
 
+.table-nohead .n-data-table .n-data-table-thead {
+  @apply hidden;
+}
+
+.table-list .n-data-table .n-data-table-th {
+  @apply bg-white border-none shadow-sm;
+}
+.table-list .n-data-table .n-data-table-tr {
+  @apply rounded overflow-hidden shadow-sm;
+}
+.table-list .n-data-table-empty {
+  @apply mt-0;
+}
+.table-list .n-data-table .n-data-table-td {
+  @apply border-none;
+}
+
+.table-list .n-data-table .n-data-table-tr > .n-data-table-td:first-child, .table-list .n-data-table .n-data-table-tr > .n-data-table-th:first-child {
+  @apply rounded-l;
+}
+
+.table-list .n-data-table .n-data-table-tr > .n-data-table-td:last-child, .table-list .n-data-table .n-data-table-tr > .n-data-table-th:last-child {
+  @apply rounded-l;
+}
+
+.table-list .n-data-table .n-data-table-wrapper {
+  @apply shadow-none border-0;
+}
+
+.table-list .n-data-table.n-data-table--bordered .n-data-table-wrapper {
+  @apply shadow-none border-0;
+}
+.table-list .n-data-table .n-data-table-table {
+  border-collapse: separate;
+  border-spacing: 0px theme('spacing.2');
+  background: none;
+}
 
 
 .n-data-table.n-data-table--bordered .n-data-table-wrapper {
@@ -65,3 +102,4 @@
 .table-tree .n-tree-node-content {
   text-decoration-line:none;
 }
+
