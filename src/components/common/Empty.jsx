@@ -2,6 +2,9 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
+    'class': {
+      type: String,
+    },
     'title': {
       type: String,
       default: '暂无数据'
@@ -18,7 +21,7 @@ export default defineComponent({
   created() {
   },
   render() {
-    return <div className="flex justify-center p-4">
+    return <div class="flex justify-center p-4">
       <div className="flex items-center gap-4">
         <div className="flex-none text-gray-400">
           <n-icon size="40">
