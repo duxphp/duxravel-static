@@ -56,7 +56,7 @@ export default {
     this.urls.push(this.currentUrl);
   },
   mounted() {
-    this.dialogShow = true
+    this.dialogShow = true;
   },
   methods: {
     closeWindow() {
@@ -99,24 +99,39 @@ export default {
       this.dialogMsg = null;
     },
     loadStatus({ type }) {
-      if (type === "start") {
-        this.windowType === "page" && window.loadingBar.start();
-        if (this.windowType !== "page") {
-          this.dialogMsg = window.message.loading("加载页面中，请稍等...");
+      if (this.windowType === "page") {
+        if (type === "start") {
+          window.loadingBar.start();
+        } else if (type === "end") {
+          this.animation();
+          window.loadingBar.finish();
+        } else {
+          this.animation();
+          window.loadingBar.error();
         }
-      } else if (type === "end") {
-        // 加载完成显示页面
-        this.windowType === "page"
-          ? window.loadingBar.finish()
-          : this.closeLoading();
       } else {
-        if (this.urls.length === 1) {
-          this.closeWindow();
+        if (type === "start") {
+          this.dialogMsg = window.message.loading("加载页面中，请稍等...");
+        } else if (type === "end") {
+          this.closeLoading();
+        } else {
+          if (this.urls.length === 1) {
+            this.closeWindow();
+          }
+          this.closeLoading();
         }
-        this.windowType === "page"
-          ? window.loadingBar.error()
-          : this.closeLoading();
       }
+    },
+    animation() {
+      /**
+       * 加载成功或者加载失败执行动画
+       */
+      const page = document.getElementById("page-animation");
+      page.classList.add("an-start");
+
+      setTimeout(() => {
+        page.classList.remove("an-start");
+      }, 5);
     },
   },
 };

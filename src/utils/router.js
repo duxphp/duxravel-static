@@ -1,4 +1,3 @@
-import * as Vue from 'vue'
 import qs from 'qs'
 import { compile } from 'vue/dist/vue.cjs.js'
 
@@ -148,80 +147,165 @@ router.https = (url) => {
   window.location.href = `https:${url}`
 }
 
-
 /**
- * 路由异步组件加载器配置
+ * 页面资源管理
  */
-export const sfcLoaderOption = {
-  moduleCache: {
-    vue: Vue,
-  },
-  async getFile(data) {
-    return {
-      type: '.vue',
-      getContentData: () => data
+
+export const resource = {
+
+  // 已经加载的资源
+  /**
+   * 已经加载的资源
+   * 资源1: dom 对应的dom节点，方便移除
+   */
+  load: {},
+
+  /**
+   * 页面引用到的资源 及当前页面存在的数量
+   * page: {
+   *  num: 1,
+   *  list: ['资源1', '资源2']
+   * }
+   */
+  pageLoad: {},
+
+  /**
+   * 加载页面样式
+   * @param {string} data 当前页面模板
+   * @param {string} page 当前页面url 用于做标识
+   * @param {string} oldPage 上一个页面url 用户删除上一个页面的导入的相关资源
+   */
+  async pageLoad(data, page) {
+    const current = this.pageLoad[page] = {
+      num: 0,
+      list: []
     }
+
+    // 资源记载列表
+    const loadList = [
+      this.loadCss(getXmlByTagNames(data, 'link').filter(item => item.attr.link).map(item => item.attr.link)),
+      this.loadStyle(getXmlByTagNames(data, 'style').map(item => item.child)),
+      this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src).map(item => item.attr.src))
+    ]
+
+    const res = await Promise.all(loadList)
+
+    current.list.push(...res.map(item => item.map(item => item[0])).flat())
+
+    current.num++
   },
-  addStyle() { },
-}
 
+  /**
+   * 卸载页面资源
+   * @param {strnig} page 
+   * @param {number} num 要卸载的页面资源个数 默认是1当有大于等于1个相同页面时，将不会卸载当前的资源
+   */
+  uninstall(page, num = 1) {
+    const current = this.pageLoad[page]
+    if (!current || current.num > num) {
+      return
+    }
+    // 找到需要卸载的资源
+    const all = new Set(Object.keys(this.pageLoad).map(key => key === page ? [] : this.pageLoad[key].list).flat())
 
-const getCompObj = script => {
+    // 卸载数据
+    current.list.forEach(key => {
+      // 没有在其他页面引用到直接删除
+      if (!all.has(key)) {
+        this.load[key]?.parentNode?.removeChild?.(this.load[key])
+        delete this.load[key]
+      }
+    })
+    // 删除当前加载的页面
+    delete this.pageLoad[page]
+  },
 
-  return (new Function(script.replace('export default', 'return ')))()
-}
-
-// 异步加载js
-const loadScriptOld = new Set()
-const loadScript = list => {
-  const arr = list.filter(src => !loadScriptOld.has(src))
-  if (!arr.length) {
-    return Promise.resolve()
-  }
-
-  return new Promise((resolve, reject) => {
-    let success = 0
-    arr.forEach(src => {
-      const script = document.createElement('script')
-      script.type = 'text/javascript';
-      if (script.readyState) {
-        script.onreadystatechange = function () {
-          if (script.readyState == 'loaded' || script.readyState == 'complete') {
-            script.onreadystatechange = null;
-            success++
-            if (success === arr.length) {
-              resolve()
-            }
+  // 异步加载多个js
+  loadScript(list) {
+    const arr = list.filter(src => !this.load[src])
+    const success = []
+    if (!arr.length) {
+      return Promise.resolve(success)
+    }
+    return new Promise((resolve, reject) => {
+      arr.forEach(src => {
+        const script = document.createElement('script')
+        script.type = 'text/javascript';
+        script.onload = () => {
+          this.load[src] = {
+            source: script,
+            type: 'js'
           }
-        };
-      } else {
-        //其他浏览器
-        script.onload = function () {
-          success++
-          if (success === arr.length) {
-            resolve()
+          success.push([src, script])
+          if (success.length === arr.length) {
+            resolve(success)
           }
         }
         script.onerror = () => {
-          reject(src + '加载失败')
+          reject({
+            message: src + '加载失败'
+          })
         }
-      }
-      script.src = src
-      document.getElementsByTagName('head')[0].appendChild(script);
+        script.src = src
+        document.getElementsByTagName('head')[0].appendChild(script)
+      })
     })
-  })
+  },
+
+  /**
+   * 异步加载多个css文件
+   * @param {*} list 
+   * @returns 
+   */
+  loadCss(list) {
+    const arr = list.filter(href => !this.load.has(href))
+    const success = []
+    if (!arr.length) {
+      return Promise.resolve(success)
+    }
+
+    return new Promise((resolve, reject) => {
+      arr.forEach(href => {
+        this.load.add(href)
+        const link = document.createElement('link')
+        link.rel = 'stylesheet';
+        link.onload = () => {
+          this.load[href] = {
+            source: link,
+            type: 'css'
+          }
+          success.push([href, link])
+          if (success.length === arr.length) {
+            resolve(success)
+          }
+        }
+        link.onerror = () => {
+          reject({
+            message: href + '加载失败'
+          })
+        }
+        link.href = href
+        document.getElementsByTagName('head')[0].appendChild(link);
+      })
+    })
+  },
+
+  async loadStyle(list) {
+    return []
+  }
 }
 
+
 // 获取异步模板
-export const getComp = async data => {
+export const getComp = async (data, url) => {
 
-  const scripts = getXmlByTagNames(data, 'script')
+  // 加载页面资源
+  await resource.pageLoad(data, url)
 
-  // 加载远程js
-  await loadScript(scripts.filter(item => item.attr.src).map(item => item.attr.src))
+  // 处理组件代码
+  const compScript = (getXmlByTagNames(data, 'script').find(item => Object.keys(item.attr).length === 0)?.child || 'return {}').replace('export default', 'return ')
 
-  const compScript = (scripts.find(item => Object.keys(item.attr).length === 0)?.child || 'return {}').replace('export default', 'return ')
-
+  // 生成组件
   const comp = (new Function(compScript))()
   comp.render = compile(getXmlByTagName(data, 'template')?.child || '')
   return comp
