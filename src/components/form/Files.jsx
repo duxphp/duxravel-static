@@ -1,5 +1,4 @@
 import { defineComponent } from 'vue'
-import draggable from 'vuedraggable'
 import { getUrl } from '../../utils/request'
 import { getLocalUserInfo } from '../../utils/user'
 import { formatType } from '../../utils/component'

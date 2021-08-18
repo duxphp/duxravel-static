@@ -1,6 +1,7 @@
 import * as Vue from 'vue'
 import App from './App.vue'
 import naive from 'naive-ui'
+import draggable from 'vuedraggable'
 import * as heroicons from '@heroicons/vue/outline'
 import VueApexCharts from 'vue3-apexcharts'
 import NodeCreate from './components/Create.js'
@@ -19,6 +20,8 @@ import DataChoice from './components/form/Choice'
 import DataColor from './components/form/Color'
 import DialogTable from './components/table/DialogTable'
 import DataEmpty from './components/common/Empty'
+
+import WidgetHeader from './components/widget/Header'
 
 
 // 注册到全局
@@ -68,6 +71,12 @@ app.component('dialog-table', DialogTable)
 
 // 空组件
 app.component('app-empty', DataEmpty)
+
+// 头部件
+app.component('widget-header', WidgetHeader)
+
+// 拖动排序
+app.component('draggable', draggable)
 
 app.mount('#app')
 
