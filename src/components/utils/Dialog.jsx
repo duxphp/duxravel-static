@@ -17,13 +17,7 @@ export const appDialog = window.appDialog = {
   },
   ajax: (config) => {
     event.emit('app-dialog-ajax', { config })
-  },
-  modal: (config) => {
-    return new Promise((resolve, reject) => {
-      callback = [resolve, reject]
-      event.emit('app-dialog-modal', { config })
-    })
-  },
+  }
 }
 
 export default defineComponent({
@@ -52,11 +46,6 @@ export default defineComponent({
         title: '请输入内容',
         content: '',
         callback: null,
-      },
-      modal: {
-        title: '',
-        el: [],
-        cancel: null,
       }
     }
   },
@@ -100,16 +89,6 @@ export default defineComponent({
       this.prompt.content = config.content
       this.prompt.callback = config.callback
       this.show = true
-    })
-    event.add('app-dialog-modal', ({ config }) => {
-      this.type = 'modal'
-      this.modal.title = config.title
-      this.modal.el = config.el
-      this.modal.cancel = config.cancel
-      this.width = config.width || 'max-w-lg'
-      typeof config.callback === 'function' && config.callback(this)
-      this.show = true
-      callback[0](this)
     })
   },
   methods: {
@@ -193,21 +172,6 @@ export default defineComponent({
             确定
           </n-button>
         </div>
-      </div>
-    }
-
-    if (this.type === 'modal') {
-      inner = <div>
-          {this.modal.title && <div class="flex items-center p-4 border-b border-gray-300">
-              <div class="flex-grow text-xl">{this.modal.title}</div>
-              <div class="cursor-pointer btn-close h-6 w-6 text-gray-800 hover:text-red-600" onClick={() => {this.show = false, typeof this.modal.cancel === 'function' && this.modal.cancel(this) }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-              </div>
-          </div>
-          }
-          <Create node={this.modal.el} data={this}></Create>
       </div>
     }
 
