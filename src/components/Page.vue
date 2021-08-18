@@ -351,7 +351,7 @@ export default {
   transition: all 0.3s;
 }
 #page-animation.an-start {
-  transform: translate3D(100%, 0, 0);
+  transform: translate3D(0, 100px, 0);
   opacity: 0;
   transition: all 0s;
 }
