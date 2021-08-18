@@ -212,7 +212,7 @@ export const resource = {
     current.list.forEach(key => {
       // 没有在其他页面引用到直接删除
       if (!all.has(key)) {
-        this.load[key]?.parentNode?.removeChild?.(this.load[key])
+        this.load[key]?.source?.parentNode?.removeChild?.(this.load[key].source)
         delete this.load[key]
       }
     })
@@ -228,27 +228,34 @@ export const resource = {
       return Promise.resolve(success)
     }
     return new Promise((resolve, reject) => {
-      arr.forEach(src => {
+
+      // 按照顺序加载js，防止依赖冲突
+      const load = list => {
+        if (!list.length) {
+          resolve(success)
+          return
+        }
         const script = document.createElement('script')
         script.type = 'text/javascript';
         script.onload = () => {
-          this.load[src] = {
+          this.load[list[0]] = {
             source: script,
             type: 'js'
           }
-          success.push([src, script])
-          if (success.length === arr.length) {
-            resolve(success)
-          }
+          success.push([list[0], script])
+          load(list.slice(1))
         }
         script.onerror = () => {
           reject({
-            message: src + '加载失败'
+            message: list[0] + '加载失败'
           })
         }
-        script.src = src
+        script.src = list[0]
         document.getElementsByTagName('head')[0].appendChild(script)
-      })
+      }
+
+      load(arr)
+
     })
   },
 
