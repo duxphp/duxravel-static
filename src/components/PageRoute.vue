@@ -1,9 +1,8 @@
 <template>
   <template v-if="!uninstall && !errorMessage && currentUrl">
-    <component v-if="pageType === 'vue'" :is="innerComp"></component>
+    <component v-if="pageType === 'vue'" :is="vueComp"></component>
     <Create v-else v-bind="createData" />
   </template>
-  <!-- <component :is="innerComp"></component> -->
   <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode" />
 </template>
 
@@ -11,9 +10,8 @@
 import { defineAsyncComponent } from "vue";
 import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
-import { getComp, getPage } from "../utils/router";
+import { getComp, getPage, resource } from "../utils/router";
 import event from "../utils/event";
-import { getArr } from "./testdata";
 
 export default {
   name: "PageRoute",
@@ -35,24 +33,17 @@ export default {
     return {
       // 返回的页面类型 node 和 vue
       pageType: "",
-      // 当前选中的菜单
       // 节点创建页面
       createData: {
         node: [],
       },
+      // 自定义组件名称
+      vueComp: "",
       // 路由改变卸载页面
       uninstall: false,
       // 页面错误消息
       errorMessage: "",
     };
-  },
-  computed: {
-    // 组件创建去刷新路由
-    innerComp() {
-      return defineAsyncComponent(
-        this.currentUrl ? () => getComp(this.vueTemplate) : ""
-      );
-    },
   },
   created() {
     this.getPage(this.currentUrl);
@@ -84,25 +75,41 @@ export default {
       setTimeout(() => {
         this.pageStatus && this.$emit("load-status", { type: "start" });
       }, 100);
-      this.vueTemplate = "";
       this.pageStatus = getPage(url, this.windowType);
       this.pageStatus
         .then(({ type, data }) => {
           this.errorMessage = "";
-          this.uninstall = true;
-          this.$nextTick(() => {
-            this.pageType = type;
-            this.uninstall = false;
-            if (type === "vue") {
-              this.vueTemplate = data;
-            } else {
-              this.createData = data;
-            }
-          });
-          this.$emit("load-status", { type: "end" });
+          this.pageType = type;
           this.pageStatus = null;
+          this.vueComp = "";
+          if (type === "vue") {
+            // 创建vue组件
+            return getComp(data, this.currentUrl).then((res) => {
+              this.vueComp = defineAsyncComponent({
+                loader: () => Promise.resolve(res),
+                suspensible: false,
+              });
+            });
+          } else {
+            this.uninstall = true;
+            // 创建json组件
+            this.createData = data;
+          }
+        })
+        .then(() => {
+          this.$nextTick(() => {
+            this.uninstall = false;
+          });
+          // 卸载数据
+          resource.uninstall(this.oldUrl);
+          this.oldUrl = url;
+          this.$nextTick(() => {
+            this.$emit("load-status", { type: "end" });
+          });
         })
         .catch((err) => {
+          resource.uninstall(this.oldUrl);
+          this.oldUrl = url;
           if (err.code !== 1) {
             this.errorCode = err.code;
             this.errorMessage = err.data?.message || err.message;

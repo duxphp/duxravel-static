@@ -31,10 +31,7 @@
               mt-5
             "
           >
-            <img
-              class="w-6 h-6"
-              :src="appInfo.logo || logo"
-            />
+            <img class="w-6 h-6" :src="appInfo.logo || logo" />
           </div>
         </n-dropdown>
       </div>
@@ -186,7 +183,7 @@
       </div>
     </div>
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
-    <div class="flex-grow bg-gray-100">
+    <div class="flex-grow bg-gray-100" id="page-animation">
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
   </div>
@@ -347,4 +344,16 @@ export default {
 };
 </script>
 
+<style>
+#page-animation {
+  transform: translate3D(0, 0, 0);
+  opacity: 1;
+  transition: all 0.3s;
+}
+#page-animation.an-start {
+  transform: translate3D(0, 100px, 0);
+  opacity: 0;
+  transition: all 0s;
+}
+</style>
 
