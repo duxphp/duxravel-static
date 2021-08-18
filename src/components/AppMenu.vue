@@ -121,7 +121,7 @@ export default {
   flex: none;
 }
 .meun-child-root.an-start {
-  transform: translate3D(0, 30px, 0);
+  transform: translate3D(10px, 0, 0);
   opacity: 0;
   transition: all 0s;
 }
