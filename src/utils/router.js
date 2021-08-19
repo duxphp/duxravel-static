@@ -273,7 +273,6 @@ export const resource = {
 
     return new Promise((resolve, reject) => {
       arr.forEach(href => {
-        this.load.add(href)
         const link = document.createElement('link')
         link.rel = 'stylesheet';
         link.onload = () => {
