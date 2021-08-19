@@ -7,7 +7,12 @@
     />
   </template>
   <n-modal v-else display-directive="show" :show="dialogShow">
-    <n-card class="max-w-2xl my-4" content-style="padding: 0;">
+    <n-card
+      ref="dialogAnimation"
+      class="max-w-2xl my-4 dialog-animation"
+      content-style="padding: 0;"
+      :bordered="false"
+    >
       <PageRoute
         :windowType="windowType"
         :currentUrl="url"
@@ -40,7 +45,7 @@ export default {
       urls: [],
       // 弹出加载消息
       dialogMsg: null,
-      dialogShow: false,
+      dialogShow: true,
     };
   },
   watch: {
@@ -56,7 +61,7 @@ export default {
     this.urls.push(this.currentUrl);
   },
   mounted() {
-    this.dialogShow = true;
+    // this.dialogShow = true;
   },
   methods: {
     closeWindow() {
@@ -103,26 +108,28 @@ export default {
         if (type === "start") {
           window.loadingBar.start();
         } else if (type === "end") {
-          this.animation();
+          this.pageAnimation();
           window.loadingBar.finish();
         } else {
-          this.animation();
+          this.pageAnimation();
           window.loadingBar.error();
         }
       } else {
         if (type === "start") {
           this.dialogMsg = window.message.loading("加载页面中，请稍等...");
         } else if (type === "end") {
+          this.dialogAnimation();
           this.closeLoading();
         } else {
+          this.dialogAnimation();
+          this.closeLoading();
           if (this.urls.length === 1) {
             this.closeWindow();
           }
-          this.closeLoading();
         }
       }
     },
-    animation() {
+    pageAnimation() {
       /**
        * 加载成功或者加载失败执行动画
        */
@@ -133,10 +140,29 @@ export default {
         page.classList.remove("an-start");
       }, 5);
     },
+    dialogAnimation() {
+      /**
+       * 加载成功或者加载失败执行动画
+       */
+      const page = this.$refs.dialogAnimation.$el;
+      page.classList.add("an-start");
+
+      setTimeout(() => {
+        page.classList.remove("an-start");
+      }, 5);
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.dialog-animation {
+  transition: all 0.2s;
+  &.an-start {
+    transition: all 0s;
+    opacity: 0;
+    transform: scale3d(0.4, 0.4, 1);
+  }
+}
 </style>
 

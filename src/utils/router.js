@@ -50,7 +50,7 @@ export const getPage = (url, type) => {
         'x-dux-sfc': '1',
         ...(type === 'dialog' ? { 'x-dialog': '1' } : {})
       },
-      errorMsg: false,
+      errorMsg: type === 'dialog',
       // 删除模块名称
       url: url.split('/').slice(2).join('/')
     }, true).then(data => {
@@ -205,7 +205,7 @@ export const resource = {
     if (!current || current.num > num) {
       return
     }
-    // 找到需要卸载的资源
+    // 除了卸载页面其他所有页面的资源
     const all = new Set(Object.keys(this.pageLoad).map(key => key === page ? [] : this.pageLoad[key].list).flat())
 
     // 卸载数据

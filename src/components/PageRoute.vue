@@ -112,7 +112,7 @@ export default {
           this.oldUrl = url;
           if (err.code !== 1) {
             this.errorCode = err.code;
-            this.errorMessage = err.data?.message || err.message;
+            this.errorMessage = err.data?.error?.message || err.message;
             this.$emit("load-status", { type: "error" });
             this.pageStatus = null;
           }
