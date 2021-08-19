@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-screen overflow-hidden">
-    <div class="text-white w-16 bg-gray-800 px-2 flex-none flex flex-col">
+  <div class="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
+    <div class="text-white w-16 bg-gray-800 px-2 flex-none  flex-col lg:flex hidden">
       <div
         class="
           flex-none
@@ -182,6 +182,28 @@
         </template>
       </div>
     </div>
+
+    <div class="lg:hidden  h-14 z-10">
+      <div class="fixed bg-white shadow w-full h-14 flex items-center gap-2">
+        <div class="flex-none pl-4">
+          <img class="w-6 h-6" :src="appInfo.logo || logo" />
+        </div>
+        <div class="flex-grow text-base">{{appInfo.name}}</div>
+        <div class="flex-none pr-2">
+          <button type="button" @click="mobileMenuShow = true" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" >
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+          </button>
+        </div>
+      </div>
+      <n-drawer v-model:show="mobileMenuShow" :width="502" placement="top">
+        <n-drawer-content title="斯通纳">
+          《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。
+        </n-drawer-content>
+      </n-drawer>
+    </div>
+
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
     <div class="flex-grow bg-gray-100" id="page-animation">
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
@@ -244,6 +266,8 @@ export default {
           key: 2,
         },
       ],
+      // 移动菜单
+      mobileMenuShow: false,
       // 左侧菜单
       menu: [],
       // app

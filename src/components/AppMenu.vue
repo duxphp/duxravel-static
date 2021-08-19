@@ -1,6 +1,6 @@
 <template>
   <n-layout-content
-    class="meun-child-root hide"
+    class="menu-child-root hide lg:block hidden"
     :class="
       menuData.route
         ? 'border-r border-gray-200'
@@ -74,7 +74,7 @@ export default {
       if (data.name === old?.name) {
         return;
       }
-      const page = document.querySelector(".meun-child-root");
+      const page = document.querySelector(".menu-child-root");
       if (page) {
         const lastMenu = old.menu ? "menu" : "empty";
         const currentMenu = data.menu ? "menu" : "empty";
@@ -114,18 +114,18 @@ export default {
 </script>
 
 <style>
-.meun-child-root {
+.menu-child-root {
   transform: translate3D(0, 0, 0);
   opacity: 1;
   transition: all 0.2s;
   flex: none;
 }
-.meun-child-root.an-start {
+.menu-child-root.an-start {
   transform: translate3D(10px, 0, 0);
   opacity: 0;
   transition: all 0s;
 }
-.meun-child-root.hide {
+.menu-child-root.hide {
   opacity: 0;
   width: 0;
 }

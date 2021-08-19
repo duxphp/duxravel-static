@@ -154,7 +154,7 @@ export default defineComponent({
         draggable={true}
         onDrop={this.handleDrop}
       />
-      <div vShow={this.data.length === 0} class="flex justify-center bg-white p-4 shadow">
+      <div vShow={this.data.length === 0} class="flex justify-center bg-white rounded p-4 shadow">
         <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className="" />
       </div>
 

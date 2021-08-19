@@ -1,77 +1,108 @@
-
 /*! @import */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .n-data-table.n-data-table--bordered .n-data-table-wrapper {
-    @apply overflow-hidden;
+  @apply overflow-hidden;
 }
 
 .n-menu .n-menu-item {
-    @apply h-10;
+  @apply h-10;
 }
 
 .n-menu .n-submenu .n-menu-item-content {
-    @apply h-10;
+  @apply h-10;
 }
 
 .n-tree .n-tree-node-switcher {
-    height:38px;
+  height: 38px;
 }
 
 .n-tree .n-tree-node-content {
-    min-height: 38px;
+  min-height: 38px;
 }
 
 .n-tree .n-tree-node-checkbox {
-    height:38px;
+  height: 38px;
 }
 
 .table-nohead .n-data-table .n-data-table-thead {
   @apply hidden;
 }
 
-.table-list .n-data-table .n-data-table-th {
-  @apply bg-white border-none ;
-}
-.table-list .n-data-table .n-data-table-tr {
-  @apply rounded overflow-hidden shadow-sm;
-}
-.table-list .n-data-table-empty {
-  @apply mt-0;
-}
-.table-list .n-data-table .n-data-table-td {
-  @apply border-none;
+.table-list {
+  & .n-data-table-empty {
+    @apply mt-0 p-0 shadow-sm rounded;
+  }
+
+  & .n-data-table {
+    & .n-data-table-thead {
+      @apply bg-transparent;
+
+      & .n-data-table-tr {
+        &:hover {
+          @apply bg-transparent;
+        }
+        & .n-data-table-th {
+          @apply border-none font-normal text-gray-500 py-2 bg-gray-100;
+          &:hover {
+            @apply text-gray-900;
+          }
+        }
+      }
+    }
+
+    & .n-data-table-tbody {
+      & .n-data-table-td {
+        @apply border-none ;
+      }
+
+      & .n-data-table-tr {
+        @apply rounded overflow-hidden shadow-sm;
+
+        &>.n-data-table-td:first-child,
+        &>.n-data-table-th:first-child {
+          @apply rounded-l;
+        }
+
+        &>.n-data-table-td:last-child,
+        &>.n-data-table-th:last-child {
+          @apply rounded-r;
+        }
+      }
+    }
+
+    & .n-data-table-wrapper,
+    &.n-data-table--bordered {
+      & .n-data-table-wrapper {
+        @apply shadow-none border-0 overflow-visible;
+      }
+    }
+
+    & .n-data-table-table {
+      border-collapse: separate;
+      border-spacing: 0px theme('spacing.2');
+      background: none;
+    }
+  }
+
 }
 
-.table-list .n-data-table .n-data-table-tr > .n-data-table-td:first-child, .table-list .n-data-table .n-data-table-tr > .n-data-table-th:first-child {
-  @apply rounded-l;
-}
 
-.table-list .n-data-table .n-data-table-tr > .n-data-table-td:last-child, .table-list .n-data-table .n-data-table-tr > .n-data-table-th:last-child {
-  @apply rounded-r;
-}
+.n-data-table {
+   & .n-data-table-th, & .n-data-table-td {
+    @apply whitespace-nowrap ;
+  }
 
-.table-list .n-data-table .n-data-table-wrapper {
-  @apply shadow-none border-0;
-}
-
-.table-list .n-data-table.n-data-table--bordered .n-data-table-wrapper {
-  @apply shadow-none border-0;
-}
-.table-list .n-data-table .n-data-table-table {
-  border-collapse: separate;
-  border-spacing: 0px theme('spacing.2');
-  background: none;
-}
-
-
-.n-data-table.n-data-table--bordered .n-data-table-wrapper {
-    @apply shadow overflow-hidden rounded-md border-0;
-}
-.n-data-table .n-data-table-empty {
+  &.n-data-table--bordered {
+    & .n-data-table-wrapper {
+      @apply shadow overflow-hidden rounded-md border-0;
+    }
+  }
+  & .n-data-table-empty {
     @apply bg-white;
+  }
 }
 
 .table-tree {
@@ -79,27 +110,28 @@
 }
 
 .table-tree .n-tree-node {
- @apply flex items-center;
+  @apply flex items-center;
 }
+
 .table-tree .n-tree-node-wrapper {
   @apply mb-1;
 }
-.table-tree .n-tree-node-switcher {
-}
+
+.table-tree .n-tree-node-switcher {}
+
 .table-tree .n-tree-node-content {
-  @apply px-4 py-3 bg-white rounded shadow;
+  text-decoration-line: none;
+  @apply px-4 py-3.5 bg-white rounded shadow-sm;
 }
 
 .table-tree .n-tree-node-content__text {
-  @apply flex flex-row flex-grow items-center gap-4 ;
+  @apply flex flex-row flex-grow items-center gap-4;
 }
+
 .table-tree .n-tree-node-content__text .tree-line {
   @apply flex-none;
 }
+
 .table-tree .n-tree-node-content__text .tree-line:last-child {
   @apply flex-grow flex justify-end;
 }
-.table-tree .n-tree-node-content {
-  text-decoration-line:none;
-}
-
