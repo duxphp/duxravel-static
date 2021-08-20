@@ -6,13 +6,14 @@ import { clearUserInfo, getLocalUserInfo, login, reloadToken, setLocalUserInfo }
 /**
  * 转换当前url为真实URL
  * @param {*} url
+ * @param {*} type 相对地址还是绝对地址 relative absolute  绝对地址包含/admin  相对地址不包含admin 并且不能以/开头
  * @returns
  */
-export const getUrl = url => {
+export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `http://dev.test/${location.pathname.split('/')[1] || 'admin'}${!url.startsWith('/') ? '/' : ''}${url}`
+  return `http://dev.test${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
 }
 
 /**
@@ -24,7 +25,7 @@ export const request = window.ajax = async params => {
       url: params
     }
   }
-  let { url, data = {}, method = 'GET', header = {}, successMsg, errorMsg = true } = params
+  let { url, urlType, data = {}, method = 'GET', header = {}, successMsg, errorMsg = true } = params
 
   // 请求头
   const headers = new Headers({
@@ -50,7 +51,7 @@ export const request = window.ajax = async params => {
     }
     headers.append('Content-Type', 'application/x-www-form-urlencoded')
   }
-  const res = await fetch(getUrl(url), init)
+  const res = await fetch(getUrl(url, urlType), init)
   const result = {
     code: res.status,
     message: res.statusText

@@ -96,6 +96,9 @@ export default defineComponent({
         if (!option.method) {
           option.method = 'POST'
         }
+        if (!option.urlType) {
+          option.urlType = 'absolute'
+        }
         if (typeof option.successMsg === 'undefined') {
           option.successMsg = true
         }
@@ -206,6 +209,7 @@ export default defineComponent({
       }
       request({
         url,
+        urlType: 'absolute',
         method: 'post',
         data
       }).finally(() => {
