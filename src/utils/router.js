@@ -312,7 +312,10 @@ export const getComp = async (data, url) => {
   const compScript = (getXmlByTagNames(data, 'script').find(item => Object.keys(item.attr).length === 0)?.child || 'return {}').replace('export default', 'return ')
 
   // 生成组件
-  const comp = (new Function(compScript))()
+  let comp = (new Function(compScript))()
+  if (typeof comp !== 'object') {
+    comp = {}
+  }
   comp.render = compile(getXmlByTagName(data, 'template')?.child || '')
   return comp
 }

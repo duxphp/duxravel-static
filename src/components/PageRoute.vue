@@ -108,6 +108,7 @@ export default {
           });
         })
         .catch((err) => {
+          console.trace("路由错误", err);
           resource.uninstall(this.oldUrl);
           this.oldUrl = url;
           if (err.code !== 1) {
