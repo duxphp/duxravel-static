@@ -38,7 +38,10 @@ export default {
         url: this.href,
         method: this.method,
         successMsg: true,
-      });
+        urlType: 'absolute',
+      }).then(res => {
+        router('routerPush:')
+      })
     },
     jump(e) {
       // 处理跳转
