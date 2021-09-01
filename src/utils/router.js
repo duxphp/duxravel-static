@@ -116,7 +116,7 @@ router.routerPush = (url, data) => {
     url,
     agree: 'routerPush'
   }
-  history.pushState(state, url, url)
+  history.replaceState(state, url, url)
   routerChange(state)
 }
 
