@@ -181,7 +181,7 @@ export const resource = {
       list: []
     }
 
-    // 资源记载列表
+    // 资源加载列表
     const loadList = [
       this.loadCss(getXmlByTagNames(data, 'link').filter(item => item.attr.link).map(item => item.attr.link)),
       this.loadStyle(getXmlByTagNames(data, 'style').map(item => item.child)),
