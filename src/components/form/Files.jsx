@@ -152,7 +152,7 @@ export default defineComponent({
               accept={this.accept}
               headers={{
                 'Accept': 'application/json',
-                Authorization: `bearer ${getLocalUserInfo().token || ''}`
+                Authorization: `${getLocalUserInfo().token || ''}`
               }}
               onChange={this.fileChange}
               onFinish={this.fileFinish}
