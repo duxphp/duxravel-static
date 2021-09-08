@@ -5,7 +5,7 @@
  * @param {*} cursor 
  * @returns 
  */
-export const getXmlByTagName = (xml, name, cursor = 0) => {
+export const getXmlByTagName = window.getXmlByTagName = (xml, name, cursor = 0) => {
   const startIndex = xml.indexOf('<' + name, cursor)
   if (!~startIndex) {
     return
@@ -59,7 +59,7 @@ export const getXmlByTagName = (xml, name, cursor = 0) => {
  * @param {*} arr 
  * @returns 
  */
-export const getXmlByTagNames = (xml, name, cursor, arr = []) => {
+export const getXmlByTagNames = window.getXmlByTagNames = (xml, name, cursor, arr = []) => {
   const data = getXmlByTagName(xml, name, cursor)
   if (data) {
     arr.push(data)

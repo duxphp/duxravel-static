@@ -1,4 +1,5 @@
 import qs from 'qs'
+import md5 from 'md5'
 import { compile } from 'vue/dist/vue.cjs.js'
 
 import { request } from "./request";
@@ -145,6 +146,11 @@ router.http = (url) => {
 }
 router.https = (url) => {
   window.location.href = `https:${url}`
+}
+// 转换为一个vue组件
+router.toVueComponent = (template, comp = {}) => {
+  comp.render = compile(template)
+  return comp
 }
 
 /**
@@ -297,7 +303,20 @@ export const resource = {
   },
 
   async loadStyle(list) {
-    return []
+    const arr = []
+    list.forEach(string => {
+      const stylee = document.createElement('style')
+      stylee.innerHTML = string
+      document.getElementsByTagName('head')[0].appendChild(stylee)
+      
+      const key = md5(string)
+      this.load[key] = {
+        source: stylee,
+        type: 'css'
+      }
+      arr.push([key, stylee])
+    })
+    return arr
   }
 }
 
