@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
-    <div class="text-white w-16 bg-gray-800 px-2 flex-none  flex-col lg:flex hidden">
+    <div
+      class="text-white w-16 bg-gray-800 px-2 flex-none flex-col lg:flex hidden"
+    >
       <div
         class="
           flex-none
@@ -183,17 +185,45 @@
       </div>
     </div>
 
-    <div class="lg:hidden  h-14 z-10">
+    <div class="lg:hidden h-14 z-10">
       <div class="fixed bg-white shadow w-full h-14 flex items-center gap-2">
         <div class="flex-none pl-4">
           <img class="w-6 h-6" :src="appInfo.logo || logo" />
         </div>
-        <div class="flex-grow text-base">{{appInfo.name}}</div>
+        <div class="flex-grow text-base">{{ appInfo.name }}</div>
         <div class="flex-none pr-2">
-          <button type="button" @click="mobileMenuShow = true" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" >
-              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
+          <button
+            type="button"
+            @click="mobileMenuShow = true"
+            class="
+              bg-white
+              rounded-md
+              p-2
+              inline-flex
+              items-center
+              justify-center
+              text-gray-400
+              hover:text-gray-500
+              hover:bg-gray-100
+              focus:outline-none
+              focus:ring-2 focus:ring-inset focus:ring-indigo-500
+            "
+          >
+            <svg
+              class="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
           </button>
         </div>
       </div>
@@ -241,6 +271,39 @@ export default {
     window.message = useMessage();
     window.dialog = useDialog();
     window.loadingBar = useLoadingBar();
+
+    window.dialogAsync = {
+      destroyAll: window.dialog.destroyAll.bind(window.dialog),
+      common(option, type) {
+        if (window.dialog[type]) {
+          return new Promise((resolve) => {
+            window.dialog?.[type]({
+              ...option,
+              onClose() {
+                resolve("close");
+              },
+              onNegativeClick() {
+                resolve("negative");
+              },
+              onPositiveClick() {
+                resolve("positive");
+              },
+            });
+          });
+        } else {
+          return Promise.reject(type + "API不存在");
+        }
+      },
+      info(option) {
+        return dialogAsync.common.call(dialogAsync, option, "info");
+      },
+      success(option) {
+        return dialogAsync.common.call(dialogAsync, option, "info");
+      },
+      warning(option) {
+        return dialogAsync.common.call(dialogAsync, option, "info");
+      },
+    };
   },
   components: {
     Login,
