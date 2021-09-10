@@ -36,16 +36,33 @@ export const getXmlByTagName = window.getXmlByTagName = (xml, name, cursor = 0) 
   }
   // 获取标签属性
   const attrEnd = xml.indexOf('>', startIndex)
-  const attr = xml.substr(startIndex + name.length + 2, attrEnd - (startIndex + name.length + 2))
+  let attrString = xml.substr(startIndex + name.length + 2, attrEnd - (startIndex + name.length + 2)).trim()
+  const attr = {}
+  while (attrString.length) {
+    const spaceIndex = attrString.indexOf(' ')
+    const equalIndex = attrString.indexOf('=')
+    if (!~spaceIndex && !~equalIndex) {
+      // 找到最后一个没有值的属性
+      attr[attrString] = true
+      attrString = ''
+    } else if ((~spaceIndex && ~equalIndex && spaceIndex < equalIndex) || !~equalIndex) {
+      // 找到没有值的属性 后面还有属性 有等号 或者 没有等号
+      const key = attrString.substr(0, spaceIndex)
+      attr[key] = true
+      attrString = attrString.substr(key.length).trim()
+    } else {
+      // 有属性的值
+      const key = attrString.substr(0, equalIndex)
+      const value = attrString.substr(equalIndex + 2, attrString.indexOf(attrString.substr(equalIndex + 1, 1), equalIndex + 2) - equalIndex - 2)
+      attr[key] = value
+      attrString = attrString.substr((key + value).length + 3).trim()
+    }
+  }
   const data = {
-    attr: attr ? Object.fromEntries(attr
-      .split(' ')
-      .map(item => item
-        .split('=')
-        .map((name, index) => index === 1 ? name.replace(/[\"\']/g, '') : name)
-      )
-    ) : {},
-    child: xml.substr(attrEnd + 1, endIndex - startIndex - name.length - 2),
+    attr,
+    child: xml.substr(attrEnd + 1, endIndex - attrEnd - 1),
+    start: startIndex,
+    end: endIndex + name.length + 3,
     nextStart: attrEnd
   }
   return data
