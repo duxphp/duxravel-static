@@ -36,29 +36,31 @@ export const getXmlByTagName = window.getXmlByTagName = (xml, name, cursor = 0) 
   }
   // 获取标签属性
   const attrEnd = xml.indexOf('>', startIndex)
-  let attrString = xml.substr(startIndex + name.length + 2, attrEnd - (startIndex + name.length + 2)).trim()
+  const attrString = xml.substr(startIndex + name.length + 2, attrEnd - (startIndex + name.length + 2)).trim()
+  let attrAction = attrString
   const attr = {}
-  while (attrString.length) {
-    const spaceIndex = attrString.indexOf(' ')
-    const equalIndex = attrString.indexOf('=')
+  while (attrAction.length) {
+    const spaceIndex = attrAction.indexOf(' ')
+    const equalIndex = attrAction.indexOf('=')
     if (!~spaceIndex && !~equalIndex) {
       // 找到最后一个没有值的属性
-      attr[attrString] = true
-      attrString = ''
+      attr[attrAction] = true
+      attrAction = ''
     } else if ((~spaceIndex && ~equalIndex && spaceIndex < equalIndex) || !~equalIndex) {
       // 找到没有值的属性 后面还有属性 有等号 或者 没有等号
-      const key = attrString.substr(0, spaceIndex)
+      const key = attrAction.substr(0, spaceIndex)
       attr[key] = true
-      attrString = attrString.substr(key.length).trim()
+      attrAction = attrAction.substr(key.length).trim()
     } else {
       // 有属性的值
-      const key = attrString.substr(0, equalIndex)
-      const value = attrString.substr(equalIndex + 2, attrString.indexOf(attrString.substr(equalIndex + 1, 1), equalIndex + 2) - equalIndex - 2)
+      const key = attrAction.substr(0, equalIndex)
+      const value = attrAction.substr(equalIndex + 2, attrAction.indexOf(attrAction.substr(equalIndex + 1, 1), equalIndex + 2) - equalIndex - 2)
       attr[key] = value
-      attrString = attrString.substr((key + value).length + 3).trim()
+      attrAction = attrAction.substr((key + value).length + 3).trim()
     }
   }
   const data = {
+    attrString,
     attr,
     child: xml.substr(attrEnd + 1, endIndex - attrEnd - 1),
     start: startIndex,
