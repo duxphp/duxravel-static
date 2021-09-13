@@ -1,4 +1,7 @@
 import { asyncTimeOut } from "./util"
+import * as dateUtil from './date'
+
+window.dateUtil = dateUtil
 
 // 菜单数据
 const globalMenuData = {
