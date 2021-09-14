@@ -22,6 +22,8 @@ import DataColor from './components/form/Color'
 import DialogTable from './components/table/DialogTable'
 import DataEmpty from './components/common/Empty'
 
+import {NTree} from './components/naive/tree'
+
 import WidgetHeader from './components/widget/Header'
 
 
@@ -40,6 +42,8 @@ for (const key in heroicons) {
     app.component(key, heroicons[key])
   }
 }
+// 链接组件
+app.component('n-tree-copy', NTree)
 // 链接组件
 app.component('route', Route)
 // 富文本显示组件
