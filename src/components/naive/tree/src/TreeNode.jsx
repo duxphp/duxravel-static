@@ -253,7 +253,7 @@ const TreeNode = defineComponent({
             'n-tree-copy-node-indent-hide': parent?.isLastChild && i,
             'n-tree-copy-node-indent-half': tmNode.isLastChild && i === 0,
             'n-tree-copy-node-indent-top': tmNode.isFirstChild && !tmNode.isLastChild && i === 0,
-            'n-tree-copy-node-indent-top-more': tmNode.isFirstChild && tmNode.siblings.length > 1 && i === 0
+            'n-tree-copy-node-indent-top-more': tmNode.isFirstChild && tmNode.siblings.length > 2 && i === 0
           })}
         >
           {i === 0 && <div className={`${clsPrefix}-tree-copy-node-indent-right`} />}
