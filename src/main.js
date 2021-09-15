@@ -22,7 +22,7 @@ import DataColor from './components/form/Color'
 import DialogTable from './components/table/DialogTable'
 import DataEmpty from './components/common/Empty'
 
-import {NTree} from './components/naive/tree'
+import { NTree } from './components/naive/tree'
 
 import WidgetHeader from './components/widget/Header'
 

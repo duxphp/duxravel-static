@@ -2293,6 +2293,11 @@ treemate@^0.3.0:
   resolved "https://registry.yarnpkg.com/treemate/-/treemate-0.3.0.tgz#9f3ca2dce12d8285990646df4acb0db114b38088"
   integrity sha512-Wgnx+Oz+SD2mza6PxQZCWmLrCQV1uplmqUfxsP5M58C722ociHQFtLUZsyilQzhNBn6kZTTpGerG3QZCOPvCWA==
 
+typescript@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.3.tgz#bdc5407caa2b109efd4f82fe130656f977a29324"
+  integrity sha512-4xfscpisVgqqDfPaJo5vkd+Qd/ItkoagnHpufr+i2QCHBsNYp+G7UAoyFl8aPtx879u38wPV65rZ8qbGZijalA==
+
 uniqs@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/uniqs/-/uniqs-2.0.0.tgz#ffede4b36b25290696e6e165d4a59edb998e6b02"

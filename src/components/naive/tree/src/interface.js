@@ -1,1 +1,1 @@
-export const treeInjectionKey = Symbol('tree');
+export const treeInjectionKey = Symbol('tree')

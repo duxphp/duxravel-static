@@ -1,0 +1,80 @@
+.n-tree-copy-line {
+  position: absolute;
+}
+.n-tree-copy-line-top {
+  top: 0;
+  left: 50%;
+  height: 10px;
+  border-left: 1px dashed #666;
+}
+
+.n-tree-copy-line-bottom {
+  bottom: 0;
+  left: 50%;
+  height: 10px;
+  border-left: 1px dashed #666;
+}
+.n-tree-copy-line-right {
+  right: 0;
+  top: 50%;
+  width: 10px;
+  border-top: 1px dashed #666;
+}
+
+.n-tree-copy-point {
+  position: absolute;
+  right: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.n-tree-copy-point-child {
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+
+.n-tree-copy .n-tree-copy-node-wrapper {
+  padding: 0;
+}
+.n-tree-copy .n-tree-copy-node{
+  align-items: center;
+  height: 38px;
+}
+.n-tree-copy .n-tree-copy-node-indent {
+  margin-left: 10px;
+  margin-right: 14px;
+  height: 38px;
+  border-left: 1px dashed #666;
+}
+.n-tree-copy .n-tree-copy-node-indent-hide {
+  border-left: 1px dashed transparent;
+}
+.n-tree-copy .n-tree-copy-node-switcher {
+  margin-right: 3px;
+  width: auto;
+  margin-right: 24px;
+}
+.n-tree-copy .n-tree-copy-node-switcher .n-tree-copy-node-switcher__icon {
+  height: 38px;
+  width: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    border: 1px solid #666;
+  }
+}
