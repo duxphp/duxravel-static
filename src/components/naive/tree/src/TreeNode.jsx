@@ -14,6 +14,7 @@ import NTreeNodeCheckbox from './TreeNodeCheckbox'
 import NTreeNodeContent from './TreeNodeContent'
 import { treeInjectionKey } from './interface'
 import { renderDropMark } from './dnd'
+import classNames from 'classnames'
 
 const TreeNode = defineComponent({
   name: 'TreeNode',
@@ -248,8 +249,15 @@ const TreeNode = defineComponent({
       let parent = tmNode.parent
       for (let i = 0; i < tmNode.level; i++) {
         arr.unshift(<div
-          class={`${clsPrefix}-tree-copy-node-indent${parent?.isLastChild ? ' n-tree-copy-node-indent-hide' : ''}`}
-        />)
+          class={classNames(`${clsPrefix}-tree-copy-node-indent`, {
+            'n-tree-copy-node-indent-hide': parent?.isLastChild && i,
+            'n-tree-copy-node-indent-half': tmNode.isLastChild && i === 0,
+            'n-tree-copy-node-indent-top': tmNode.isFirstChild && !tmNode.isLastChild && i === 0,
+            'n-tree-copy-node-indent-top-more': tmNode.isFirstChild && tmNode.siblings.length > 1 && i === 0
+          })}
+        >
+          {i === 0 && <div className={`${clsPrefix}-tree-copy-node-indent-right`} />}
+        </div>)
         parent = parent?.parent
       }
       return arr
@@ -277,14 +285,8 @@ const TreeNode = defineComponent({
               ? this.handleDragStart
               : undefined
           }
-          // onContextmenu={}
+        // onContextmenu={}
         >
-          {/* {repeat(
-            tmNode.level,
-            <div
-              class={`${clsPrefix}-tree-copy-node-indent`}
-            />
-          )} */}
           {getIndent}
           <NTreeNodeSwitcher
             tmNode={this.tmNode}

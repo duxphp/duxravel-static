@@ -1,33 +1,10 @@
-.n-tree-copy-line {
-  position: absolute;
-}
-.n-tree-copy-line-top {
-  top: 0;
-  left: 50%;
-  height: 10px;
-  border-left: 1px dashed #666;
-}
-
-.n-tree-copy-line-bottom {
-  bottom: 0;
-  left: 50%;
-  height: 10px;
-  border-left: 1px dashed #666;
-}
-.n-tree-copy-line-right {
-  right: 0;
-  top: 50%;
-  width: 10px;
-  border-top: 1px dashed #666;
-}
-
 .n-tree-copy-point {
   position: absolute;
   right: -22px;
   top: 50%;
   transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -40,23 +17,53 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-
-
 .n-tree-copy .n-tree-copy-node-wrapper {
   padding: 0;
 }
-.n-tree-copy .n-tree-copy-node{
+.n-tree-copy .n-tree-copy-node {
   align-items: center;
   height: 38px;
 }
 .n-tree-copy .n-tree-copy-node-indent {
   margin-left: 10px;
   margin-right: 14px;
-  height: 38px;
+  height: 35px;
   border-left: 1px dashed #666;
+  position: relative;
+  flex-shrink: 0;
 }
 .n-tree-copy .n-tree-copy-node-indent-hide {
   border-left: 1px dashed transparent;
+}
+.n-tree-copy .n-tree-copy-node-indent-half {
+  border-left: 1px dashed #666;
+  height: 28px;
+  margin-top: -28px;
+  .n-tree-copy-node-indent-right {
+    margin-top: 15px;
+  }
+}
+.n-tree-copy .n-tree-copy-node-indent-top {
+  height: 48px;
+  margin-top: -18px;
+  .n-tree-copy-node-indent-right {
+    margin-top: 9px;
+  }
+}
+.n-tree-copy .n-tree-copy-node-indent-top-more {
+  height: 48px;
+  margin-top: -9px;
+  .n-tree-copy-node-indent-right {
+    margin-top: 5px;
+  }
+}
+.n-tree-copy .n-tree-copy-node-indent-right {
+  position: absolute;
+  width: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-bottom: 1px dashed #666;
+  width: 14px;
 }
 .n-tree-copy .n-tree-copy-node-switcher {
   margin-right: 3px;
@@ -72,9 +79,10 @@
   justify-content: center;
   svg {
     box-sizing: border-box;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     padding: 2px;
+    border-radius: 3px;
     border: 1px solid #666;
   }
 }
