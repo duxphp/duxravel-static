@@ -252,7 +252,7 @@
 </template>
 
 <script>
-import { useMessage, useDialog, useLoadingBar } from "naive-ui";
+import { useMessage, useDialog, useLoadingBar, useNotification } from "naive-ui";
 import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
@@ -271,6 +271,7 @@ export default {
     window.message = useMessage();
     window.dialog = useDialog();
     window.loadingBar = useLoadingBar();
+    window.notification = useNotification();
 
     window.dialogAsync = {
       destroyAll: window.dialog.destroyAll.bind(window.dialog),
