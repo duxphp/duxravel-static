@@ -52,6 +52,8 @@ export default defineComponent({
 
     // 默认跳转到默认的filter选项
     router.routerPush(void 0, Object.fromEntries(Object.keys(this.filter).filter(key => this.filter[key] !== null).map(key => [key, this.filter[key]])))
+    
+    console.log(this.nParams)
   },
   beforeUnmount() {
     event.remove('router-change', this.getList)
@@ -146,13 +148,12 @@ export default defineComponent({
       <n-tree-copy
         vShow={this.data.length > 0}
         class="table-tree"
-        {...vExec.call(this, this.nParams)}
         data={this.data}
         checkable={true}
         renderLabel={this.renderLabel}
         blockLine={true}
-        draggable={true}
         onDrop={this.handleDrop}
+        {...vExec.call(this, this.nParams)}
       />
       <div vShow={this.data.length === 0} class="flex justify-center bg-white rounded p-4 shadow">
         <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className="" />

@@ -106,7 +106,7 @@
 }
 
 .table-tree {
-  @apply flex flex-col;
+  @apply flex flex-col bg-white  rounded shadow-sm p-4;
 }
 
 .table-tree .n-tree-copy-node {
@@ -114,14 +114,14 @@
 }
 
 .table-tree .n-tree-copy-node-wrapper {
-  @apply mb-1;
+  @apply hover:bg-gray-100 rounded px-2;
 }
 
 .table-tree .n-tree-copy-node-switcher {}
 
 .table-tree .n-tree-copy-node-content {
   text-decoration-line: none;
-  @apply px-4 py-3.5 bg-white rounded shadow-sm;
+  @apply px-4;
 }
 
 .table-tree .n-tree-copy-node-content__text {
