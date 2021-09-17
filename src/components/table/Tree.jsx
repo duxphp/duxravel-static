@@ -143,7 +143,7 @@ export default defineComponent({
   },
   render() {
     return <div>
-      <n-tree
+      <n-tree-copy
         vShow={this.data.length > 0}
         class="table-tree"
         {...vExec.call(this, this.nParams)}

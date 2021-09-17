@@ -80,6 +80,52 @@ export const treeSharedProps = {
   'onUpdate:expandedKeys': [Function, Array]
 }
 
+export const treeNodeProps = {
+  /**
+   * 定义所有可用的右键菜单，当没有右键菜单时不会显示右键菜单
+   * {
+   *    level1New: {
+   *      text: '新建1',
+   *      event: 'new'
+   *    },
+   *    level2New: {
+   *      text: '新建2',
+   *      event: 'new'
+   *    },
+   *    edit: {
+   *      text: '编辑',
+   *      event: 'edit'
+   *    }
+   * }
+   */
+  contextMenus: {
+    type: Object,
+    default: () => ({})
+  },
+  /**
+   * 定义每个级别可用的菜单，如果找不到当前级别可用菜单，这表示所有可用
+   * {
+   *  0: ['level1New', 'edit'],
+   *  1: ['level2New', 'edit']
+   * }
+   */
+  contextLevelMenus: {
+    type: [Object, Array],
+    default: () => ({})
+  }
+}
+
+const treeLevelMarkProps = {
+  /**
+   * 组件不同层级的颜色标识
+   * 如果数组为空则不显示标识
+   */
+  levelMarkColor: {
+    type: Array,
+    default: () => []
+  }
+}
+
 const treeProps = {
   ...useTheme.props,
   data: {
@@ -167,7 +213,9 @@ const treeProps = {
     // Make tree-select take over keyboard operations
     type: Boolean,
     default: true
-  }
+  },
+  ...treeNodeProps,
+  ...treeLevelMarkProps
 }
 
 export default defineComponent({
@@ -1097,6 +1145,12 @@ export default defineComponent({
           key={tmNode.key}
           tmNode={tmNode}
           clsPrefix={mergedClsPrefix}
+          levelMarkColor={this.levelMarkColor[tmNode.level]}
+          contextMenu={
+            this.contextLevelMenus[tmNode.level]
+              ? this.contextLevelMenus[tmNode.level].map(key => this.contextMenus[key])
+              : Object.values(this.contextMenus)
+          }
         />
       )
     }

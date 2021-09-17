@@ -15,6 +15,7 @@ import NTreeNodeContent from './TreeNodeContent'
 import { treeInjectionKey } from './interface'
 import { renderDropMark } from './dnd'
 import classNames from 'classnames'
+import {} from './Tree'
 
 const TreeNode = defineComponent({
   name: 'TreeNode',
@@ -26,9 +27,16 @@ const TreeNode = defineComponent({
     tmNode: {
       type: Object,
       required: true
+    },
+    contextMenu: {
+      type: Array,
+      default: () => []
+    },
+    levelMarkColor: {
+      type: String
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const NTree = inject(treeInjectionKey)
     const {
@@ -132,6 +140,17 @@ const TreeNode = defineComponent({
         })
       }
     }
+    function handleContextmenu(event) {
+      if (!props.contextMenu.length) {
+        return
+      }
+      event.preventDefault()
+      openGlobalMenu({ list: props.contextMenu, event }).then(({ item }) => {
+        if (item.event) {
+          emit(item.event, props.tmNode)
+        }
+      }).catch(() => { })
+    }
     return {
       showDropMark: useMemo(() => {
         const { value: draggingNode } = draggingNodeRef
@@ -209,7 +228,8 @@ const TreeNode = defineComponent({
       handleDragEnd,
       handleDragLeave,
       handleContentClick,
-      handleSwitcherClick
+      handleSwitcherClick,
+      handleContextmenu
     }
   },
   render() {
@@ -226,7 +246,8 @@ const TreeNode = defineComponent({
       indent,
       disabled,
       pending,
-      internalScrollable
+      internalScrollable,
+      handleContextmenu
     } = this
     // drag start not inside
     // it need to be append to node itself, not wrapper
@@ -264,7 +285,7 @@ const TreeNode = defineComponent({
     })();
 
     return (
-      <div class={`${clsPrefix}-tree-copy-node-wrapper`} {...dragEventHandlers}>
+      <div class={`${clsPrefix}-tree-copy-node-wrapper`} onContextmenu={handleContextmenu} {...dragEventHandlers}>
         <div
           class={[
             `${clsPrefix}-tree-copy-node`,
@@ -285,7 +306,6 @@ const TreeNode = defineComponent({
               ? this.handleDragStart
               : undefined
           }
-        // onContextmenu={}
         >
           {getIndent}
           <NTreeNodeSwitcher
@@ -295,6 +315,7 @@ const TreeNode = defineComponent({
             loading={this.loading}
             hide={tmNode.isLeaf}
             onClick={this.handleSwitcherClick}
+            levelMarkColor={this.levelMarkColor}
           />
           {checkable ? (
             <NTreeNodeCheckbox
