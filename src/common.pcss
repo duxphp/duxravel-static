@@ -137,20 +137,12 @@
 }
 
 .global-menus {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  left: 0;
-  top: 0;
-  box-shadow: 0 0 4px 2px #f2f2f2;
+  @apply absolute flex flex-col bg-white left-0 top-0  shadow rounded;
   z-index: 99999;
 }
 .global-menus .item {
-  font-size: 12px;
-  padding: 5px 10px;
-  cursor: default;
+  @apply py-1.5 px-6 cursor-pointer;
 }
 .global-menus .item:hover {
-  background-color: #f2f2f2;
+  @apply bg-gray-50;
 }
