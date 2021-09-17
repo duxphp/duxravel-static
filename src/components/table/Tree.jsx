@@ -145,6 +145,7 @@ export default defineComponent({
     return <div>
       <n-tree
         vShow={this.data.length > 0}
+        class="table-tree"
         {...vExec.call(this, this.nParams)}
         data={this.data}
         checkable={true}
