@@ -232,10 +232,7 @@ export default defineComponent({
     for (const key in props.contextMenus) {
       if (Object.hasOwnProperty.call(props.contextMenus, key)) {
         const name = props.contextMenus[key].event
-        nodeEvents[toCamel('on-' + name)] = event => {
-          console.log(event)
-          emit(name, event)
-        }
+        nodeEvents[toCamel('on-' + name)] = event => emit(name, event)
       }
     }
     const { mergedClsPrefixRef } = useConfig(props)
