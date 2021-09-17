@@ -154,7 +154,6 @@ export default defineComponent({
         renderLabel={this.renderLabel}
         blockLine={true}
         draggable={true}
-        defaultExpandAll={true}
         onDrop={this.handleDrop}
       />
       <div vShow={this.data.length === 0} class="flex justify-center bg-white rounded p-4 shadow">
