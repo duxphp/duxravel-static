@@ -151,6 +151,7 @@ export default defineComponent({
         {...vExec.call(this, this.nParams)}
         data={this.data}
         renderLabel={this.renderLabel}
+        blockLine={true}
         onDrop={this.handleDrop}
       />
       <div vShow={this.data.length === 0} class="flex justify-center bg-white rounded p-4 shadow">
