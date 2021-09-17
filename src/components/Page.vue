@@ -45,44 +45,36 @@
           :key="item.app"
           @click="target(item)"
         >
-          <n-tooltip
+          <div
             v-if="item.app !== 'app'"
-            trigger="hover"
-            placement="right"
+            class="
+              cursor-pointer
+              rounded-sm
+              py-1
+              text-center
+              flex
+              flex-col
+              items-center
+              justify-center
+              gap-1
+              text-gray-200
+              hover:text-white
+              hover:bg-gray-700
+              relative
+              mb-2
+            "
+            :class="{
+              'bg-blue-600 hover:bg-blue-600 text-white':
+                currentIndexs[0] === index,
+            }"
           >
-            <template #trigger>
-              <div
-                class="
-                  cursor-pointer
-                  rounded-sm
-                  py-1.5
-                  text-center
-                  flex
-                  items-center
-                  justify-center
-                  gap-1
-                  text-gray-200
-                  hover:text-white
-                  hover:bg-gray-700
-                  relative
-                  mb-2
-                "
-                :class="{
-                  'bg-blue-600 hover:bg-blue-600 text-white':
-                    currentIndexs[0] === index,
-                }"
-              >
-                <span
-                  class="w-5 h-6 flex items-center justify-center"
-                  v-if="item.icon"
-                  v-html="item.icon"
-                ></span>
-              </div>
-            </template>
-            <div>
-              {{ item.name }}
-            </div>
-          </n-tooltip>
+            <span
+              class="w-5 h-6 flex items-center justify-center"
+              v-if="item.icon"
+              v-html="item.icon"
+            ></span>
+            <div class="text-xs">{{item.name}}</div>
+          </div>
         </div>
       </n-layout-content>
 
