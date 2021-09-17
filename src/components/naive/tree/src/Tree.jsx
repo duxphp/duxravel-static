@@ -221,7 +221,23 @@ const treeProps = {
 export default defineComponent({
   name: 'Tree',
   props: treeProps,
-  setup(props) {
+  setup(props, { emit }) {
+    function toCamel(str) {
+      return str.replace(/([^-])(?:-+([^-]))/g, function ($0, $1, $2) {
+        return $1 + $2.toUpperCase();
+      });
+    }
+    // 事件转发
+    const nodeEvents = {}
+    for (const key in props.contextMenus) {
+      if (Object.hasOwnProperty.call(props.contextMenus, key)) {
+        const name = props.contextMenus[key].event
+        nodeEvents[toCamel('on-' + name)] = event => {
+          console.log(event)
+          emit(name, event)
+        }
+      }
+    }
     const { mergedClsPrefixRef } = useConfig(props)
     const themeRef = useTheme(
       'Tree',
@@ -1065,6 +1081,7 @@ export default defineComponent({
     }
 
     return {
+      nodeEvents,
       mergedClsPrefix: mergedClsPrefixRef,
       mergedTheme: themeRef,
       fNodes: mergedFNodesRef,
@@ -1151,6 +1168,7 @@ export default defineComponent({
               ? this.contextLevelMenus[tmNode.level].map(key => this.contextMenus[key])
               : Object.values(this.contextMenus)
           }
+          {...this.nodeEvents}
         />
       )
     }
