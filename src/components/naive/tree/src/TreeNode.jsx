@@ -15,7 +15,7 @@ import NTreeNodeContent from './TreeNodeContent'
 import { treeInjectionKey } from './interface'
 import { renderDropMark } from './dnd'
 import classNames from 'classnames'
-import {} from './Tree'
+import { } from './Tree'
 
 const TreeNode = defineComponent({
   name: 'TreeNode',
@@ -267,11 +267,12 @@ const TreeNode = defineComponent({
 
     const getIndent = (() => {
       const arr = []
+      let current = tmNode
       let parent = tmNode.parent
       for (let i = 0; i < tmNode.level; i++) {
         arr.unshift(<div
           class={classNames(`${clsPrefix}-tree-copy-node-indent`, {
-            'n-tree-copy-node-indent-hide': parent?.isLastChild && i,
+            'n-tree-copy-node-indent-hide': !(i === 0 || (!parent.isLastChild && !current.isLastChild)),
             'n-tree-copy-node-indent-half': tmNode.isLastChild && i === 0,
             'n-tree-copy-node-indent-top': tmNode.isFirstChild && !tmNode.isLastChild && i === 0,
             'n-tree-copy-node-indent-top-more': tmNode.isFirstChild && tmNode.siblings.length > 2 && i === 0
@@ -279,7 +280,8 @@ const TreeNode = defineComponent({
         >
           {i === 0 && <div className={`${clsPrefix}-tree-copy-node-indent-right`} />}
         </div>)
-        parent = parent?.parent
+        current = parent
+        parent = current?.parent
       }
       return arr
     })();
