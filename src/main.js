@@ -11,7 +11,8 @@ import Route from './components/Route.vue'
 import RichText from './components/RichText.vue'
 import Icon from './components/Icon.vue'
 import DataTable from './components/table/DataTable'
-import DataTree from './components/table/Tree'
+import TreeTable from './components/table/TreeTable'
+import Tree from './components/table/Tree'
 import DataSelect from './components/form/Select'
 import DataCascader from './components/form/Cascader'
 import DataFile from './components/form/File'
@@ -57,7 +58,9 @@ app.component('app-form', FormSubmit)
 // 表格展示组件
 app.component('app-table', DataTable)
 // 树形列表
-app.component('app-tree', DataTree)
+app.component('app-tree', TreeTable)
+// 树形列表
+app.component('widget-tree', Tree)
 // 选择器
 app.component('app-select', DataSelect)
 // 级联选择器
