@@ -52,8 +52,7 @@
               rounded-sm
               py-1
               text-center
-              flex
-              flex-col
+              flex flex-col
               items-center
               justify-center
               gap-1
@@ -73,7 +72,7 @@
               v-if="item.icon"
               v-html="item.icon"
             ></span>
-            <div class="text-xs">{{item.name}}</div>
+            <div class="text-xs">{{ item.name }}</div>
           </div>
         </div>
       </n-layout-content>
@@ -236,7 +235,7 @@
     :key="item.key"
     :currentUrl="item.url"
     :windowType="'dialog'"
-    @close="dialogRouter.splice(index, 1)"
+    @close="closeDialog(index)"
   />
   <DataDialog />
   <FileManage />
@@ -244,7 +243,12 @@
 </template>
 
 <script>
-import { useMessage, useDialog, useLoadingBar, useNotification } from "naive-ui";
+import {
+  useMessage,
+  useDialog,
+  useLoadingBar,
+  useNotification,
+} from "naive-ui";
 import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
@@ -397,6 +401,13 @@ export default {
           window.open("/");
           break;
       }
+    },
+    closeDialog(index) {
+      const [item] = this.dialogRouter.splice(index, 1);
+      event.emit("router-dialog-close", {
+        item,
+        index,
+      });
     },
     // 菜单点击
     target(e) {

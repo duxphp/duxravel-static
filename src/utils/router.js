@@ -2,7 +2,7 @@ import qs from 'qs'
 import md5 from 'md5'
 import { compile } from 'vue/dist/vue.cjs.js'
 
-import { request } from "./request";
+import { getUrl, request } from "./request";
 import event from './event'
 import { getXmlByTagName, getXmlByTagNames } from './xml'
 
@@ -151,6 +151,32 @@ router.https = (url) => {
 router.toVueComponent = (template, comp = {}) => {
   comp.render = compile(template)
   return comp
+}
+router.ajax = (url, data) => {
+  const ajaxAction = () => {
+    request({
+      url: toUrl(url, data),
+      method: data?._method,
+      successMsg: true,
+      urlType: data?._urlType || 'absolute',
+    }).then(result => {
+      router('routerPush:')
+      event.emit('router-ajax-finish', {
+        url: getUrl(toUrl(url, data), data?._urlType || 'absolute'),
+        data,
+        result
+      })
+    })
+  }
+  if (data?._title) {
+    window.appDialog.confirm({
+      title: '确认操作',
+      content: data?._title,
+      success: this.ajaxAction.bind(this)
+    })
+  } else {
+    ajaxAction()
+  }
 }
 
 /**
@@ -308,7 +334,7 @@ export const resource = {
       const stylee = document.createElement('style')
       stylee.innerHTML = string
       document.getElementsByTagName('head')[0].appendChild(stylee)
-      
+
       const key = md5(string)
       this.load[key] = {
         source: stylee,

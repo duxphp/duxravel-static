@@ -18,9 +18,6 @@ function findSiblingsAndIndex(node, nodes) {
 
 export default defineComponent({
   props: {
-    'n-params': {
-      type: Object,
-    },
     columns: {
       type: Array,
       default: () => []
@@ -34,33 +31,61 @@ export default defineComponent({
     filter: {
       type: Object,
       default: () => ({})
+    },
+    urlBind: {
+      type: Boolean,
+      default: true
+    },
+    closeDialogRefreshUrls: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      data: [],
-      loading: true
+      data: []
     }
   },
   setup(props) {
     watch(props.filter, params => {
-      router.routerPush(void 0, Object.fromEntries(Object.keys(params).filter(key => params[key] !== null).map(key => [key, params[key]])))
+      if (props.urlBind) {
+        router.routerPush(void 0, Object.fromEntries(Object.keys(params).filter(key => params[key] !== null).map(key => [key, params[key]])))
+      } else {
+        this.getList({
+          params: props.filter,
+          agree: 'routerPush'
+        })
+      }
     })
+
   },
   created() {
-    // 监听路由参数改变重新获取列表数据
-    event.add('router-change', this.getList)
+    if (this.urlBind) {
+      // 监听路由参数改变重新获取列表数据
+      event.add('router-change', this.getList)
 
-    // 默认跳转到默认的filter选项
-    router.routerPush(void 0, Object.fromEntries(Object.keys(this.filter).filter(key => this.filter[key] !== null).map(key => [key, this.filter[key]])))
+      // 默认跳转到默认的filter选项
+      router.routerPush(void 0, Object.fromEntries(Object.keys(this.filter).filter(key => this.filter[key] !== null).map(key => [key, this.filter[key]])))
+    } else {
+      this.getList({
+        params: this.filter,
+        agree: 'routerPush'
+      })
+      // 监听关闭弹窗的时候刷新路由
+      event.add('router-dialog-close', this.closeEvent)
+      // 监听关闭ajax确认框时候的刷新数据
+      event.add('router-ajax-finish', this.ajaxEvent)
+    }
+
   },
   beforeUnmount() {
     event.remove('router-change', this.getList)
+    event.remove('router-dialog-close', this.closeEvent)
+    event.remove('router-ajax-finish', this.ajaxEvent)
   },
   methods: {
     getList({ params, agree }) {
       if (agree === 'routerPush') {
-        this.loading = true
         searchQuick({
           url: this.url,
           method: 'get',
@@ -69,8 +94,22 @@ export default defineComponent({
           this.data = res.data
         }).catch(() => {
 
-        }).finally(() => {
-          this.loading = false
+        })
+      }
+    },
+    closeEvent(data) {
+      if (this.closeDialogRefreshUrls.length === 0 || this.closeDialogRefreshUrls.some(item => ~data.item.url.indexOf(item))) {
+        this.getList({
+          params: this.filter,
+          agree: 'routerPush'
+        })
+      }
+    },
+    ajaxEvent(data) {
+      if (this.closeDialogRefreshUrls.length === 0 || this.closeDialogRefreshUrls.some(item => ~data.url.indexOf(item))) {
+        this.getList({
+          params: this.filter,
+          agree: 'routerPush'
         })
       }
     },
@@ -148,20 +187,20 @@ export default defineComponent({
     }
   },
   render() {
-    return <>
-      {this.data.length > 0 && <n-tree-copy
-        class="table-tree"
-        {...vExec.call(this, this.nParams)}
-        data={this.data}
-        renderLabel={this.renderLabel}
-        blockLine={true}
-        onDrop={this.handleDrop}
-      />}
-      {this.data.length === 0 && !this.loading && <div>
-        {
-          { default: () => this.$slots.default?.() }
-        }
-      </div>}
-    </>
+    return <div>
+      {{
+        default: () => {
+          if (this.data.length === 0) {
+            return null
+          }
+          return this.$slots.default?.({
+            data: this.data,
+            renderLabel: this.renderLabel,
+            onDrop: this.onDrop
+          })
+        },
+        empty: () => this.$slots.empty?.(),
+      }}
+    </div>
   }
 })
