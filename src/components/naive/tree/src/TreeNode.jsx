@@ -272,7 +272,7 @@ const TreeNode = defineComponent({
       for (let i = 0; i < tmNode.level; i++) {
         arr.unshift(<div
           class={classNames(`${clsPrefix}-tree-copy-node-indent`, {
-            'n-tree-copy-node-indent-hide': !(i === 0 || (!parent.isLastChild && !current.isLastChild)),
+            'n-tree-copy-node-indent-hide': !(i === 0 || (parent.children.findIndex(item => current === item) < parent.children.length - 1)),
             'n-tree-copy-node-indent-half': tmNode.isLastChild && i === 0,
             'n-tree-copy-node-indent-top': tmNode.isFirstChild && !tmNode.isLastChild && i === 0,
             'n-tree-copy-node-indent-top-more': tmNode.isFirstChild && tmNode.siblings.length > 2 && i === 0
