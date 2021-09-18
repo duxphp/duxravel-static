@@ -38,7 +38,8 @@ export default defineComponent({
   },
   data() {
     return {
-      data: []
+      data: [],
+      loading: true
     }
   },
   setup(props) {
@@ -58,15 +59,20 @@ export default defineComponent({
   },
   methods: {
     getList({ params, agree }) {
-      agree === 'routerPush' && searchQuick({
-        url: this.url,
-        method: 'get',
-        data: params
-      }).then(res => {
-        this.data = res.data
-      }).catch(() => {
-
-      })
+      if(agree === 'routerPush') {
+        this.loading = true
+        searchQuick({
+          url: this.url,
+          method: 'get',
+          data: params
+        }).then(res => {
+          this.data = res.data
+        }).catch(() => {
+  
+        }).finally(() => {
+          this.loading = false
+        })
+      }
     },
     handleDrop({ node, dragNode, dropPosition }) {
       const data = this.data
@@ -142,20 +148,18 @@ export default defineComponent({
     }
   },
   render() {
-    return <div>
-      <n-tree-copy
-        vShow={this.data.length > 0}
+    return <>
+      {this.data.length > 0 && <n-tree-copy
         class="table-tree"
         {...vExec.call(this, this.nParams)}
         data={this.data}
         renderLabel={this.renderLabel}
         blockLine={true}
         onDrop={this.handleDrop}
-      />
-      <div vShow={this.data.length === 0} class="flex justify-center bg-white rounded p-4 shadow">
+      />}
+      {this.data.length === 0 && !this.loading && <div class="flex justify-center bg-white rounded p-4 shadow">
         <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className="" />
-      </div>
-
-    </div>
+      </div>}
+    </>
   }
 })
