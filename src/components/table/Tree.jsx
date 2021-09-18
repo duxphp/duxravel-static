@@ -145,15 +145,17 @@ export default defineComponent({
     return <div>
       <n-tree-copy
         vShow={this.data.length > 0}
-        class="table-tree"
+        class="table-tree "
         {...vExec.call(this, this.nParams)}
         data={this.data}
         renderLabel={this.renderLabel}
         blockLine={true}
         onDrop={this.handleDrop}
       />
-      <div vShow={this.data.length === 0} class="flex justify-center bg-white rounded p-4 shadow">
-        <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className="" />
+      <div vShow={this.data.length === 0}>
+      {
+        {default: () => this.$slots.default?.()}
+      }
       </div>
 
     </div>
