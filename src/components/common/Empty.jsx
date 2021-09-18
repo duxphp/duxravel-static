@@ -33,7 +33,7 @@ export default defineComponent({
             </svg>
           </n-icon>
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow ">
           <div className="mb-1 text-base">{this.title}</div>
           <div className="text-gray-400">{this.content}</div>
         </div>
