@@ -172,7 +172,7 @@ router.ajax = (url, data) => {
     window.appDialog.confirm({
       title: '确认操作',
       content: data?._title,
-      success: this.ajaxAction.bind(this)
+      success: ajaxAction
     })
   } else {
     ajaxAction()
