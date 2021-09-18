@@ -350,7 +350,7 @@ export default defineComponent({
       const { labelField } = props
       return (pattern, node) => {
         if (!pattern.length) return true
-        return node[labelField]
+        return ('' + node[labelField])
           .toLowerCase()
           .includes(pattern.toLowerCase())
       }
