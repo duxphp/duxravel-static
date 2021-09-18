@@ -188,19 +188,16 @@ export default defineComponent({
   },
   render() {
     return <div>
-      {{
-        default: () => {
-          if (this.data.length === 0) {
-            return null
-          }
-          return this.$slots.default?.({
-            data: this.data,
-            renderLabel: this.renderLabel,
-            onDrop: this.onDrop
-          })
-        },
-        empty: () => this.$slots.empty?.(),
-      }}
+      {
+        this.data.length > 0 && this.$slots.default?.({
+          data: this.data,
+          renderLabel: this.renderLabel,
+          onDrop: this.onDrop
+        })
+      }
+      {
+        this.data.length === 0 && this.$slots.empty?.()
+      }
     </div>
   }
 })
