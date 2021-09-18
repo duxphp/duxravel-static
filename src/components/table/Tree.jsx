@@ -192,7 +192,7 @@ export default defineComponent({
         this.data.length > 0 && this.$slots.default?.({
           data: this.data,
           renderLabel: this.renderLabel,
-          onDrop: this.onDrop
+          onDrop: this.handleDrop
         })
       }
       {
