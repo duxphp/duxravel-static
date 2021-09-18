@@ -59,7 +59,7 @@ export default defineComponent({
   },
   methods: {
     getList({ params, agree }) {
-      if(agree === 'routerPush') {
+      if (agree === 'routerPush') {
         this.loading = true
         searchQuick({
           url: this.url,
@@ -68,7 +68,7 @@ export default defineComponent({
         }).then(res => {
           this.data = res.data
         }).catch(() => {
-  
+
         }).finally(() => {
           this.loading = false
         })
@@ -157,8 +157,10 @@ export default defineComponent({
         blockLine={true}
         onDrop={this.handleDrop}
       />}
-      {this.data.length === 0 && !this.loading && <div class="flex justify-center bg-white rounded p-4 shadow">
-        <app-empty title="暂未找到数据" content="暂未找到数据，您可以尝试刷新数据" className="" />
+      {this.data.length === 0 && !this.loading && <div>
+        {
+          { default: () => this.$slots.default?.() }
+        }
       </div>}
     </>
   }
