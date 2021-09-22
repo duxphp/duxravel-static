@@ -1,7 +1,7 @@
 import qs from 'qs'
 import { deepCopy } from './object'
 import { router } from './router'
-import { clearUserInfo, getLocalUserInfo, login, reloadToken, setLocalUserInfo } from './user'
+import { clearUserInfo, getLocalUserInfo, login, setLocalUserInfo } from './user'
 
 /**
  * 转换当前url为真实URL
@@ -13,7 +13,7 @@ export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
+  return `${import.meta.env.DEV ? 'http://duxravel.test.com' : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
 }
 
 /**

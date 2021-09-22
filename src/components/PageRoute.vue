@@ -68,6 +68,9 @@ export default {
       }
     },
     getPage(url) {
+      if (url === "/") {
+        return;
+      }
       if (this.pageStatus) {
         // 取消请求
         this.pageStatus.abort();

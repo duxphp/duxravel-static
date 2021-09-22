@@ -30,7 +30,7 @@ export const getXmlByTagName = window.getXmlByTagName = (xml, name, cursor = 0) 
       cursor = nextStart + 1
       level++
     } else {
-      console.error('xml结构错误')
+      console.error('xml结构错误 或者没有找到：' + name)
       return
     }
   }

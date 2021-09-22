@@ -16,30 +16,6 @@ export const login = () => {
   })
 }
 
-const reloadTokenFunc = []
-/**
- * token过期 重新获取token
- * @returns
- */
-export const reloadToken = () => {
-  return new Promise((resolve, reject) => {
-    if (!reloadTokenFunc.length) {
-      request({
-        url: 'login/refresh'
-      }).then(res => {
-        setLocalUserInfo({ token: res.token })
-        reloadTokenFunc.forEach(([func]) => func())
-        reloadTokenFunc.splice(0)
-      }).catch(err => {
-        reloadTokenFunc.forEach(([, func]) => func(err))
-        reloadTokenFunc.splice(0)
-      })
-    }
-    reloadTokenFunc.push([resolve, reject])
-  })
-
-}
-
 /**
  * 获取本地用户信息
  * @returns
