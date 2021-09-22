@@ -11,6 +11,10 @@ export default defineConfig({
       '@components': '/src/components'
     }
   },
+  build: {
+    //outDir: 'dist/resource',
+    emptyOutDir: true
+  },
   server: {
     // proxy: {
     //   '/': {
