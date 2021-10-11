@@ -1,6 +1,6 @@
 <template>
   <n-config-provider
-    :theme-overrides="theme"
+    :theme-overrides="themeApp"
     :locale="zhCN"
     :date-locale="dateZhCN"
   >
@@ -20,7 +20,8 @@
 <script>
 import { zhCN, dateZhCN } from "naive-ui";
 import Index from "./page/Index.vue";
-import theme from "./config/theme";
+import themeLight from "./config/themeLight";
+import themeDark from "./config/themeDark";
 
 export default {
   name: "App",
@@ -28,10 +29,13 @@ export default {
     Index,
   },
   data() {
+
+    let themeApp = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? themeLight : themeDark
+
     return {
       zhCN,
       dateZhCN,
-      theme,
+      themeApp,
     };
   },
   method: {

@@ -1,6 +1,10 @@
+import { NConfigProvider } from 'naive-ui'
 import theme from "tailwindcss/defaultTheme"
 import colors from "tailwindcss/colors"
 
+/**
+ * @type import('naive-ui').GlobalThemeOverrides
+ */
 export default {
   "common": {
     "primaryColor": colors.blue["600"],

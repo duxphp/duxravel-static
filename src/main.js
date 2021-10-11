@@ -27,6 +27,7 @@ import { NTree } from './components/naive/tree'
 
 import WidgetHeader from './components/widget/Header'
 
+window.derkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 
 // 注册到全局
 window.Vue = Vue
