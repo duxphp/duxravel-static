@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
     <div
-      class="text-white w-16 bg-gray-800 px-2 flex-none flex-col lg:flex hidden"
+      class="text-white w-16 bg-gray-800 px-2 flex-none flex-col lg:flex hidden border-r border-gray-800 dark:border-gray-700"
     >
       <div
         class="
