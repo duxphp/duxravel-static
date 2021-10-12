@@ -1,8 +1,9 @@
 <template>
   <n-config-provider
-    :theme-overrides="themeApp"
+    :theme="darkTheme"
     :locale="zhCN"
     :date-locale="dateZhCN"
+    :theme-overrides="themeApp"
   >
     <n-global-style />
     <n-message-provider>
@@ -20,6 +21,7 @@
 <script>
 import { zhCN, dateZhCN } from "naive-ui";
 import Index from "./page/Index.vue";
+import { darkTheme } from "naive-ui";
 import themeLight from "./config/themeLight";
 import themeDark from "./config/themeDark";
 
@@ -29,13 +31,37 @@ export default {
     Index,
   },
   data() {
-    let themeApp = window.derkMode ? themeDark : themeLight
-
+    const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     return {
       zhCN,
       dateZhCN,
-      themeApp,
+      themeApp: dark ? themeDark : themeLight,
+      darkTheme: dark ? darkTheme : null,
     };
+  },
+  created() {
+    console.log(this.themeApp);
+    let listeners = {
+      dark: (mediaQueryList) => {
+        if (mediaQueryList.matches) {
+          this.themeApp = themeDark;
+          this.darkTheme = darkTheme;
+        }
+      },
+      light: (mediaQueryList) => {
+        if (mediaQueryList.matches) {
+          this.themeApp = themeLight;
+          this.darkTheme = null;
+        }
+      },
+    };
+
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addListener(listeners.dark);
+    window
+      .matchMedia("(prefers-color-scheme: light)")
+      .addListener(listeners.light);
   },
   method: {
     modelDialog() {},
