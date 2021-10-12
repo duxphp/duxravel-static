@@ -1,6 +1,6 @@
 <template>
   <n-layout-content
-    class="menu-child-root hide lg:block hidden border-l border-white dark:bg-gray-800 dark:border-gray-900 "
+    class="menu-child-root hide lg:block hidden border-r border-white dark:bg-gray-800 dark:border-gray-700 "
     :class="
         menuData.menu
         ? 'w-40 bg-white shadow z-20 '

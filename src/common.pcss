@@ -45,9 +45,9 @@
           @apply bg-transparent;
         }
         & .n-data-table-th {
-          @apply border-none font-normal text-gray-500 py-2 bg-gray-100 dark:bg-gray-800;
+          @apply border-none font-normal text-gray-500 py-2 bg-gray-100 dark:bg-gray-800 dark:text-gray-400;
           &:hover {
-            @apply text-gray-900;
+            @apply text-gray-900 dark:text-gray-300;
           }
         }
       }
@@ -101,14 +101,9 @@
     }
   }
   & .n-data-table-empty {
-    @apply bg-white;
+    @apply bg-white dark:bg-gray-800;
   }
 }
-
-
-
-
-
 
 .table-tree {
   @apply flex flex-col;

@@ -228,7 +228,7 @@
     </div>
 
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
-    <div class="flex-grow bg-gray-100 dark:bg-gray-900  dark:text-gray-200" id="page-animation">
+    <div class="flex-grow bg-gray-100 dark:bg-dark  dark:text-gray-200" id="page-animation">
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
   </div>
