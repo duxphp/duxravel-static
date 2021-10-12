@@ -40,7 +40,6 @@ export default {
     };
   },
   created() {
-    console.log(this.themeApp);
     let listeners = {
       dark: (mediaQueryList) => {
         if (mediaQueryList.matches) {
