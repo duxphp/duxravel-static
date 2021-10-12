@@ -29,8 +29,7 @@ export default {
     Index,
   },
   data() {
-
-    let themeApp = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? themeLight : themeDark
+    let themeApp = window.derkMode ? themeDark : themeLight
 
     return {
       zhCN,

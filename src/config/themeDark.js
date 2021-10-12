@@ -117,9 +117,9 @@ export default {
     "borderColor": colors.blueGray["200"],
   },
   "DataTable": {
-    "borderColor": colors.blueGray["200"],
+    "borderColor": colors.blueGray["800"],
     "tdColorHover": colors.blueGray["50"],
-    "thColor": colors.blueGray["50"],
+    "thColor": colors.blueGray["900"],
     "thPaddingLarge": "14px",
     "thPaddingMedium": "14px",
     "thPaddingSmall": "10px",
