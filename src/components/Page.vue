@@ -38,7 +38,7 @@
         </n-dropdown>
       </div>
 
-      <n-layout-content class="flex-grow bg-gray-800" :native-scrollbar="false">
+      <n-layout-content class="app-scrollbar flex-grow bg-gray-800" :native-scrollbar="false">
         <div
           v-show="!item.hidden || currentIndexs[0] === index"
           v-for="(item, index) in menu"
@@ -57,6 +57,8 @@
               justify-center
               gap-1
               text-gray-200
+              dark:text-gray-300
+              dark:hover:text-gray-50
               hover:text-white
               hover:bg-gray-700
               relative
@@ -177,7 +179,7 @@
     </div>
 
     <div class="lg:hidden h-14 z-10">
-      <div class="fixed bg-white shadow w-full h-14 flex items-center gap-2">
+      <div class="fixed bg-white dark:bg-gray-900 shadow w-full h-14 flex items-center gap-2">
         <div class="flex-none pl-4">
           <img class="w-6 h-6" :src="appInfo.logo || logo" />
         </div>
@@ -226,7 +228,7 @@
     </div>
 
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
-    <div class="flex-grow bg-gray-100" id="page-animation">
+    <div class="flex-grow bg-gray-100 dark:bg-gray-900  dark:text-gray-200" id="page-animation">
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
   </div>

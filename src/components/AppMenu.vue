@@ -1,17 +1,15 @@
 <template>
   <n-layout-content
-    class="menu-child-root hide lg:block hidden"
+    class="menu-child-root hide lg:block hidden border-l border-white dark:bg-gray-800 dark:border-gray-900 "
     :class="
-      menuData.route
-        ? 'border-r border-gray-200'
-        : menuData.menu
-        ? 'w-40 bg-white shadow z-20'
+        menuData.menu
+        ? 'w-40 bg-white shadow z-20 '
         : ''
     "
     :native-scrollbar="false"
   >
     <template v-if="menuData.menu">
-      <div class="p-4 py-3">
+      <div class="p-4 py-3 dark:text-gray-400">
         {{ menuData.name }}
       </div>
       <div
@@ -19,14 +17,16 @@
         v-for="(child, index1) in menuData.menu"
         :key="child.name"
       >
-        <span class="text-xs text-gray-400 py-3 px-2 block">{{
+        <span class="text-xs text-gray-400 dark:text-gray-500 py-3 px-2 block">{{
           child.name
         }}</span>
         <template v-if="child.menu">
           <div
             class="
               text-gray-800
+              dark:text-gray-400
               hover:text-blue-600
+              dark:hover:text-gray-300
               block
               p-2
               rounded
@@ -36,7 +36,7 @@
             v-for="(child2, index2) in child.menu"
             :key="child2.name"
             :class="{
-              'bg-blue-50 text-blue-600':
+              'bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-gray-400':
                 select[1] === index1 && select[2] === index2,
             }"
             @click="target(child2)"

@@ -7,6 +7,7 @@
         items-center
         justify-center
         bg-gray-50
+        dark:bg-gray-900
         py-12
         px-4
         sm:px-6
@@ -18,11 +19,11 @@
           <div class="mx-auto h-16 w-16 text-blue-900">
             <img class="w-16 h-16" :src="appInfo.logo || data.logo" />
           </div>
-          <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-300">
             {{ appInfo.name }}
           </h2>
-          <p class="mt-2 text-center text-sm text-gray-600">
-            <span class="text-blue-900"> 欢迎使用后台管理系统 </span>
+          <p class="mt-2 text-center text-sm ">
+            <span class="text-blue-900  dark:text-gray-500"> 欢迎使用后台管理系统 </span>
           </p>
         </div>
         <form class="mt-8 space-y-6" @submit="login">
