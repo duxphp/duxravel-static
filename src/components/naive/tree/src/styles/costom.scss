@@ -377,6 +377,12 @@
   width: auto;
   margin-right: 24px;
 }
+
+.n-tree-copy .n-tree-copy-node-switcher.icon-hide {
+  margin-right: 0;
+  overflow: hidden;
+}
+
 .n-tree-copy .n-tree-copy-node-switcher .n-tree-copy-node-switcher__icon {
   height: 38px;
   width: 20px;
