@@ -15,7 +15,7 @@
     "classnames": "^2.3.1",
     "cssnano": "^5.0.8",
     "md5": "^2.3.0",
-    "naive-ui": "^2.16.4",
+    "naive-ui": "^2.20.0",
     "postcss-nested": "^5.0.6",
     "qs": "^6.10.1",
     "sass": "^1.37.5",

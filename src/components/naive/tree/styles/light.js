@@ -1,6 +1,6 @@
 import { changeColor } from 'seemly'
 import { checkboxLight } from 'naive-ui/es/checkbox/styles'
-import { scrollbarLight } from 'naive-ui/es/scrollbar/styles'
+import { scrollbarLight } from 'naive-ui/es/_internal/scrollbar/styles'
 import { commonLight } from 'naive-ui/es/_styles/common'
 import { createTheme } from 'naive-ui/es/_mixins/use-theme'
 

@@ -1,6 +1,6 @@
 import { changeColor } from 'seemly'
 import { checkboxDark } from 'naive-ui/es/checkbox/styles'
-import { scrollbarDark } from 'naive-ui/es/scrollbar/styles'
+import { scrollbarDark } from 'naive-ui/es/_internal/scrollbar/styles'
 import { commonDark } from 'naive-ui/es/_styles/common'
 import { self } from './light'
 
