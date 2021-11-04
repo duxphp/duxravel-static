@@ -55,8 +55,9 @@ export const getPage = (url, type) => {
       // 删除模块名称
       url: url.split('/').slice(2).join('/')
     }, true).then(data => {
+
       resolve({
-        type: typeof data === 'string' ? 'vue' : 'node',
+        type: typeof data === 'string' ? (getXmlByTagName(data, 'html') ? 'html' : 'vue') : 'node',
         data
       })
     }).catch(reject)
@@ -205,20 +206,22 @@ export const resource = {
    * 加载页面样式
    * @param {string} data 当前页面模板
    * @param {string} page 当前页面url 用于做标识
-   * @param {string} oldPage 上一个页面url 用户删除上一个页面的导入的相关资源
    */
-  async pageLoad(data, page) {
+  async pageLoad(data, page, asyncLoad) {
     const current = this.pageLoad[page] = {
       num: 0,
       list: []
     }
 
     // 资源加载列表
-    const loadList = [
-      this.loadCss(getXmlByTagNames(data, 'link').filter(item => item.attr.link).map(item => item.attr.link)),
-      this.loadStyle(getXmlByTagNames(data, 'style').map(item => item.child)),
-      this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src).map(item => item.attr.src))
-    ]
+    const loadList = asyncLoad
+      ? [
+        this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src && item.attr.async).map(item => item.attr.src))
+      ] : [
+        this.loadCss(getXmlByTagNames(data, 'link').filter(item => item.attr.link).map(item => item.attr.link)),
+        this.loadStyle(getXmlByTagNames(data, 'style').map(item => item.child)),
+        this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src && !item.attr.async).map(item => item.attr.src))
+      ]
 
     const res = await Promise.all(loadList)
 
@@ -362,6 +365,11 @@ export const getComp = async (data, url) => {
     comp = {}
   }
   comp.render = compile(getXmlByTagName(data, 'template')?.child || '')
+
+  // 节点渲染后执行的回调函数
+  comp._didCallback = () => {
+    resource.pageLoad(data, url, true)
+  }
   return comp
 }
 

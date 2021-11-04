@@ -87,6 +87,6 @@ app.component('widget-header', WidgetHeader)
 // 拖动排序
 app.component('draggable', draggable)
 
-app.mount('#app')
+app.mount('#duxravel-static')
 
 import './common.pcss'
