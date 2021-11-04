@@ -46,7 +46,6 @@
           @click="target(item)"
         >
           <div
-            v-if="item.app !== 'app'"
             class="
               cursor-pointer
               rounded-sm
@@ -80,10 +79,7 @@
       </n-layout-content>
 
       <div class="flex-none">
-        <template v-for="item in menu" :key="item.app">
           <n-popover
-            v-if="item.app === 'app'"
-            :overlap="overlap"
             placement="right-end"
             trigger="click"
             :show-arrow="false"
@@ -106,11 +102,9 @@
                   mb-2
                 "
               >
-                <span
-                  class="w-5 h-6 flex items-center justify-center"
-                  v-if="item.icon"
-                  v-html="item.icon"
-                ></span>
+                <span class="w-5 h-6 flex items-center justify-center">
+                  <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M174.5 463.397h295.714V184.125c0-54.766-43.763-104.093-104.093-104.093H174.5c-60.206 0-104.093 49.327-104.093 104.093v180.742c0.123 54.643 43.887 98.53 104.093 98.53z" fill="#F36A5A" p-id="10025"></path><path d="M952.852 364.744V184.125c0-54.766-43.764-104.093-104.094-104.093h-191.62c-54.767 0-104.094 43.764-104.094 104.093v284.712h295.714c60.33-5.44 104.094-49.327 104.094-104.093z" fill="#F1C40F" p-id="10026"></path><path d="M656.52 934.29h197.183c54.767 0 98.53-43.763 98.53-104.093V649.579c0-54.767-43.763-104.094-104.093-104.094H552.426v284.712c0 54.89 43.764 104.093 104.093 104.093z" fill="#45BE89" p-id="10027"></path><path d="M174.5 934.29h191.62c54.767 0 104.094-43.763 104.094-104.093V550.925H174.5c-54.766 0-104.093 43.764-104.093 104.093V835.76c0.123 49.327 43.887 98.53 104.093 98.53z" fill="#5491DE" p-id="10028"></path></svg>
+                </span>
               </div>
             </template>
             <div class="flex flex-row flex-wrap max-w-md gap-4 p-2">
@@ -129,55 +123,20 @@
                   p-2
                   transition
                 "
-                @click="target(item)"
-              >
-                <div
-                  class="
-                    w-10
-                    h-10
-                    border border-gray-300
-                    p-2
-                    rounded
-                    flex
-                    justify-center
-                    items-center
-                  "
-                  v-if="item.icon"
-                  v-html="item.icon"
-                  @click="target(item)"
-                ></div>
-                <div class="truncate">{{ item.name }}</div>
-              </div>
-              <div
-                class="
-                  flex flex-col
-                  gap-2
-                  overflow-hidden
-                  items-center
-                  justify-center
-                  cursor-pointer
-                  relative
-                  rounded
-                  hover:bg-gray-100
-                  dark:hover:bg-gray-800
-                  p-2
-                  transition
-                "
-                v-for="(sub, index) in item.data"
+                v-for="(app, index) in apps"
                 :key="index"
-                @click="target(sub)"
+                @click="target(app)"
               >
                 <div
                   class="w-10 h-10 text-white p-2 rounded"
-                  :style="{ 'background-color': sub.color || '#1e5eff' }"
-                  v-if="sub.icon"
-                  v-html="sub.icon"
+                  :style="{ 'background-color': app.color || '#1e5eff' }"
+                  v-if="app.icon"
+                  v-html="app.icon"
                 ></div>
-                <div class="truncate">{{ sub.name }}</div>
+                <div class="truncate">{{ app.name }}</div>
               </div>
             </div>
           </n-popover>
-        </template>
       </div>
     </div>
 
@@ -225,7 +184,7 @@
       </div>
       <n-drawer v-model:show="mobileMenuShow" :width="502" placement="top">
         <n-drawer-content title="斯通纳">
-          《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。
+          ...
         </n-drawer-content>
       </n-drawer>
     </div>
@@ -375,7 +334,7 @@ export default {
           url: "menu",
         }).then((res) => {
           this.menu = res.list;
-          this.apps = res.list.filter((v) => v.hidden);
+          this.apps = res.apps;
           this.menuHover();
           // 跳转到第一个菜单
           router.indexPage = this.menu[0].url;
