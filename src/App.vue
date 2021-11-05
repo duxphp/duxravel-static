@@ -1,4 +1,5 @@
 <template>
+  <div :class="{'dark': darkMode === 'dark'}">
   <n-config-provider
     :theme="darkTheme"
     :locale="zhCN"
@@ -16,6 +17,7 @@
       </n-dialog-provider>
     </n-message-provider>
   </n-config-provider>
+  </div>
 </template>
 
 <script>
@@ -31,42 +33,16 @@ export default {
     Index,
   },
   data() {
-    const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    window.derkMode = dark;
+    window.derkMode = window.localStorage.getItem('darkMode') === 'dark' ? 'dark' : 'light'
     return {
       zhCN,
       dateZhCN,
-      themeApp: dark ? themeDark : themeLight,
-      darkTheme: dark ? darkTheme : null,
+      themeApp: window.derkMode === 'dark' ? themeDark : themeLight,
+      darkTheme: window.derkMode === 'dark' ? darkTheme : null,
+      darkMode: window.derkMode
     };
   },
   created() {
-    let listeners = {
-      dark: (mediaQueryList) => {
-        if (mediaQueryList.matches) {
-          this.themeApp = themeDark
-          this.darkTheme = darkTheme
-          window.derkMode = true
-          window.Apex.tooltip.theme = 'dark'
-        }
-      },
-      light: (mediaQueryList) => {
-        if (mediaQueryList.matches) {
-          this.themeApp = themeLight
-          this.darkTheme = null
-          window.derkMode = false
-          window.Apex.tooltip.theme = 'light'
-        }
-      },
-    };
-
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addListener(listeners.dark);
-    window
-      .matchMedia("(prefers-color-scheme: light)")
-      .addListener(listeners.light);
-
 
     // 注册图表
     window.Apex = {
@@ -96,7 +72,7 @@ export default {
         "defaultLocale": "zh-CN",
       },
       tooltip: {
-        theme: window.derkMode ? 'dark' : 'light'
+        theme: window.derkMode === 'dark' ? 'dark' : 'light'
       },
       colors: [
         '#005dff',
