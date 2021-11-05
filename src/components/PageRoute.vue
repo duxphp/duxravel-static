@@ -1,7 +1,8 @@
 <template>
   <template v-if="!uninstall && !errorMessage && currentUrl">
-    <component v-if="pageType === 'vue'" :is="vueComp"></component>
-    <Create v-else v-bind="createData" />
+    <component :is="vueComp" v-if="pageType === 'vue'"></component>
+    <iframe v-if="pageType === 'html'" seamless src="http://a.dezhi-highway.com/admin/tpl/test"></iframe>
+    <Create v-if="pageType === 'node'" v-bind="createData" />
   </template>
   <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode" />
 </template>
@@ -39,6 +40,8 @@ export default {
       },
       // 自定义组件名称
       vueComp: "",
+      // html编写的页面
+      htmlComp: "",
       // 路由改变卸载页面
       uninstall: false,
       // 页面错误消息
@@ -84,7 +87,7 @@ export default {
           this.errorMessage = "";
           this.pageType = type;
           this.pageStatus = null;
-          this.vueComp = "";
+          this.shadowRoot;
           if (type === "vue") {
             // 创建vue组件
             return getComp(data, this.currentUrl).then((res) => {
@@ -92,7 +95,13 @@ export default {
                 loader: () => Promise.resolve(res),
                 suspensible: false,
               });
+              setTimeout(() => {
+                // 执行渲染成功回调
+                res._didCallback();
+              }, 100);
             });
+          } else if (type === "html") {
+            this.htmlComp = data;
           } else {
             this.uninstall = true;
             // 创建json组件
@@ -111,7 +120,6 @@ export default {
           });
         })
         .catch((err) => {
-          console.trace("路由错误", err);
           resource.uninstall(this.oldUrl);
           this.oldUrl = url;
           if (err.code !== 1) {
