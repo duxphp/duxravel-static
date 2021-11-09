@@ -48,9 +48,8 @@
         </n-dropdown>
       </div>
 
-      <n-layout-content
-        class="app-scrollbar flex-grow bg-gray-800"
-        :native-scrollbar="false"
+      <n-scrollbar
+        class="flex-grow bg-gray-800"
       >
         <div
           v-show="!item.hidden || currentIndexs[0] === index"
@@ -87,7 +86,7 @@
             <div class="text-xs">{{ item.name }}</div>
           </div>
         </div>
-      </n-layout-content>
+      </n-scrollbar>
 
       <div class="flex-none">
         <div

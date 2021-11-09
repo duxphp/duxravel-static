@@ -363,7 +363,7 @@ export default defineComponent({
           </div>
         </div>
         {this.isMultiple && <div class="p-4 flex items-center  gap-4 flex-col lg:flex-row">
-          <n-layout-content class="flex-grow " native-scrollbar={false}>
+          <n-scrollbar class="flex-grow">
           <div class="flex gap-2 flex-nowrap lg:flex flex-col lg:flex-row">
             {
               this.select.map(item => <div class="relative" key={item.file_id} onClick={() => this.selectItem(item)}>
@@ -372,7 +372,7 @@ export default defineComponent({
               </div>)
             }
           </div>
-          </n-layout-content>
+          </n-scrollbar>
           <div class="flex-none justify-end flex gap-2">
             <n-button type="default" onClick={this.closeModal}>关闭</n-button>
             <n-button type="primary" onClick={this.submit}>确定</n-button>

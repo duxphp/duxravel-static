@@ -1,12 +1,11 @@
 <template>
-  <n-layout-content
+  <n-scrollbar
     class="menu-child-root hide lg:block hidden border-r border-white dark:bg-gray-800 dark:border-gray-700 "
     :class="
         menuData.menu
         ? 'w-40 bg-white shadow z-20 '
         : ''
     "
-    :native-scrollbar="false"
   >
     <template v-if="menuData.menu">
       <div class="p-4 py-3 dark:text-gray-400">
@@ -46,7 +45,7 @@
         </template>
       </div>
     </template>
-  </n-layout-content>
+  </n-scrollbar>
 </template>
 
 <script>

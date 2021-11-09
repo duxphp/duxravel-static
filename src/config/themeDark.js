@@ -143,6 +143,6 @@ export default {
   },
   "Tree": {
     "nodeColorHover": "rgba(0,0,0, 0)",
-    "nodeColorActive": colors.blue["50"]
+    "nodeColorActive": colors.blueGray["700"]
   }
 }
