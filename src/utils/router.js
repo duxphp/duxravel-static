@@ -212,13 +212,12 @@ export const resource = {
       num: 0,
       list: []
     }
-
     // 资源加载列表
     const loadList = asyncLoad
       ? [
         this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src && item.attr.async).map(item => item.attr.src))
       ] : [
-        this.loadCss(getXmlByTagNames(data, 'link').filter(item => item.attr.link).map(item => item.attr.link)),
+        this.loadCss(getXmlByTagNames(data, 'link').filter(item => item.attr.href).map(item => item.attr.href)),
         this.loadStyle(getXmlByTagNames(data, 'style').map(item => item.child)),
         this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src && !item.attr.async).map(item => item.attr.src))
       ]
@@ -300,7 +299,7 @@ export const resource = {
    * @returns 
    */
   loadCss(list) {
-    const arr = list.filter(href => !this.load.has(href))
+    const arr = list.filter(href => !this.load[href])
     const success = []
     if (!arr.length) {
       return Promise.resolve(success)
