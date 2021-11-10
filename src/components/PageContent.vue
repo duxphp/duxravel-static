@@ -100,23 +100,23 @@ export default {
       }
     },
     closeLoading() {
-      this.dialogMsg?.destroy?.();
+      this.dialogMsg?.clear?.();
       this.dialogMsg = null;
     },
     loadStatus({ type }) {
       if (this.windowType === "page") {
         if (type === "start") {
-          window.loadingBar.start();
+          window.NProgress.start();
         } else if (type === "end") {
           this.pageAnimation();
-          window.loadingBar.finish();
+          window.NProgress.done();
         } else {
           this.pageAnimation();
-          window.loadingBar.error();
+          window.NProgress.done();
         }
       } else {
         if (type === "start") {
-          this.dialogMsg = window.message.loading("加载页面中，请稍等...");
+          this.dialogMsg = window.message.info("加载页面中，请稍等...");
         } else if (type === "end") {
           this.dialogAnimation();
           this.closeLoading();

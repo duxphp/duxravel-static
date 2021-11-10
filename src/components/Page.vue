@@ -424,6 +424,11 @@ import {
   useLoadingBar,
   useNotification,
 } from "naive-ui";
+import {
+  Message,
+  Modal,
+  Notification,
+} from "@arco-design/web-vue";
 import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
@@ -440,13 +445,17 @@ export default {
   props: ["show"],
   setup() {
     // 注册全局组件
-    window.message = useMessage();
+    /*window.message = useMessage();
     window.dialog = useDialog();
     window.loadingBar = useLoadingBar();
-    window.notification = useNotification();
+    window.notification = useNotification();*/
+
+    window.message = Message
+    window.dialog = Modal
+    window.notification = Notification
 
     window.dialogAsync = {
-      destroyAll: window.dialog.destroyAll.bind(window.dialog),
+      //destroyAll: window.dialog.destroyAll.bind(window.dialog),
       common(option, type) {
         if (window.dialog[type]) {
           return new Promise((resolve) => {
@@ -456,10 +465,10 @@ export default {
                 resolve("close");
               },
               onNegativeClick() {
-                resolve("negative");
+                resolve("cancel");
               },
               onPositiveClick() {
-                resolve("positive");
+                resolve("ok");
               },
             });
           });

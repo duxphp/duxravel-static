@@ -1,22 +1,6 @@
 <template>
   <div :class="{ dark: darkMode === 'dark' }">
-    <n-config-provider
-      :theme="darkTheme"
-      :locale="zhCN"
-      :date-locale="dateZhCN"
-      :theme-overrides="themeApp"
-    >
-      <n-global-style />
-      <n-message-provider>
-        <n-dialog-provider>
-          <n-loading-bar-provider>
-            <n-notification-provider>
-              <Page :show="show" @switch-dark="switchDark" />
-            </n-notification-provider>
-          </n-loading-bar-provider>
-        </n-dialog-provider>
-      </n-message-provider>
-    </n-config-provider>
+    <Page :show="show" @switch-dark="switchDark" />
   </div>
 </template>
 

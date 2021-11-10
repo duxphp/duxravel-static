@@ -1,7 +1,13 @@
 import * as Vue from 'vue'
 import App from './App.vue'
+import ArcoVue from '@arco-design/web-vue'
+import '@arco-design/web-vue/dist/arco.css'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 import naive from 'naive-ui'
 import draggable from 'vuedraggable'
+import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import * as heroicons from '@heroicons/vue/outline'
 import VueApexCharts from 'vue3-apexcharts'
 import './utils/global'
@@ -29,13 +35,25 @@ import WidgetHeader from './components/widget/Header'
 
 // 注册到全局
 window.Vue = Vue
+window.NProgress = NProgress
 
 // 实例注册到全局
 const app = window.vueApp = Vue.createApp(App)
 
-app.use(naive)
+//app.use(naive)
+app.use(ArcoVue)
+app.use(ArcoVueIcon)
+
+window.NProgress.configure({
+  easing: 'ease',
+  speed: 500,         // 递增进度条的速度
+  showSpinner: false, // 是否显示加载ico
+  trickleSpeed: 200,  // 自动递增间隔
+  minimum: 0.3        // 初始化时的最小百分比
+});
 
 app.use(VueApexCharts)
+
 
 // 注册图标
 for (const key in heroicons) {

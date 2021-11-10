@@ -219,6 +219,8 @@ export default defineComponent({
       })
     }
 
+    console.log(data)
+
     return {
       checkedRowKeys,
       sorter,
@@ -237,7 +239,7 @@ export default defineComponent({
 
   render() {
     return <n-spin show={this.loding}>
-      <n-data-table
+      <a-table
         remote={true}
         {...vExec.call(this, this.nParams)}
         pagination={this.pagination}
@@ -249,10 +251,10 @@ export default defineComponent({
       >
         {
           {
-            empty: () => this.$slots.empty?.()
+            empty: () => <a-empty />
           }
         }
-      </n-data-table>
+      </a-table>
     </n-spin>
   }
 })

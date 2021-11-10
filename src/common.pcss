@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/*
 
 .n-data-table.n-data-table--bordered .n-data-table-wrapper {
   @apply overflow-hidden;
@@ -30,6 +31,7 @@
 .table-nohead .n-data-table .n-data-table-thead {
   @apply hidden;
 }
+!*
 
 .table-list {
   & .n-data-table-empty {
@@ -88,8 +90,9 @@
   }
 
 }
+*!
 
-
+!*
 .n-data-table {
    & .n-data-table-th, & .n-data-table-td {
     @apply whitespace-nowrap ;
@@ -103,7 +106,7 @@
   & .n-data-table-empty {
     @apply bg-white dark:bg-gray-800;
   }
-}
+}*!
 
 .table-tree {
   @apply flex flex-col;
@@ -151,15 +154,15 @@
     @apply bg-opacity-30;
 }
 .app-scrollbar::-webkit-scrollbar {
-  /*滚动条整体样式*/
+  !*滚动条整体样式*!
   width : 5px;
   height: 5px;
 }
 .app-scrollbar::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
+  !*滚动条里面小方块*!
   @apply transition-all bg-black bg-opacity-0;
   border-radius: 5px;
   }
 .app-scrollbar::-webkit-scrollbar-track {
   background: none;
-}
+}*/

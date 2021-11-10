@@ -13,7 +13,7 @@ export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `${import.meta.env.DEV ? 'http://a.dezhi-highway.com' : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
+  return `${import.meta.env.DEV ? 'http://highway.test' : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
 }
 
 /**
