@@ -41,16 +41,10 @@ export default defineComponent({
     'n-params': {
       type: Object,
     },
-    // 分页前缀
-    'page-prefix': {
-      type: [Object, Array],
-      default: () => []
+    simple: {
+      type: Boolean,
+      default: false
     },
-    // 分页后缀
-    'page-suffix': {
-      type: [Object, Array],
-      default: () => []
-    }
   },
 
   created() {
@@ -116,35 +110,44 @@ export default defineComponent({
     }
 
     const pagination = ref({
-      prefix: () => renderNodeList.call({}, props.pagePrefix, childData).default?.(),
-      suffix: () => renderNodeList.call({}, props.pageSuffix, childData).default?.(),
-      page: 1,
-      pageCount: 1,
-      'onUpdate:page': page => {
-        pagination.value.page = page
+      showTotal: true,
+      showJumper: true,
+      showPageSize: true,
+      simple: props.simple,
+      total: 0,
+      current: 1,
+      pageSize: 20,
+      onChange: page => {
+        pagination.value.current = page
+        getList(props.filter)
+      },
+      onPageSizeChange: limit => {
+        pagination.value.pageSize = limit
         getList(props.filter)
       }
     })
 
-    // loding显示
-    const loding = ref(false)
+    // loading显示
+    const loading = ref(false)
 
     // 获取列表
     const getList = (params = {}) => {
-      loding.value = true
+      loading.value = true
       searchQuick({
         url: props.url,
         data: {
           ...params,
           _sort: sort.value,
-          page: pagination.value.page
+          page: pagination.value.current,
+          limit: pagination.value.pageSize
         }
       }, 'data-table').then(res => {
-        pagination.value['pageCount'] = res.totalPage
+        pagination.value['total'] = res.total
+        pagination.value['pageSize'] = res.pageSize
         data.value = res.data
-        loding.value = false
+        loading.value = false
       }).catch(() => {
-        loding.value = false
+        loading.value = false
       })
     }
 
@@ -219,14 +222,12 @@ export default defineComponent({
       })
     }
 
-    console.log(data)
-
     return {
       checkedRowKeys,
       sorter,
       pagination,
       data,
-      loding,
+      loading,
       columnsRender: props.columns.map(item => vExec.call({}, item, { editValue, editStatus })),
       getList,
       routerChange
@@ -238,23 +239,16 @@ export default defineComponent({
   },
 
   render() {
-    return <n-spin show={this.loding}>
-      <a-table
-        remote={true}
+    return <a-table
+    loading={this.loading}
+    remote={true}
         {...vExec.call(this, this.nParams)}
-        pagination={this.pagination}
-        data={this.data}
-        columns={this.columnsRender}
-        onUpdate:sorter={this.sorter}
-        checkedRowKeys={this.checkedRowKeys}
-        onUpdate:checkedRowKeys={value => this.checkedRowKeys = value}
-      >
-        {
-          {
-            empty: () => <a-empty />
-          }
-        }
-      </a-table>
-    </n-spin>
+    pagination={this.pagination}
+    data={this.data}
+    columns={this.columnsRender}
+    onUpdate:sorter={this.sorter}
+    checkedRowKeys={this.checkedRowKeys}
+    onUpdate:checkedRowKeys={value => this.checkedRowKeys = value}
+    />
   }
 })

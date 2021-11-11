@@ -6,20 +6,19 @@
       @load-status="loadStatus"
     />
   </template>
-  <n-modal v-else display-directive="show" :show="dialogShow">
-    <n-card
+
+  <a-modal v-else :visible="dialogShow" modalClass="page-dialog"  :closable="false" :mask="true" :footer="false">
+    <div
       ref="dialogAnimation"
       class="max-w-2xl my-4 dialog-animation"
-      content-style="padding: 0;"
-      :bordered="false"
     >
       <PageRoute
         :windowType="windowType"
         :currentUrl="url"
         @load-status="loadStatus"
       />
-    </n-card>
-  </n-modal>
+    </div>
+  </a-modal>
 </template>
 
 <script>
@@ -45,7 +44,7 @@ export default {
       urls: [],
       // 弹出加载消息
       dialogMsg: null,
-      dialogShow: true,
+      dialogShow: false,
     };
   },
   watch: {
@@ -100,8 +99,8 @@ export default {
       }
     },
     closeLoading() {
-      this.dialogMsg?.clear?.();
-      this.dialogMsg = null;
+      this.dialogMsg?.close?.()
+      this.dialogMsg = null
     },
     loadStatus({ type }) {
       if (this.windowType === "page") {
@@ -118,10 +117,14 @@ export default {
         if (type === "start") {
           this.dialogMsg = window.message.info("加载页面中，请稍等...");
         } else if (type === "end") {
-          this.dialogAnimation();
+          this.dialogShow = true
+
+          //this.dialogAnimation();
           this.closeLoading();
         } else {
-          this.dialogAnimation();
+
+          this.dialogShow = true
+          //this.dialogAnimation();
           this.closeLoading();
           if (this.urls.length === 1) {
             this.closeWindow();
@@ -162,6 +165,11 @@ export default {
     transition: all 0s;
     opacity: 0;
     transform: scale3d(0.4, 0.4, 1);
+  }
+}
+.page-dialog {
+  .arco-modal-body {
+    padding: 0;
   }
 }
 </style>

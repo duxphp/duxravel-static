@@ -125,6 +125,22 @@ export default defineComponent({
     }
 
     if (this.type === 'confirm') {
+
+      return <a-modal
+          visible={this.show}
+          onOk={() => { this.show = this.confirm.ajax ? true : false, typeof this.confirm.success === 'function' && this.confirm.success(this) }}
+          onCancel={() => { this.show = false, typeof this.confirm.cancel === 'function' && this.confirm.cancel(this) }}
+          okLoading={!this.confirm.loading}
+      >
+        {
+          {
+            title: () => 'sss'
+          }
+        }
+        <div>{this.confirm.content}</div>
+
+      </a-modal>
+
       inner = <div>
         <div class="flex items-start p-6 ">
           <div class=" flex-shrink-0 flex items-center justify-center rounded-full bg-yellow-200 mx-0 h-10 w-10">
@@ -175,12 +191,12 @@ export default defineComponent({
       </div>
     }
 
-    return <n-modal
-      show={this.show}
+    return <a-modal
+        visible={this.show}
     >
       <n-card class={this.width} content-style="padding: 0;">
         {inner}
       </n-card>
-    </n-modal>
+    </a-modal>
   }
 })

@@ -1,7 +1,7 @@
 <template>
-  <NForm ref="formRef" @submit="submit" :rules="rules">
+  <a-form ref="formRef" @submit="submit" :rules="rules">
     <slot :value="value" :submitStatus="submitStatus"></slot>
-  </NForm>
+  </a-form>
 </template>
 <script>
 import { defineComponent, ref, nextTick, getCurrentInstance } from "vue";
@@ -36,7 +36,7 @@ export default defineComponent({
     const that = getCurrentInstance();
     const submitStatus = ref(false);
     const submit = (e) => {
-      e.preventDefault();
+      //e.preventDefault();
       if (submitStatus.value) {
         return;
       }
@@ -59,19 +59,34 @@ export default defineComponent({
         })
         .catch((err) => {
           submitStatus.value = false;
+
           if (err.code === 422) {
             const data = err.data.error;
             for (const key in data) {
               if (Object.hasOwnProperty.call(data, key)) {
                 const err = data[key][0];
+
+                formRef.value.setFields({
+                  name: {
+                    value: '8888'
+                  }
+                })
+
                 data[key] = {
-                  validator: () => new Error(err),
+                  validate: () => new Error(err),
                 };
               }
             }
+
             rules.value = data;
+
+
             nextTick(() => {
-              formRef.value.validate();
+              formRef.value.validate((errors, sss) => {
+
+                console.log(data)
+                return data;
+              });
             });
           }
         });

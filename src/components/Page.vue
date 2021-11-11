@@ -480,10 +480,10 @@ export default {
         return dialogAsync.common.call(dialogAsync, option, "info");
       },
       success(option) {
-        return dialogAsync.common.call(dialogAsync, option, "info");
+        return dialogAsync.common.call(dialogAsync, option, "success");
       },
       warning(option) {
-        return dialogAsync.common.call(dialogAsync, option, "info");
+        return dialogAsync.common.call(dialogAsync, option, "warning");
       },
     };
   },

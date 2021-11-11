@@ -47,11 +47,15 @@ export default {
       // 处理跳转
       if (this.type === "ajax") {
         if (this.title) {
-          window.appDialog.confirm({
+          window.dialog.info({
             title: '确认操作',
             content: this.title,
-            success: this.ajaxAction.bind(this)
-          });
+            hideCancel: false,
+            onOk: () => {
+              this.ajaxAction()
+            }
+          })
+
         } else {
           this.ajaxAction();
         }
