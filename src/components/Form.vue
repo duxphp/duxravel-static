@@ -4,10 +4,10 @@
   </a-form>
 </template>
 <script>
-import { defineComponent, ref, nextTick, getCurrentInstance } from "vue";
-import { NForm } from "naive-ui";
-import { request } from "../utils/request";
-import { getPageContent } from "./table/DataTable";
+import {defineComponent, ref, nextTick, getCurrentInstance} from "vue";
+import {NForm} from "naive-ui";
+import {request} from "../utils/request";
+import {getPageContent} from "./table/DataTable";
 
 export default defineComponent({
   components: {
@@ -38,7 +38,7 @@ export default defineComponent({
     const submit = (e) => {
       //e.preventDefault();
       if (submitStatus.value) {
-        return;
+        return false;
       }
       const page = getPageContent(that.proxy.$parent);
       submitStatus.value = true;
@@ -48,48 +48,30 @@ export default defineComponent({
         data: props.value,
         successMsg: true,
         header: {
-          ...(page ? { "x-dialog": "1" } : {}),
+          ...(page ? {"x-dialog": "1"} : {}),
         },
-      })
-        .then(() => {
-          if (page) {
-            page.changeRouter(1, "back");
-          }
-          submitStatus.value = false;
-        })
-        .catch((err) => {
-          submitStatus.value = false;
+      }).then(() => {
+        if (page) {
+          page.changeRouter(1, "back");
+        }
+        submitStatus.value = false;
+      }).catch((err) => {
+        submitStatus.value = false;
 
-          if (err.code === 422) {
-            const data = err.data.error;
-            for (const key in data) {
-              if (Object.hasOwnProperty.call(data, key)) {
-                const err = data[key][0];
-
-                formRef.value.setFields({
-                  name: {
-                    value: '8888'
-                  }
-                })
-
-                data[key] = {
-                  validate: () => new Error(err),
-                };
-              }
+        if (err.code === 422) {
+          const data = err.data.error
+          const fields = {};
+          for (const key in data) {
+            if (Object.hasOwnProperty.call(data, key)) {
+              fields[key] = {
+                status: 'error',
+                message: data[key][0]
+              };
             }
-
-            rules.value = data;
-
-
-            nextTick(() => {
-              formRef.value.validate((errors, sss) => {
-
-                console.log(data)
-                return data;
-              });
-            });
           }
-        });
+          formRef.value.setFields(fields)
+        }
+      });
     };
     return {
       formRef,

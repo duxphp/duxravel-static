@@ -16,7 +16,7 @@
     "cssnano": "^5.0.8",
     "md5": "^2.3.0",
     "naive-ui": "^2.20.0",
-    "@arco-design/web-vue": "^2.2.0",
+    "@arco-design/web-vue": "^2.3.0",
     "nprogress": "^0.2.0",
     "postcss-nested": "^5.0.6",
     "qs": "^6.10.1",

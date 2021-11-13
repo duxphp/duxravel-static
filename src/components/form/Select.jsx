@@ -1,6 +1,6 @@
-import { onMounted, defineComponent } from 'vue'
-import { request } from '../../utils/request'
-import { vExec } from '../Create'
+import {defineComponent} from 'vue'
+import {request} from '../../utils/request'
+import {vExec} from '../Create'
 
 export default defineComponent({
   props: {
@@ -44,13 +44,14 @@ export default defineComponent({
           id: value
         }
       }).then(res => {
-        let data = res.data.map((item) => {
-            return {
-              label: item.name,
-              value: item.id
-            }
+        this.nParams.options = res.data.map((item) => {
+          return {
+            label: item.name,
+            value: item.id
+          }
         })
-        this.nParams.options = data
+
+        console.log(this.nParams.options)
         this.loading = false
       }).catch(() => {
         this.loading = false
@@ -58,12 +59,13 @@ export default defineComponent({
     }
   },
   render() {
-    return <n-select
+    return <a-select
       {...vExec.call(this, this.nParams)}
-      value={this.value}
+
+      modelValue={this.value}
       loading={this.loading}
       onSearch={this.handleSearch}
-      onUpdate:value={this.updateValue}
+      onChange={this.updateValue}
     />
   }
 })

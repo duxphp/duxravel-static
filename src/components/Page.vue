@@ -412,7 +412,6 @@
     :windowType="'dialog'"
     @close="closeDialog(index)"
   />
-  <DataDialog />
   <FileManage />
   <Login />
 </template>
@@ -432,7 +431,6 @@ import {
 import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
-import DataDialog from "./utils/Dialog";
 import FileManage from "./utils/FileManage";
 import { router } from "../utils/router";
 import { getUrl, request } from "../utils/request";
@@ -491,7 +489,6 @@ export default {
     Login,
     PageContent,
     AppMenu,
-    DataDialog,
     FileManage,
   },
   data() {

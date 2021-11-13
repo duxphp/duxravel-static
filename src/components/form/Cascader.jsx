@@ -1,6 +1,6 @@
-import { defineComponent } from 'vue'
-import { requestCache } from '../../utils/request'
-import { vExec } from '../Create'
+import {defineComponent, nextTick} from 'vue'
+import {requestCache} from '../../utils/request'
+import {vExec} from '../Create'
 
 export default defineComponent({
   props: {
@@ -12,10 +12,11 @@ export default defineComponent({
     },
     'data-url': {
       type: String
-    }
+    },
   },
   data() {
     return {
+      modelVale: '',
     }
   },
   created() {
@@ -24,16 +25,41 @@ export default defineComponent({
         url: this.dataUrl,
         method: 'get',
       }).then(res => {
-        this.nParams.options = res
+        this.nParams.options = this.formatOptions(res)
         if (this.value !== null) {
           this.$emit('dataLabel', this.getLabel(this.value).join(' | '))
+          this.modelValue = this.value.toString()
         }
+
       })
+    } else {
+      this.nParams.options = this.formatOptions(this.nParams.options)
+      if (this.value !== null) {
+        this.$emit('dataLabel', this.getLabel(this.value).join(' | '))
+        this.modelValue = this.value.toString()
+      }
     }
   },
   methods: {
+    formatOptions(data) {
+      let format = (data) => {
+        return data.map((item) => {
+          let tmp = {
+            label: item.label.toString(),
+            value: item.value.toString(),
+          }
+          if (item.children && item.children.length) {
+            tmp.children = format(item.children)
+          }
+          return tmp;
+        })
+      }
+      return format(data)
+    },
+
     formatData(value) {
       let labelPath = []
+
       function getNodeRoute(tree) {
         for (let index = 0; index < tree.length; index++) {
           if (tree[index].children) {
@@ -49,6 +75,7 @@ export default defineComponent({
           }
         }
       }
+
       getNodeRoute(this.nParams.options)
       return {
         label: labelPath.reverse().join(' / '),
@@ -61,22 +88,25 @@ export default defineComponent({
           let data = this.formatData(item)
           labels.push(data.label)
         })
-      }else {
+      } else {
         let data = this.formatData(value)
         labels.push(data.label)
       }
       return labels
     },
     updateValue(value) {
-      this.$emit('dataLabel', this.getLabel(value).join(' | '))
+      this.modelVale = value
+      let labels = this.getLabel(value)
+      this.$emit('dataLabel', labels.join(' | '))
       this.$emit('update:value', value)
-    }
+    },
   },
   render() {
-    return <n-cascader
+    return <a-cascader
       {...vExec.call(this, this.nParams)}
-      value={this.value}
-      onUpdate:value={this.updateValue}
+      formatLabel={this.formatLabel}
+      modelValue={this.modelValue}
+      onChange={this.updateValue}
     />
   }
 })

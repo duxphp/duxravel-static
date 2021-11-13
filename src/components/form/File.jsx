@@ -1,7 +1,7 @@
-import { defineComponent } from 'vue'
-import { getUrl, request } from '../../utils/request'
-import { getLocalUserInfo } from '../../utils/user'
-import { formatType } from '../../utils/component'
+import {defineComponent, ref} from 'vue'
+import {getUrl, request} from '../../utils/request'
+import {getLocalUserInfo} from '../../utils/user'
+import {formatType} from '../../utils/component'
 
 export default defineComponent({
   props: {
@@ -36,6 +36,9 @@ export default defineComponent({
     return {
       formatClone: '',
       accept: '*.*',
+      visible: false,
+      prompt: false,
+      modalValue: '',
       progress: {
         status: false,
         progress: 0
@@ -61,7 +64,7 @@ export default defineComponent({
         this.progress.status = false
       }
     },
-    fileFinish({ file, event }) {
+    fileFinish({file, event}) {
       try {
         const result = JSON.parse(event.target.response)
         if (result.code !== 200) {
@@ -83,7 +86,7 @@ export default defineComponent({
 
     if (!this.image) {
       return this.type !== 'manage'
-        ? <n-upload
+        ? <a-upload
           action={getUrl(this.upload)}
           accept={this.accept}
           headers={{
@@ -94,57 +97,88 @@ export default defineComponent({
           onFinish={this.fileFinish}
           showFileList={false}
         >
-          <n-upload-dragger class="select-none flex flex-col gap-2 justify-center items-center relative cursor-pointer h-32 lg:h-32 border border-gray-500 border-dashed rounded bg-cover bg-center bg-no-repeat text-gray-500 hover:text-blue-600 hover:border-blue-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+          <n-upload-dragger
+            class="select-none flex flex-col gap-2 justify-center items-center relative cursor-pointer h-32 lg:h-32 border border-gray-500 border-dashed rounded bg-cover bg-center bg-no-repeat text-gray-500 hover:text-blue-600 hover:border-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 " fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
             </svg>
-            <div class="text-gray-500"><span class="status">{this.progress.status ? <span>文件上传中，请稍后 <span class="ml-2 text-blue-600">{this.progress.progress}%</span></span> : (this.value ? '文件已上传，点击重新上传' : '未上传文件，点击或者拖动上传文件')}</span></div>
+            <div class="text-gray-500"><span class="status">{this.progress.status ? <span>文件上传中，请稍后 <span
+              class="ml-2 text-blue-600">{this.progress.progress}%</span></span> : (this.value ? '文件已上传，点击重新上传' : '未上传文件，点击或者拖动上传文件')}</span>
+            </div>
           </n-upload-dragger>
-        </n-upload>
-        : <div onClick={this.fileManage} class="select-none flex flex-col gap-2 justify-center items-center relative cursor-pointer h-32 lg:h-32 border border-gray-500 border-dashed rounded bg-cover bg-center bg-no-repeat text-gray-500 hover:text-blue-600 hover:border-blue-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+        </a-upload>
+        : <div onClick={this.fileManage}
+               class="select-none flex flex-col gap-2 justify-center items-center relative cursor-pointer h-32 lg:h-32 border border-gray-500 border-dashed rounded bg-cover bg-center bg-no-repeat text-gray-500 hover:text-blue-600 hover:border-blue-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 " fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
           </svg>
-          <div class="text-gray-500"><span class="status">{this.value ? <span class="text-blue-600">文件已上传，点击重新上传</span> : '未上传文件，点击上传文件'}</span></div>
+          <div class="text-gray-500"><span class="status">{this.value ?
+            <span class="text-blue-600">文件已上传，点击重新上传</span> : '未上传文件，点击上传文件'}</span></div>
         </div>
 
     } else {
       return <div
-        class="relative  border border-gray-300 border-dashed bg-gray-100 rounded bg-cover bg-center bg-no-repeat block hover:border-blue-600"
+        class="relative  border border-gray-300  bg-gray-100 rounded bg-cover bg-center bg-no-repeat block flex items-end w-full h-full "
         class={`h-${this.size} lg:w-${this.size} lg:h-${this.size}`}
-        style={{ backgroundSize: '90%', backgroundImage: `url(${this.value || '/service/image/placeholder/180/180/选择图片'})` }}
+        style={{
+          backgroundSize: '90%',
+          backgroundImage: `url(${this.value || 'http://highway.test/service/image/placeholder/180/180/选择图片'})`
+        }}
       >
-        <div class="opacity-0 hover:opacity-100 absolute flex flex-col gap-2 justify-center items-center w-full h-full bg-blue-100 bg-opacity-90 rounded cursor-pointer">
-          {this.type !== 'manage' ? <n-upload
-            action={getUrl(this.upload)}
-            accept={this.accept}
-            headers={{
-              'Accept': 'application/json',
-              Authorization: `bearer ${getLocalUserInfo().token || ''}`
-            }}
-            onChange={this.fileChange}
-            onFinish={this.fileFinish}
-            showFileList={false}
-          >
-            {this.link ? <n-button type="primary" ghost size="small">上传</n-button> : <div class="w-1/2 h-1/2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
+        <a-image-preview src={this.value || 'http://highway.test/service/image/placeholder/180/180/选择图片'}
+                         vModel={[this.visible, 'visible']}/>
+        <div class="flex p-2 gap-2 w-full bg-white bg-opacity-60">
+
+          <div class="flex-grow flex text-center justify-center hover:text-blue-600 cursor-pointer" onClick={() => {
+            this.visible = true
+          }}>
+            <icon-eye/>
+          </div>
+
+          {this.type !== 'manage' ? <div
+              class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer"
+              onClick={this.fileManage}
+
+              //
+              // action={getUrl(this.upload)}
+              // accept={this.accept}
+              // headers={{
+              //   'Accept': 'application/json',
+              //   Authorization: `bearer ${getLocalUserInfo().token || ''}`
+              // }}
+              // onChange={this.fileChange}
+              // onFinish={this.fileFinish}
+              // showFileList={false}
+            >
+              <icon-upload/>
+            </div>
+            : <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
+              <icon-upload onClick={this.fileManage} />
             </div>}
-          </n-upload> 
-          : (this.link ? <n-button type="primary" onClick={this.fileManage} ghost size="small">上传</n-button> : <div onClick={this.fileManage} class="w-1/2 h-1/2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
-            </div>)}
-          {this.link && <n-button type="primary" ghost size="small" onClick={() => {
-            window.appDialog.prompt({
-              title: '请输入图片地址',
-              callback: (value) => {
-                this.$emit('update:value', value)
-              }
-            })
-          }}>地址</n-button>}
+          {this.link && <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
+            <icon-share-alt type="primary" ghost size="small" onClick={() => {
+              this.prompt = true
+            }}>地址
+            </icon-share-alt>
+
+            <a-modal
+              visible={this.prompt}
+              title='图片地址'
+              vModel={[this.prompt, 'visible']}
+              onOk={() => {
+                this.$emit('update:value', this.modalValue)
+              }}
+            >
+              <div>
+                <a-input vModel={[this.modalValue, 'model-value']} modelValue={this.value}/>
+              </div>
+            </a-modal>
+
+          </div>}
         </div>
       </div>
     }

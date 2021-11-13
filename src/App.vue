@@ -1,11 +1,13 @@
 <template>
-  <div :class="{ dark: darkMode === 'dark' }">
-    <Page :show="show" @switch-dark="switchDark" />
-  </div>
+  <a-config-provider :locale="zhCN">
+    <div :class="{ dark: darkMode === 'dark' }">
+      <Page :show="show" @switch-dark="switchDark" />
+    </div>
+  </a-config-provider>
 </template>
 
 <script>
-import { zhCN, dateZhCN } from "naive-ui";
+import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn';
 import Page from "./components/Page.vue";
 import { darkTheme } from "naive-ui";
 import themeLight from "./config/themeLight";
@@ -21,11 +23,10 @@ export default {
       localStorage.getItem("darkMode") === "dark" ? "dark" : "light";
     return {
       show: true,
-      zhCN,
-      dateZhCN,
       themeApp: window.derkMode === "dark" ? themeDark : themeLight,
       darkTheme: window.derkMode === "dark" ? darkTheme : null,
       darkMode: window.derkMode,
+      zhCN,
     };
   },
   created() {

@@ -255,8 +255,8 @@ export default defineComponent({
     }
   },
   render() {
-    return <n-modal show={this.showModal} displayDirective='show' onUpdate:show={this.closeModal}>
-      <n-card class="max-w-screen-md file-manage" content-style="padding: 0;">
+    return <a-modal modalClass="page-dialog max-w-screen-md w-auto" visible={this.showModal} closable={false} footer={false} onUpdate:close={this.closeModal}>
+
         <div class="flex flex-col items-center  lg:flex-row p-4 border-b border-gray-300  gap-4">
           <div class="flex-grow flex flex-col lg:flex-row gap-2">
             {!!this.filter.id && <n-upload
@@ -378,7 +378,6 @@ export default defineComponent({
             <n-button type="primary" onClick={this.submit}>确定</n-button>
           </div>
         </div>}
-      </n-card>
-    </n-modal>
+    </a-modal>
   }
 })
