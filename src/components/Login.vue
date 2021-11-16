@@ -1,7 +1,7 @@
 <template>
-  <div v-if="data.show" class="absolute inset-0" style="z-index: 9999">
+  <div v-if="data.show" class="absolute inset-0" style="z-index: 100">
     <div
-      class="
+        class="
         min-h-screen
         flex
         items-center
@@ -17,7 +17,7 @@
       <div class="max-w-md w-full space-y-8">
         <div>
           <div class="mx-auto h-16 w-16 text-blue-900">
-            <img class="w-16 h-16" :src="appInfo.logo || data.logo" />
+            <img class="w-16 h-16" :src="appInfo.logo || data.logo"/>
           </div>
           <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-300">
             {{ appInfo.name }}
@@ -27,35 +27,36 @@
           </p>
         </div>
         <form class="mt-8 space-y-6" @submit="login">
-          <input type="hidden" name="remember" value="true" />
+          <input type="hidden" name="remember" value="true"/>
           <div class="rounded-md flex flex-col gap-2">
             <div>
-              <n-input
-                type="input"
-                size="large"
-                placeholder="用户名"
-                @update:value="input('username', $event)"
+              <a-input
+                  type="input"
+                  size="large"
+                  placeholder="用户名"
+                  @update:modelValue="input('username', $event)"
               />
             </div>
             <div>
-              <n-input
-                type="password"
-                size="large"
-                placeholder="密码"
-                @update:value="input('password', $event)"
+              <a-input
+                  type="password"
+                  size="large"
+                  placeholder="密码"
+                  @update:modelValue="input('password', $event)"
               />
             </div>
           </div>
 
           <div>
-            <n-button
-              attr-type="submit"
-              type="primary"
-              size="large"
-              :loading="data.status"
-              class="w-full"
-              >登录</n-button
+            <a-button
+                html-type="submit"
+                type="primary"
+                size="large"
+                :loading="data.status"
+                long
             >
+              登录
+            </a-button>
           </div>
         </form>
       </div>
@@ -64,10 +65,10 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { request } from "../utils/request";
+import {ref} from "vue";
+import {request} from "../utils/request";
 import event from "../utils/event";
-import { isLogin, setLocalUserInfo } from "../utils/user";
+import {isLogin, setLocalUserInfo} from "../utils/user";
 import logo from "../assets/images/logo.svg";
 
 
@@ -106,14 +107,14 @@ export default {
           data: data.value.post,
           method: "POST",
         })
-          .then((res) => {
-            setLocalUserInfo({ ...res.userInfo, token: res.token });
-            event.emit("login-success");
-            data.value.show = false;
-          })
-          .finally(() => {
-            data.value.status = false;
-          });
+            .then((res) => {
+              setLocalUserInfo({...res.userInfo, token: res.token});
+              event.emit("login-success");
+              data.value.show = false;
+            })
+            .finally(() => {
+              data.value.status = false;
+            });
         return false;
       },
     };

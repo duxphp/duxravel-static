@@ -405,6 +405,7 @@
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
   </div>
+  <a-button @click="test">test</a-button>
   <PageContent
     v-for="(item, index) in dialogRouter"
     :key="item.key"
@@ -412,7 +413,6 @@
     :windowType="'dialog'"
     @close="closeDialog(index)"
   />
-  <FileManage />
   <Login />
 </template>
 
@@ -431,7 +431,7 @@ import {
 import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
-import FileManage from "./utils/FileManage";
+import FileManage from "./utils/FileManageExtend";
 import { router } from "../utils/router";
 import { getUrl, request } from "../utils/request";
 import event from "../utils/event";
@@ -451,6 +451,7 @@ export default {
     window.message = Message
     window.dialog = Modal
     window.notification = Notification
+    window.fileManage = FileManage
 
     window.dialogAsync = {
       //destroyAll: window.dialog.destroyAll.bind(window.dialog),
@@ -489,7 +490,6 @@ export default {
     Login,
     PageContent,
     AppMenu,
-    FileManage,
   },
   data() {
     return {
@@ -569,6 +569,12 @@ export default {
     });
   },
   methods: {
+    test() {
+      window.FileManage({
+
+        multiple: true
+      })
+    },
     avatarSelect(key) {
       switch (key) {
         case 2:

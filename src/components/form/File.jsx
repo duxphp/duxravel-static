@@ -56,37 +56,66 @@ export default defineComponent({
   },
   methods: {
     fileChange(e) {
-      if (e.file.status === 'uploading') {
-        this.progress.status = true
-        this.progress.progress = e.file.percentage
-        // 上传中
-      } else if (e.file.status === 'finished') {
-        this.progress.status = false
-      }
-    },
-    fileFinish({file, event}) {
-      try {
-        const result = JSON.parse(event.target.response)
-        if (result.code !== 200) {
-          window.message.error(result.message || '上传失败')
-        } else {
-          this.$emit('update:value', result.data[0].url)
+      this.progress.status = true
+      const fd = new FormData()
+      fd.append('file', e.target.files[0])
+      window.ajax({
+        url: getUrl(this.upload),
+        method: 'POST',
+        header: {
+          'Content-Type': 'multipart/form-data'
+        },
+        data: fd,
+        onProgress: (progress) => {
+          this.progress.progress = progress
         }
-      } catch (err) {
-        window.message.error('上传文件异常，请稍后再试')
-      }
+      }).then(data => {
+        this.progress.status = false
+        this.$emit('update:value', data[0].url)
+      })
     },
     fileManage() {
-      window.selectFile(false, this.formatClone).then(res => {
+      window.fileManage({
+        type: this.formatClone,
+      }).then(res => {
         this.$emit('update:value', res.url)
-      });
+      })
     }
   },
   render() {
 
     if (!this.image) {
       return this.type !== 'manage'
-        ? <a-upload
+        ?
+        <div class="w-full bg-gray-2 border border-dashed rounded border-gray-4 p-4 flex justify-center items-center flex-col ">
+          <div class="">
+            <svg t="1637049076755" class="w-12 h-12" viewBox="0 0 1024 1024" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg" >
+              <path
+                d="M918.673 883H104.327C82.578 883 65 867.368 65 848.027V276.973C65 257.632 82.578 242 104.327 242h814.346C940.422 242 958 257.632 958 276.973v571.054C958 867.28 940.323 883 918.673 883z"
+                fill="#FFE9B4" p-id="9921"></path>
+              <path
+                d="M512 411H65V210.37C65 188.597 82.598 171 104.371 171h305.92c17.4 0 32.71 11.334 37.681 28.036L512 411z"
+                fill="#FFB02C" p-id="9922"></path>
+              <path
+                d="M918.673 883H104.327C82.578 883 65 865.42 65 843.668V335.332C65 313.58 82.578 296 104.327 296h814.346C940.422 296 958 313.58 958 335.332v508.336C958 865.32 940.323 883 918.673 883z"
+                fill="#FFCA28" p-id="9923"></path>
+            </svg>
+          </div>
+          <div className="text-gray-6 mt-2">请点击上传或者拖动文件到该处</div>
+          <div className="mt-2 relative">
+              <input type="file" vShow={false} ref="fileRef" onChange={this.fileChange} />
+              <a-button
+                type="primary"
+                loading={this.progress.status}
+                onClick={() => {
+                this.$refs.fileRef.dispatchEvent(new MouseEvent('click'))
+              }
+              }>{this.progress.status ? <span>上传中 {this.progress.progress}%</span> : (this.value ? '已上传': '上传文件')}</a-button>
+
+          </div>
+        </div>
+        /*<a-upload
           action={getUrl(this.upload)}
           accept={this.accept}
           headers={{
@@ -94,32 +123,37 @@ export default defineComponent({
             Authorization: `${getLocalUserInfo().token || ''}`
           }}
           onChange={this.fileChange}
-          onFinish={this.fileFinish}
           showFileList={false}
+          draggable
+          tip={this.progress.status ? this.progress.progress + '%' : (this.value ? '已上传文件': '未上传文件')}
         >
-          <n-upload-dragger
-            class="select-none flex flex-col gap-2 justify-center items-center relative cursor-pointer h-32 lg:h-32 border border-gray-500 border-dashed rounded bg-cover bg-center bg-no-repeat text-gray-500 hover:text-blue-600 hover:border-blue-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 " fill="none" viewBox="0 0 24 24"
-                 stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-            </svg>
-            <div class="text-gray-500"><span class="status">{this.progress.status ? <span>文件上传中，请稍后 <span
-              class="ml-2 text-blue-600">{this.progress.progress}%</span></span> : (this.value ? '文件已上传，点击重新上传' : '未上传文件，点击或者拖动上传文件')}</span>
-            </div>
-          </n-upload-dragger>
-        </a-upload>
-        : <div onClick={this.fileManage}
-               class="select-none flex flex-col gap-2 justify-center items-center relative cursor-pointer h-32 lg:h-32 border border-gray-500 border-dashed rounded bg-cover bg-center bg-no-repeat text-gray-500 hover:text-blue-600 hover:border-blue-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 " fill="none" viewBox="0 0 24 24"
-               stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-          </svg>
-          <div class="text-gray-500"><span class="status">{this.value ?
-            <span class="text-blue-600">文件已上传，点击重新上传</span> : '未上传文件，点击上传文件'}</span></div>
-        </div>
 
+        </a-upload>*/
+
+        :
+
+        <div
+          className="w-full bg-gray-2 border border-dashed rounded border-gray-4 p-4 flex justify-center items-center flex-col ">
+          <div className="">
+            <svg t="1637049076755" class="w-12 h-12" viewBox="0 0 1024 1024" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M918.673 883H104.327C82.578 883 65 867.368 65 848.027V276.973C65 257.632 82.578 242 104.327 242h814.346C940.422 242 958 257.632 958 276.973v571.054C958 867.28 940.323 883 918.673 883z"
+                fill="#FFE9B4" p-id="9921"></path>
+              <path
+                d="M512 411H65V210.37C65 188.597 82.598 171 104.371 171h305.92c17.4 0 32.71 11.334 37.681 28.036L512 411z"
+                fill="#FFB02C" p-id="9922"></path>
+              <path
+                d="M918.673 883H104.327C82.578 883 65 865.42 65 843.668V335.332C65 313.58 82.578 296 104.327 296h814.346C940.422 296 958 313.58 958 335.332v508.336C958 865.32 940.323 883 918.673 883z"
+                fill="#FFCA28" p-id="9923"></path>
+            </svg>
+          </div>
+          <div className="text-gray-6 mt-2">请点击上传或者拖动文件到该处</div>
+          <div className="mt-2 relative">
+            <a-button type="primary" onClick={this.fileManage}>{this.progress.status ? <span>上传中 <icon-loading/></span> : (this.value ? '重新上传' : '上传文件')}</a-button>
+
+          </div>
+        </div>
     } else {
       return <div
         class="relative  border border-gray-300  bg-gray-100 rounded bg-cover bg-center bg-no-repeat block flex items-end w-full h-full "
@@ -132,17 +166,14 @@ export default defineComponent({
         <a-image-preview src={this.value || 'http://highway.test/service/image/placeholder/180/180/选择图片'}
                          vModel={[this.visible, 'visible']}/>
         <div class="flex p-2 gap-2 w-full bg-white bg-opacity-60">
-
           <div class="flex-grow flex text-center justify-center hover:text-blue-600 cursor-pointer" onClick={() => {
             this.visible = true
           }}>
             <icon-eye/>
           </div>
-
           {this.type !== 'manage' ? <div
               class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer"
               onClick={this.fileManage}
-
               //
               // action={getUrl(this.upload)}
               // accept={this.accept}
@@ -157,7 +188,7 @@ export default defineComponent({
               <icon-upload/>
             </div>
             : <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
-              <icon-upload onClick={this.fileManage} />
+              <icon-upload onClick={this.fileManage}/>
             </div>}
           {this.link && <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
             <icon-share-alt type="primary" ghost size="small" onClick={() => {

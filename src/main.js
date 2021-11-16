@@ -41,8 +41,7 @@ window.NProgress = NProgress
 const app = window.vueApp = Vue.createApp(App)
 
 //app.use(naive)
-app.use(ArcoVue)
-app.use(ArcoVueIcon)
+app.use(ArcoVue, ArcoVueIcon)
 
 window.NProgress.configure({
   easing: 'ease',

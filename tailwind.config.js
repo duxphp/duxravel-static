@@ -1,4 +1,5 @@
 const colors = require('tailwindcss/colors')
+const { preset } = require('twin.arco')
 
 module.exports = {
   purge: [],
@@ -7,13 +8,10 @@ module.exports = {
     extend: {
       colors: {
         // Build your palette here
-        gray: colors.blueGray,
-        red: colors.red,
-        blue: colors.blue,
-        yellow: colors.orange,
       }
     },
   },
+  ...preset(),
   variants: {
     extend: {
       display: ['hover', 'focus'],
