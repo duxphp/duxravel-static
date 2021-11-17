@@ -1,5 +1,4 @@
-import {defineComponent, ref, getCurrentInstance, watch} from 'vue'
-import event from '../../utils/event'
+import {defineComponent, ref, watch} from 'vue'
 import {getUrl, request, searchQuick} from '../../utils/request'
 import {getLocalUserInfo} from '../../utils/user'
 import {formatType} from '../../utils/component'
@@ -258,7 +257,7 @@ export default defineComponent({
   },
   render() {
     return <a-modal modalClass="file-manage page-dialog max-w-screen-md w-auto" visible={this.showModal}
-                    closable={false} footer={false} onClose={this.closeModal} onCance={this.closeModal}>
+                    closable={false} footer={false} onClose={this.closeModal} onCancel={this.closeModal}>
 
         <div class="arco-modal-header flex gap-2">
           <div class="flex-grow flex flex-row gap-2">

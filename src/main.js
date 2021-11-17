@@ -23,6 +23,7 @@ import DataSelect from './components/form/Select'
 import DataCascader from './components/form/Cascader'
 import DataFile from './components/form/File'
 import DataFiles from './components/form/Files'
+import DataImages from './components/form/Images'
 import DataEditor from './components/form/Editor'
 import DataChoice from './components/form/Choice'
 import DataColor from './components/form/Color'
@@ -41,7 +42,8 @@ window.NProgress = NProgress
 const app = window.vueApp = Vue.createApp(App)
 
 //app.use(naive)
-app.use(ArcoVue, ArcoVueIcon)
+app.use(ArcoVue)
+app.use(ArcoVueIcon)
 
 window.NProgress.configure({
   easing: 'ease',
@@ -85,6 +87,7 @@ app.component('app-cascader', DataCascader)
 // 文件上传
 app.component('app-file', DataFile)
 app.component('app-files', DataFiles)
+app.component('app-images', DataImages)
 // 编辑器
 app.component('app-editor', DataEditor)
 // 动态选择器

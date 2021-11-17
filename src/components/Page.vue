@@ -432,6 +432,7 @@ import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
 import FileManage from "./utils/FileManageExtend";
+import AppDialog from "./utils/DialogExtend";
 import { router } from "../utils/router";
 import { getUrl, request } from "../utils/request";
 import event from "../utils/event";
@@ -452,6 +453,7 @@ export default {
     window.dialog = Modal
     window.notification = Notification
     window.fileManage = FileManage
+    window.appDialog = AppDialog
 
     window.dialogAsync = {
       //destroyAll: window.dialog.destroyAll.bind(window.dialog),
@@ -570,9 +572,8 @@ export default {
   },
   methods: {
     test() {
-      window.FileManage({
-
-        multiple: true
+      window.appDialog.prompt().then((value) => {
+        console.log(value)
       })
     },
     avatarSelect(key) {

@@ -1,14 +1,14 @@
 import {createApp} from 'vue'
-import FileManage from "./FileManage";
+import Dialog from "./Dialog";
 import ArcoVue from "@arco-design/web-vue";
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 
-function createFileManage(option = {}) {
 
+function createDialog(option = {}) {
   return new Promise((resolve, reject) => {
     const dom = document.createElement('div')
     document.body.appendChild(dom)
-    const app = createApp(FileManage, {
+    const app = createApp(Dialog, {
       close: () => {
         setTimeout(() => {
           app.unmount()
@@ -25,4 +25,9 @@ function createFileManage(option = {}) {
   })
 }
 
-export default createFileManage
+createDialog.prompt = (option = {}) => {
+  option.type = 'prompt'
+  return createDialog(option)
+}
+
+export default createDialog

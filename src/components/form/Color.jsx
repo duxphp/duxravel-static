@@ -42,18 +42,18 @@ export default defineComponent({
     }
   },
   render() {
-    return <n-popover placement="bottom-start" trigger="click" style={{padding: 0}}>
+    return <a-popover position="bl" trigger="click"  style={{padding: 0}}>
       {{
-        default: () => <div class="flex flex-wrap pl-2 pr-1 py-2 gap-2 w-64">
-            {this.color.map(color => <div class="w-7 h-7 rounded hover:shadow cursor-pointer" onClick={() => {this.onSelect(color)}} style={{backgroundColor: color}}></div>)}
-            <div class="w-24"><n-input size="small" placeholder="" value={this.value} onUpdate:value={this.onSelect}  /></div>
-        </div>,
-        trigger: () => <n-input value={this.value} type="text" placeholder={this.placeholder}>
+        default: () => <a-input modelValue={this.value} type="text" placeholder={this.placeholder}>
           {{
-            suffix: () => <div class="rounded-full w-6 h-6 border " style={{backgroundColor: this.value}}></div>
+            append: () => <div className="rounded-full w-6 h-6 border " style={{backgroundColor: this.value}}></div>
           }}
-        </n-input>
+        </a-input>,
+        content: () => <div class="flex flex-wrap pl-1 pr-0 py-0 gap-2 w-64">
+            {this.color.map(color => <div class="w-7 h-7 rounded hover:shadow cursor-pointer" onClick={() => {this.onSelect(color)}} style={{backgroundColor: color}}></div>)}
+            <div class="w-24"><a-input size="small" placeholder="" modelValue={this.value} onUpdate:modelValue={this.onSelect}  /></div>
+        </div>
       }}
-    </n-popover>
+    </a-popover>
   }
 })
