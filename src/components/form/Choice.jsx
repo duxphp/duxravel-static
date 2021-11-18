@@ -6,11 +6,15 @@ import { renderNodeList } from '../Create'
 
 export default defineComponent({
   props: {
-    'only': {
+    'key': {
       type: String,
+      default: 'id'
     },
     'ajaxColumn': {
       type: Array,
+    },
+    'ajaxType': {
+      type: Array
     },
     'column': {
       type: Array,
@@ -42,36 +46,43 @@ export default defineComponent({
     }
   },
   watch: {
-    data: {
+    /*data: {
       handler(val){
         this.$emit('update:value', val)
       },
       deep:true
-    }
+    }*/
   },
   created() {
     // 数据表格
     let columns = []
+
     this.column.map(item => {
       const column = {
         title: item.name,
-        key: item.key,
+        dataIndex: item.key,
         render: null
       }
       if (item.type === 'text') {
         column.render = (row, index) => renderNodeList.call({}, {
-          nodeName: 'n-input',
-          'onUpdate:value': value => { row[item.key] = value, this.data[index][item.key] = value },
-          value: row[item.key]
+          nodeName: 'a-input',
+          'onUpdate:model-value': value => {row.record[item.key] = value },
+          modelValue: row[item.key]
+          //'onUpdate:model-value': value => { row.record[item.key] = value, this.data[index][item.key] = value },
+          //modelValue: row[item.key]
         }).default()
       }
       if (item.type === 'image') {
         column.render = (row, index) => renderNodeList.call({}, {
           nodeName: 'app-file',
-          'onUpdate:value': value => { row[item.key] = value, this.data[index][item.key] = value },
+          //'vModel:value': this.data[index][item.key],
+          'onUpdate:value': value => {row.record[item.key] = value },
           value: row[item.key],
+          //'onUpdate:value': value => { row.record[item.key] = value, this.data[index][item.key] = value },
+          //value: row.record[item.key],
           image: true,
-          size: 9,
+          mini: true,
+          size: 8,
           link: false
         }).default()
       }
@@ -79,101 +90,96 @@ export default defineComponent({
     })
 
     this.option && columns.push({
-      title: '操作',
+      title: <div class="flex">
+        <div class="flex-grow">操作</div>
+        <a-link class="flex-none"><icon-plus onClick={this.onOpen} /></a-link>
+      </div>,
       width: 80,
-      render: (row, index) => renderNodeList.call({}, {
-        nodeName: 'div',
-        class: 'flex gap-2',
-        child: [
-          {
-            nodeName: 'n-icon',
-            onClick: () => {
-              if(index === 0) {
-                return false;
-              }
-              this.dataTable.splice(index - 1, 0, this.dataTable.splice(index, 1)[0])
-            },
-            class: classnames('cursor-pointer hover:text-blue-600', {'text-gray-300 hover:text-gray-300': index === 0}),
-            child: {
-              nodeName: 'chevron-up-icon'
-            },
-          },
-          {
-            nodeName: 'n-icon',
-            onClick: () => {
-              if(index + 1 === this.dataTable.length) {
-                return false;
-              }
-              this.dataTable.splice(index + 1, 0, this.dataTable.splice(index, 1)[0])
-            },
-            class: classnames('cursor-pointer hover:text-blue-600', {'text-gray-300 hover:text-gray-300': index + 1 === this.dataTable.length}),
-            child: {
-              nodeName: 'chevron-down-icon'
-            },
-          },
-          {
-            nodeName: 'n-icon',
-            onClick: () => {
-              this.data.splice(index, 1)
-              this.dataTable.splice(index, 1)
-            },
-            class: 'cursor-pointer hover:text-red-600',
-            child: {
-              nodeName: 'x-icon'
-            },
-          },
-        ]
-      }).default()
+      render: (row) => <div class="flex gap-2">
+        <a-link onClick={() => {
+          let index = this.data.findIndex((item) => {
+            return row.record[this.key] === item[this.key]
+          })
+          if(index === 0) {
+            return false;
+          }
+          this.data.splice(index - 1, 0, this.data.splice(index, 1)[0])
+          this.$emit('update:value', this.data)
+        }
+        }>
+          <icon-arrow-up />
+        </a-link>
+        <a-link onClick={() => {
+          let index = this.data.findIndex((item) => {
+            return row.record[this.key] === item[this.key]
+          })
+          if(index + 1 === this.data.length) {
+            return false;
+          }
+          this.data.splice(index + 1, 0, this.data.splice(index, 1)[0])
+          this.$emit('update:value', this.data)
+        }
+        }>
+          <icon-arrow-down />
+        </a-link>
+
+        <a-link onClick={() => {
+          let index = this.data.findIndex((item) => {
+            return row.record[this.key] === item[this.key]
+          })
+          this.data.splice(index, 1)
+          this.$emit('update:value', this.data)
+        }
+        }>
+          <icon-close />
+        </a-link>
+      </div>,
     })
     this.columns = columns
 
     // 初始数据
-    const ids = this.value.map(item => item[this.only]).join(',')
-    let params = {}
-    params[this.only] = ids;
+    this.init()
 
-    if (ids) {
-      request({
-        url: this.url,
-        data: params
-      }).then(res => {
-        // 合并数据
-        let tmp = {}
-        res.data.map(item => {
-            tmp[item[this.only]] = item
-        })
-        const list = this.value.map(item => {
-            return {...item, ...tmp[item[this.only]] || {}}
-        })
-        this.setData(list, true)
-        this.loading = false
-      })
-    } else {
-      this.loading = false
-    }
   },
   methods: {
+    init() {
+      // 获主键
+      const ids = this.value.map(item => item[this.key]).join(',')
+      let params = {}
+      params[this.key] = ids;
+      if (ids) {
+        request({
+          url: this.url,
+          data: params
+        }).then(res => {
+          // 合并数据
+          let tmp = {}
+          res.data.map(item => {
+            tmp[item[this.key]] = item
+          })
+          const list = this.value.map(item => {
+            return {...item, ...tmp[item[this.key]] || {}}
+          })
+          this.setData(list, true)
+          this.loading = false
+        })
+      } else {
+        this.loading = false
+      }
+    },
     setData(data, init) {
-      const ids = this.data.map(item => item[this.only])
-      let dataTableArray = [], dataArray = []
+      const ids = this.data.map(item => item[this.key])
+      let dataArray = []
       let number = this.data.length
       data.map(item => {
-        if (~ids.indexOf(item[this.only])) {
+        if (~ids.indexOf(item[this.key])) {
           return false
         }
         const data = {}
-        const tableData = {}
-        data[this.only] = tableData[this.only] = item[this.only]
+        data[this.key] = item[this.key]
         this.column.map(column => {
-          if (!column.key) {
-            return false;
-          }
-          if (column.type !== 'show') {
-            data[column.key] = item[column.key] || ""
-          }
-          tableData[column.key] = item[column.key]
+          data[column.key] = item[column.key] || ""
         })
-        dataTableArray.push(tableData)
         dataArray.push(data)
         number++
       })
@@ -181,8 +187,8 @@ export default defineComponent({
         window.message.warning('最多可选择 ' + this.number + ' 条数据')
         return false;
       }
-      this.dataTable.push(...dataTableArray)
       this.data.push(...dataArray)
+      this.$emit('update:value', this.data)
     },
     onSave(data) {
       this.setData(data)
@@ -196,28 +202,20 @@ export default defineComponent({
     },
   },
   render() {
-    return <div>
+    return <div class="w-full">
       <div class="overflow-x-auto w-full mb-2">
-        <n-data-table single-line={true} loading={this.loading} columns={this.columns} data={this.dataTable} class="whitespace-nowrap">
+        <a-table stripe={true} loading={this.loading} columns={this.columns} data={this.data} pagination={false} class="whitespace-nowrap">
         {
           {
-            empty: () => <div class="flex items-center gap-4">
-              <div class="flex-none text-gray-400">
-                <n-icon size="38"><svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1341" width="64" height="64"><path d="M831.7 369.4H193.6L64 602v290.3h897.2V602L831.7 369.4zM626.6 604.6c0 62.9-51 113.9-114 113.9s-114-51-114-113.9H117.5l103.8-198h582.5l103.8 198h-281zM502.2 131h39.1v140.6h-39.1zM236.855 200.802l27.647-27.647 99.419 99.418-27.648 27.648zM667.547 272.637l99.418-99.419 27.648 27.648-99.418 99.418z" p-id="1342"></path></svg></n-icon>
-              </div>
-              <div class="flex-grow">
-                <div class="mb-1">暂无数据</div>
-                <div class="text-gray-400">暂未选择数据，请选择数据</div>
-              </div>
-            </div>
+            empty: () => <a-empty/>
           }
         }
-        </n-data-table>
+        </a-table>
       </div>
       {(!this.number || this.data.length < this.number) && <div>
         <n-button class="w-full " onClick={this.onOpen}>增加</n-button>
       </div>}
-      {this.show && <dialog-table url={this.url} column={this.ajaxColumn} key={this.only} onUpdate:show={value => this.show = value} onConfirm={this.onSave} />}
+      {this.show && <dialog-table url={this.url} column={this.ajaxColumn} key={this.key} type={this.ajaxType} onUpdate:show={value => this.show = value} onConfirm={this.onSave} />}
     </div>
   }
 })

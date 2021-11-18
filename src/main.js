@@ -27,6 +27,7 @@ import DataImages from './components/form/Images'
 import DataEditor from './components/form/Editor'
 import DataChoice from './components/form/Choice'
 import DataColor from './components/form/Color'
+import DynamicData from './components/form/DynamicData'
 import DialogTable from './components/table/DialogTable'
 import DataEmpty from './components/common/Empty'
 
@@ -94,6 +95,10 @@ app.component('app-editor', DataEditor)
 app.component('app-choice', DataChoice)
 // 颜色选择器
 app.component('app-color', DataColor)
+
+// 动态数据
+app.component('app-dynamic-data', DynamicData)
+
 // 列表选择器
 app.component('dialog-table', DialogTable)
 
@@ -105,6 +110,7 @@ app.component('widget-header', WidgetHeader)
 
 // 拖动排序
 app.component('draggable', draggable)
+
 
 app.mount('#duxravel-static')
 

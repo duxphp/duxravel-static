@@ -1,6 +1,7 @@
 import {defineComponent} from 'vue'
 import {getUrl} from '../../utils/request'
 import {formatType} from '../../utils/component'
+import {getLocalUserInfo} from "../../utils/user";
 
 export default defineComponent({
   props: {
@@ -31,6 +32,10 @@ export default defineComponent({
       progress: {
         status: false,
         progress: 0
+      },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `${getLocalUserInfo().token || ''}`
       }
     }
   },
@@ -42,39 +47,23 @@ export default defineComponent({
     this.accept = formatType(this.formatClone)
   },
   methods: {
-    fileChange(e) {
-      e.stopPropagation()
-      if (!e.target.files.length || this.progress.status) {
-        return false;
-      }
-      this.progress.status = true
-      const fd = new FormData()
+    fileChange(files, e) {
 
-      for (let i in e.target.files) {
-        fd.append('file_' + i, e.target.files[i])
-      }
-      window.ajax({
-        url: getUrl(this.upload),
-        method: 'POST',
-        header: {
-          'Content-Type': 'multipart/form-data'
-        },
-        data: fd,
-        onProgress: (progress) => {
-          this.progress.progress = progress
-        }
-      }).then(data => {
+      if (e.status === 'uploading') {
+        this.progress.status = true
+        this.progress.progress = e.percent * 100
+      } else if (e.status === 'done') {
         this.progress.status = false
-        data.map(item => {
+        e.response.data.map(item => {
           this.list.push({
             name: item.title,
             url: item.url
           })
         })
         this.$emit('update:value', this.list)
-      }).catch(() => {
-        this.progress.status = false
-      })
+      } else if (e.status === 'error') {
+        window.message.error(e.response.message || '上传失败')
+      }
     },
     fileManage() {
       window.fileManage({
@@ -125,12 +114,22 @@ export default defineComponent({
           </div>,
           footer: () => this.type !== 'manage'
             ? <div>
-              <input type="file" vShow={false} ref="fileRef" accept={this.accept} multiple onChange={this.fileChange} disabled={this.progress.status} />
-              <div className="pl-3 pr-4 py-3 flex items-center justify-center cursor-pointer hover:text-arcoblue-7" onClick={() => {
-                this.$refs.fileRef.dispatchEvent(new MouseEvent('click'))
-              }}>
-                {this.progress.status ? <div class="text-gray-6">已上传 {this.progress.progress}%</div> : '上传附件'}
-              </div>
+              <a-upload
+                action={getUrl(this.upload)}
+                accept={this.accept}
+                headers={this.headers}
+                onChange={this.fileChange}
+                multiple
+                showFileList={false}
+              >
+                {
+                  {
+                    'upload-button': () => <div className="pl-3 pr-4 py-3 flex items-center justify-center cursor-pointer hover:text-arcoblue-7">
+                      {this.progress.status ? <div className="text-gray-6">已上传 {this.progress.progress}%</div> : '上传附件'}
+                    </div>
+                  }
+                }
+              </a-upload>
             </div>
             : <div class="pl-3 pr-4 py-3 flex items-center justify-center cursor-pointer hover:text-arcoblue-7" onClick={this.fileManage}>
               上传附件

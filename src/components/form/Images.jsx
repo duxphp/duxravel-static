@@ -1,6 +1,7 @@
 import {defineComponent} from 'vue'
 import {getUrl} from '../../utils/request'
 import {formatType} from '../../utils/component'
+import {getLocalUserInfo} from "../../utils/user";
 
 export default defineComponent({
   props: {
@@ -28,6 +29,10 @@ export default defineComponent({
       progress: {
         status: false,
         progress: 0
+      },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `${getLocalUserInfo().token || ''}`
       }
     }
   },
@@ -36,38 +41,19 @@ export default defineComponent({
     this.accept = formatType(this.formatClone)
   },
   methods: {
-    fileChange(e) {
-      e.stopPropagation()
-      if (!e.target.files.length || this.progress.status) {
-        return false;
-      }
-      this.progress.status = true
-      const fd = new FormData()
-
-      for (let i in e.target.files) {
-        fd.append('file_' + i, e.target.files[i])
-
-      }
-
-      window.ajax({
-        url: getUrl(this.upload),
-        method: 'POST',
-        header: {
-          'Content-Type': 'multipart/form-data'
-        },
-        data: fd,
-        onProgress: (progress) => {
-          this.progress.progress = progress
-        }
-      }).then(data => {
+    fileChange(files, e) {
+      if (e.status === 'uploading') {
+        this.progress.status = true
+        this.progress.progress = e.percent * 100
+      } else if (e.status === 'done') {
         this.progress.status = false
-        data.map(item => {
+        e.response.data.map(item => {
           this.list.push(item.url)
         })
         this.$emit('update:value', this.list)
-      }).catch(() => {
-        this.progress.status = false
-      })
+      } else if (e.status === 'error') {
+        window.message.error(e.response.message || '上传失败')
+      }
     },
     fileManage() {
       window.fileManage({
@@ -132,18 +118,31 @@ export default defineComponent({
           </div>,
           footer: () => this.type !== 'manage'
             ? <div class="relative w-28 h-28 border border-gray-4 border-dashed rounded block hover:border-arcoblue-7">
-              <input type="file" vShow={false} ref="fileRef" accept={this.accept} multiple onChange={this.fileChange}  disabled={this.progress.status}/>
-              <div class="text-gray-500 hover:text-arcoblue-7 absolute flex items-center justify-center w-full h-full bg-gray-1 rounded cursor-pointer" onClick={() => {
-                this.$refs.fileRef.dispatchEvent(new MouseEvent('click'))
-              }}>
-                {this.progress.status ?
-                  <div class="text-xl"> {this.progress.progress}%</div> :
-                  <div className="flex items-center flex-col justify-center ">
-                    <icon-upload className="text-2xl"/>
-                    <div className="mt-2 text-xs">上传图片</div>
-                  </div>
-                }
-              </div>
+                <a-upload
+                  action={getUrl(this.upload)}
+                  accept={this.accept}
+                  headers={this.headers}
+                  onChange={this.fileChange}
+                  multiple
+                  showFileList={false}
+                  class="block"
+                >
+                  {
+                    {
+                      'upload-button': () => <div className="text-gray-500 hover:text-arcoblue-7 absolute flex items-center justify-center w-full h-full bg-gray-1 rounded cursor-pointer text-center">
+                        {this.progress.status ?
+                        <div class="text-xl"> {this.progress.progress}%</div> :
+                        <div className="flex items-center flex-col justify-center ">
+                          <icon-upload className="text-2xl"/>
+                          <div className="mt-2 text-xs">上传图片</div>
+                        </div>}
+                      </div>
+                    }
+                  }
+                </a-upload>
+
+
+
             </div>
             : <div class="relative w-28 h-28 border border-gray-4 border-dashed rounded block hover:border-arcoblue-7" onClick={this.fileManage}>
               <div class="text-gray-500 hover:text-arcoblue-7 absolute flex items-center justify-center w-full h-full bg-gray-1 rounded cursor-pointer">

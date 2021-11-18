@@ -1,6 +1,5 @@
 import {defineComponent, h} from 'vue'
 import {searchQuick} from "@/utils/request";
-import {NImage} from "naive-ui";
 
 export default defineComponent({
   props: {
@@ -31,24 +30,15 @@ export default defineComponent({
     this.column.map(item => {
       const column = {
         title: item.name,
-        key: item.key,
+        dataIndex: item.key,
         render: null
       }
       if (item.type === 'image') {
-        column.render = (row) => {
-          return h(
-            NImage,
-            {
-              width: 60,
-              src: row[item.key]
-            },
-          )
-        }
+        column.render = (row) => <a-avatar shape="square" size="30"><img
+          src={row.record[item.key]}
+        /></a-avatar>
       }
       columns.push(column)
-    })
-    columns.push({
-      type: 'selection',
     })
     this.columns = columns
 
@@ -72,7 +62,7 @@ export default defineComponent({
   data() {
     return {
       title: '列表数据',
-      width: 'max-w-4xl',
+      width: 'max-w-4xl w-auto',
       filter: {
         query: '',
         type: ''
@@ -134,49 +124,36 @@ export default defineComponent({
     },
   },
   render() {
-    return <n-modal show={this.show} displayDirective="if">
-      <n-card class={this.width} content-style="padding: 0;">
-        <div className="flex items-center p-4 border-b border-gray-300">
-          <div className="flex-grow text-xl">{this.title}</div>
-          <div className="cursor-pointer btn-close h-6 w-6 text-gray-600 hover:text-red-900" onClick={this.onCancel}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </div>
-        </div>
-        <div className="p-4">
-          <div className="flex gap-4 mb-3">
-            {this.type && <div className="flex-grow">
-              <n-radio-group
-                value={this.filter.type}
-                onUpdate:value={value => this.filter.type = value}
-                name="left-size"
-              >
-                {this.type.map(item => <n-radio-button value={item.key}>{item.name}</n-radio-button>)}
-              </n-radio-group>
-            </div>}
-            {this.search && <div className="flex-none flex gap-4">
-              <div>
-                <n-input placeholder="请输入搜索内容" value={this.filter.query}
-                         onUpdate:value={value => this.filter.query = value}/>
-              </div>
-            </div>}
-          </div>
-          <n-data-table remote={true} loading={this.loading} columns={this.columns} data={this.data}
-                        rowKey={row => row[this.key]} pagination={this.pagination}
-                        onUpdate:checkedRowKeys={value => {
-                          this.checked = value
-                          if (!this.multiple) {
-                            this.onSave()
-                          }
-                        }
-                        }/>
-          {this.multiple && <div className="mt-4 flex justify-end gap-2">
-            <n-button onClick={this.onCancel}>取消</n-button>
-            <n-button type="primary" onClick={this.onSave}>确定</n-button>
+    return <a-modal modalClass={this.width} visible={this.show} title={this.title} onCancel={this.onCancel} onClose={this.onCancel} onOk={this.onSave} footer={this.multiple}>
+      <div >
+        <div class="flex gap-4 mb-3">
+          {console.log(this.type)}
+          {this.type && <div class="flex-grow">
+            <a-radio-group
+              type="button"
+              vModel={[this.filter.type, 'modelValue']}
+            >
+              {this.type.map((item, key) => <a-radio value={key}>{item}</a-radio>)}
+            </a-radio-group>
+          </div>}
+          {this.search && <div class="flex-none flex gap-4">
+            <div>
+              <a-input placeholder="请输入搜索内容" value={this.filter.query}
+                       onUpdate:value={value => this.filter.query = value}/>
+            </div>
           </div>}
         </div>
-      </n-card>
-    </n-modal>
+        <a-table remote={true} loading={this.loading} columns={this.columns} data={this.data}
+                      rowKey={row => row[this.key]} pagination={this.pagination}
+                      onUpdate:checkedRowKeys={value => {
+                        this.checked = value
+                        if (!this.multiple) {
+                          this.onSave()
+                        }
+                      }
+                      }/>
+        
+      </div>
+    </a-modal>
   }
 })
