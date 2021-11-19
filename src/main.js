@@ -28,8 +28,8 @@ import DataEditor from './components/form/Editor'
 import DataChoice from './components/form/Choice'
 import DataColor from './components/form/Color'
 import DynamicData from './components/form/DynamicData'
-import DialogTable from './components/table/DialogTable'
 import DataEmpty from './components/common/Empty'
+import DataLayout from './components/common/Layout'
 
 import { NTree } from './components/naive/tree'
 
@@ -99,11 +99,11 @@ app.component('app-color', DataColor)
 // 动态数据
 app.component('app-dynamic-data', DynamicData)
 
-// 列表选择器
-app.component('dialog-table', DialogTable)
-
 // 空组件
 app.component('app-empty', DataEmpty)
+
+
+app.component('app-layout', DataLayout)
 
 // 头部件
 app.component('widget-header', WidgetHeader)

@@ -10,6 +10,7 @@ import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入则不显
 import 'tinymce/themes/silver'  //编辑器主题，不引入则报错
 import 'tinymce/icons/default'  //引入编辑器图标icon，不引入则不显示对应图标
 
+// 扩展插件
 import 'tinymce/plugins/advlist'  //高级列表
 import 'tinymce/plugins/anchor'  //锚点
 import 'tinymce/plugins/autolink'  //自动链接
@@ -83,9 +84,8 @@ export default defineComponent({
             init: {
                 language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,  //引入语言包文件
                 language: 'zh_CN',  //语言类型
-
-                skin_url: `${this.baseUrl}/tinymce/skins/ui/dux`,
-                content_css: `${this.baseUrl}/tinymce/skins/content/dux/content.css`,
+                skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide`,
+                content_css: `${this.baseUrl}/tinymce/skins/content/default/content.css`,
                 emoticons_database_url: `${this.baseUrl}/tinymce/emojis.min.js`,
                 
                 plugins: this.plugins,
@@ -126,7 +126,7 @@ export default defineComponent({
                     formData.append('file', blobInfo.blob(), blobInfo.filename())
 
                     xhr.setRequestHeader('Accept', 'application/json')
-                    xhr.setRequestHeader('Authorization', `bearer ${getLocalUserInfo().token || ''}`)
+                    xhr.setRequestHeader('Authorization', `${getLocalUserInfo().token || ''}`)
                     xhr.send(formData)
                 },
                 setup: function (editor) {
@@ -136,7 +136,9 @@ export default defineComponent({
                         icon: 'filemanage',
                         tooltip: '文件管理器',
                         onAction: function () {
-                            window.selectFile(true).then(res => {
+                            window.fileManage({
+                                multiple: true
+                            }).then(res => {
                                 res.map(info => {
                                     let node
                                     switch (info.ext) {

@@ -91,10 +91,10 @@ export default defineComponent({
         onStart={this.drag = true}
         onEnd={this.drag = false}
         itemKey="index"
-        class="border border-gray-4 rounded divide-y divide-gray-4 overflow-hidden "
+        class="border border-gray-3 rounded divide-y divide-gray-3 overflow-hidden "
       >
         {{
-          item: (item) => <div class="pl-3 pr-4 py-3 flex items-center justify-between text-sm bg-white">
+          item: (item) => <div class="pl-3 pr-4 py-2 flex items-center justify-between text-sm bg-white">
             <div class="w-0 flex-1 flex items-center text-gray-8">
               <icon-file class="flex-shrink-0 "/>
               <span class="ml-2 flex-1 w-0 truncate">
@@ -124,7 +124,7 @@ export default defineComponent({
               >
                 {
                   {
-                    'upload-button': () => <div className="pl-3 pr-4 py-3 flex items-center justify-center cursor-pointer hover:text-arcoblue-7">
+                    'upload-button': () => <div className="pl-3 pr-4 py-2 flex items-center justify-center cursor-pointer hover:text-arcoblue-7">
                       {this.progress.status ? <div className="text-gray-6">已上传 {this.progress.progress}%</div> : '上传附件'}
                     </div>
                   }

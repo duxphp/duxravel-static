@@ -123,6 +123,7 @@ export default defineComponent({
       },
       onPageSizeChange: limit => {
         pagination.value.pageSize = limit
+        pagination.value.current = 1
         getList(props.filter)
       }
     })
@@ -142,8 +143,8 @@ export default defineComponent({
           limit: pagination.value.pageSize
         }
       }, 'data-table').then(res => {
-        pagination.value['total'] = res.total
-        pagination.value['pageSize'] = res.pageSize
+        pagination.value.total = res.total
+        pagination.value.pageSize = res.pageSize
         data.value = res.data
         loading.value = false
       }).catch(() => {

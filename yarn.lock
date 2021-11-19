@@ -9,10 +9,10 @@
   dependencies:
     color "^3.1.3"
 
-"@arco-design/web-vue@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@arco-design/web-vue/-/web-vue-2.4.0.tgz#019b14afa58234922a077108a3d3e462ec37c563"
-  integrity sha512-DVvxu8LHVTW5erDa0A8SvNuDdCMKNGABaQj/8u0zJJe+iw2QPkQ6K3UaNeSsWib8vKSkY1oJnPc/dbTbJOxanQ==
+"@arco-design/web-vue@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@arco-design/web-vue/-/web-vue-2.5.0.tgz#92b774bc71d8b27571e5e7d60845ebcf21af3aa3"
+  integrity sha512-m6HtJujbEqRiS9rG1Cwg6mmdI5FqsbDCtbZCpWNSDF2ZJYUiRFpvHGYVUSajgqpSvuFSvQit8wYrE+Qdbib0aQ==
   dependencies:
     "@arco-design/color" "^0.4.0"
     b-tween "^0.3.3"
@@ -2496,10 +2496,10 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
-tinymce@^5.8.2:
-  version "5.8.2"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.8.2.tgz#54eb8160b697796c3b52282e648d9d12b1a7399a"
-  integrity sha512-qfWThBrSzbj4DoUk+lgGeDoP2GzLDSWrfvVUxf40HZhTzsG15X2nZ4N49IFqwaVgRl5AyFDtuWiEH/lCmiAcRA==
+tinymce@^5.10.2:
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.10.2.tgz#cf1ff01025909be26c64348509e6de8e70d58e1d"
+  integrity sha512-5QhnZ6c8F28fYucLLc00MM37fZoAZ4g7QCYzwIl38i5TwJR5xGqzOv6YMideyLM4tytCzLCRwJoQen2LI66p5A==
 
 tmp@^0.2.1:
   version "0.2.1"

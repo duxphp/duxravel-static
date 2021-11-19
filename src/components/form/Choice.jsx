@@ -1,8 +1,6 @@
-import { h, toRef, defineComponent } from 'vue'
-import { NImage } from 'naive-ui'
-import classnames from 'classnames'
-import { request, searchQuick } from '../../utils/request'
-import { renderNodeList } from '../Create'
+import {defineComponent} from 'vue'
+import {request} from '../../utils/request'
+import {renderNodeList} from '../Create'
 
 export default defineComponent({
   props: {
@@ -38,7 +36,6 @@ export default defineComponent({
       filter: {
         query: ''
       },
-      show: false,
       loading: true,
       columns: [],
       data: [],
@@ -66,20 +63,19 @@ export default defineComponent({
       if (item.type === 'text') {
         column.render = (row, index) => renderNodeList.call({}, {
           nodeName: 'a-input',
-          'onUpdate:model-value': value => {row.record[item.key] = value },
-          modelValue: row[item.key]
-          //'onUpdate:model-value': value => { row.record[item.key] = value, this.data[index][item.key] = value },
-          //modelValue: row[item.key]
+          'onUpdate:model-value': value => {
+            row.record[item.key] = value
+          },
+          modelValue: row.record[item.key]
         }).default()
       }
       if (item.type === 'image') {
         column.render = (row, index) => renderNodeList.call({}, {
           nodeName: 'app-file',
-          //'vModel:value': this.data[index][item.key],
-          'onUpdate:value': value => {row.record[item.key] = value },
-          value: row[item.key],
-          //'onUpdate:value': value => { row.record[item.key] = value, this.data[index][item.key] = value },
-          //value: row.record[item.key],
+          'onUpdate:value': value => {
+            row.record[item.key] = value
+          },
+          value: row.record[item.key],
           image: true,
           mini: true,
           size: 8,
@@ -92,35 +88,37 @@ export default defineComponent({
     this.option && columns.push({
       title: <div class="flex">
         <div class="flex-grow">操作</div>
-        <a-link class="flex-none"><icon-plus onClick={this.onOpen} /></a-link>
+        {(!this.number || this.data.length < this.number) && <a-link class="flex-none">
+          <icon-plus onClick={this.onOpen}/>
+        </a-link>}
       </div>,
-      width: 80,
+      width: 110,
       render: (row) => <div class="flex gap-2">
         <a-link onClick={() => {
           let index = this.data.findIndex((item) => {
             return row.record[this.key] === item[this.key]
           })
-          if(index === 0) {
+          if (index === 0) {
             return false;
           }
           this.data.splice(index - 1, 0, this.data.splice(index, 1)[0])
           this.$emit('update:value', this.data)
         }
         }>
-          <icon-arrow-up />
+          <icon-arrow-up/>
         </a-link>
         <a-link onClick={() => {
           let index = this.data.findIndex((item) => {
             return row.record[this.key] === item[this.key]
           })
-          if(index + 1 === this.data.length) {
+          if (index + 1 === this.data.length) {
             return false;
           }
           this.data.splice(index + 1, 0, this.data.splice(index, 1)[0])
           this.$emit('update:value', this.data)
         }
         }>
-          <icon-arrow-down />
+          <icon-arrow-down/>
         </a-link>
 
         <a-link onClick={() => {
@@ -131,7 +129,7 @@ export default defineComponent({
           this.$emit('update:value', this.data)
         }
         }>
-          <icon-close />
+          <icon-close/>
         </a-link>
       </div>,
     })
@@ -160,6 +158,8 @@ export default defineComponent({
           const list = this.value.map(item => {
             return {...item, ...tmp[item[this.key]] || {}}
           })
+          console.log('init2', list)
+
           this.setData(list, true)
           this.loading = false
         })
@@ -183,7 +183,7 @@ export default defineComponent({
         dataArray.push(data)
         number++
       })
-      if(!init && this.number && this.number < number) {
+      if (!init && this.number && this.number < number) {
         window.message.warning('最多可选择 ' + this.number + ' 条数据')
         return false;
       }
@@ -193,29 +193,28 @@ export default defineComponent({
     onSave(data) {
       this.setData(data)
     },
-    onSearch(){
+    onSearch() {
       this.pagination.page = 1
       this.getList(this.filter)
     },
     onOpen() {
-      this.show = true
+      window.appDialogTable({
+        url: this.url,
+        column: this.ajaxColumn,
+        key: this.key,
+        type: this.ajaxType
+      }).then(ids => {
+        this.onSave(ids)
+      })
     },
   },
   render() {
     return <div class="w-full">
       <div class="overflow-x-auto w-full mb-2">
         <a-table stripe={true} loading={this.loading} columns={this.columns} data={this.data} pagination={false} class="whitespace-nowrap">
-        {
-          {
-            empty: () => <a-empty/>
-          }
-        }
+
         </a-table>
       </div>
-      {(!this.number || this.data.length < this.number) && <div>
-        <n-button class="w-full " onClick={this.onOpen}>增加</n-button>
-      </div>}
-      {this.show && <dialog-table url={this.url} column={this.ajaxColumn} key={this.key} type={this.ajaxType} onUpdate:show={value => this.show = value} onConfirm={this.onSave} />}
     </div>
   }
 })

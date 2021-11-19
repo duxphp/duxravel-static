@@ -433,6 +433,7 @@ import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
 import FileManage from "./utils/FileManageExtend";
 import AppDialog from "./utils/DialogExtend";
+import AppDialogTable from "./utils/DialogTableExtend";
 import { router } from "../utils/router";
 import { getUrl, request } from "../utils/request";
 import event from "../utils/event";
@@ -454,6 +455,7 @@ export default {
     window.notification = Notification
     window.fileManage = FileManage
     window.appDialog = AppDialog
+    window.appDialogTable = AppDialogTable
 
     window.dialogAsync = {
       //destroyAll: window.dialog.destroyAll.bind(window.dialog),

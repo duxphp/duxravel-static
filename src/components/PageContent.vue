@@ -7,7 +7,7 @@
     />
   </template>
 
-  <a-modal v-else :visible="dialogShow" modalClass="page-dialog"  :closable="false" :mask="true" :footer="false">
+  <a-modal v-else :visible="dialogShow" modalClass="page-dialog max-w-2xl w-full"  :closable="false" :mask="true" :footer="false">
     <div
       ref="dialogAnimation"
       class="max-w-2xl my-4 dialog-animation"
