@@ -1,7 +1,6 @@
 <template>
   <template v-if="!uninstall && !errorMessage && currentUrl">
     <component :is="vueComp" v-if="pageType === 'vue'"></component>
-    <iframe v-if="pageType === 'html'" seamless src="http://a.dezhi-highway.com/admin/tpl/test"></iframe>
     <Create v-if="pageType === 'node'" v-bind="createData" />
   </template>
   <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode" />

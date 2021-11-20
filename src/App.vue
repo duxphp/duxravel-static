@@ -106,7 +106,6 @@ export default {
     }
 
     event.add('switch-dark', (type) => {
-      console.log('sss')
       localStorage.setItem("darkMode", type);
       this.show = false
       window.Apex.tooltip.theme = type;

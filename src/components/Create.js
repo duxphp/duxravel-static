@@ -166,7 +166,7 @@ export const renderNodeList = function (node, arg) {
     if (typeof item === 'string') {
       slotGroup.default = slotGroup.default || []
       slotGroup.default.push(item)
-    } else if (typeof item === 'object' && item !== null) {
+    } else if (typeof item === 'object' && Object.keys(item).length && item !== null) {
       // 插槽变量计算
       const vSlotKey = Object.keys(item).find(key => key.startsWith('vSlot'))
       const slotName = vSlotKey && vSlotKey.substr(6) || 'default'
