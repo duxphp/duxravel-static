@@ -1,7 +1,7 @@
 <template>
   <a-config-provider :locale="zhCN">
     <div :class="{ dark: darkMode === 'dark' }">
-      <Page :show="show" @switch-dark="switchDark" />
+      <Page :show="show"  />
     </div>
   </a-config-provider>
 </template>
@@ -9,9 +9,8 @@
 <script>
 import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn';
 import Page from "./components/Page.vue";
-import { darkTheme } from "naive-ui";
-import themeLight from "./config/themeLight";
-import themeDark from "./config/themeDark";
+
+import event from './utils/event';
 
 export default {
   name: "App",
@@ -19,12 +18,11 @@ export default {
     Page,
   },
   data() {
-    window.derkMode =
-      localStorage.getItem("darkMode") === "dark" ? "dark" : "light";
+    window.derkMode = localStorage.getItem("darkMode") === "dark" ? "dark" : "light";
     return {
       show: true,
-      themeApp: window.derkMode === "dark" ? themeDark : themeLight,
-      darkTheme: window.derkMode === "dark" ? darkTheme : null,
+      //themeApp: window.derkMode === "dark" ? themeDark : themeLight,
+      //darkTheme: window.derkMode === "dark" ? darkTheme : null,
       darkMode: window.derkMode,
       zhCN,
     };
@@ -105,21 +103,21 @@ export default {
         theme: window.derkMode === "dark" ? "dark" : "light",
       },
       colors: ["#005dff", "#b1cdec", "#00d586"],
-    };
-  },
-  methods: {
-    switchDark(type) {
+    }
+
+    event.add('switch-dark', (type) => {
+      console.log('sss')
       localStorage.setItem("darkMode", type);
       this.show = false
       window.Apex.tooltip.theme = type;
       window.derkMode = type;
-      this.themeApp = type === "dark" ? themeDark : themeLight;
-      this.darkTheme = type === "dark" ? darkTheme : null;
       this.darkMode = type;
       this.$nextTick(() => {
         this.show = true
       })
-    },
+    })
+  },
+  methods: {
   },
 };
 </script>

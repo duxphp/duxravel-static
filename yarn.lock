@@ -9,10 +9,10 @@
   dependencies:
     color "^3.1.3"
 
-"@arco-design/web-vue@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@arco-design/web-vue/-/web-vue-2.5.0.tgz#92b774bc71d8b27571e5e7d60845ebcf21af3aa3"
-  integrity sha512-m6HtJujbEqRiS9rG1Cwg6mmdI5FqsbDCtbZCpWNSDF2ZJYUiRFpvHGYVUSajgqpSvuFSvQit8wYrE+Qdbib0aQ==
+"@arco-design/web-vue@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@arco-design/web-vue/-/web-vue-2.6.0.tgz#171fd32fe4038ad6edc89acbebd9265d4a7c7696"
+  integrity sha512-wsffEGi1uo6sbaFblgYOswFyvh2bIfp0tB/tXiq8MoLuPuluU2XlZrq/hB9BTymtb0efLySeK53LgsWyliJbuA==
   dependencies:
     "@arco-design/color" "^0.4.0"
     b-tween "^0.3.3"

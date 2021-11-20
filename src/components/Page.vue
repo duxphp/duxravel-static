@@ -23,15 +23,8 @@
           mb-4
         "
       >
-        <n-dropdown
-          trigger="click"
-          :options="avatarMenu"
-          @select="avatarSelect"
-          width="150"
-          placement="bottom-start"
-          :show-arrow="true"
-        >
-          <div
+
+        <div
             class="
               rounded-full
               h-8
@@ -42,10 +35,10 @@
               bg-white
               mt-5
             "
-          >
-            <img class="w-6 h-6" :src="appInfo.logo || logo" />
-          </div>
-        </n-dropdown>
+        >
+          <img class="w-6 h-6" :src="appInfo.logo || logo" />
+        </div>
+
       </div>
 
       <n-scrollbar
@@ -405,7 +398,6 @@
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
   </div>
-  <a-button @click="test">test</a-button>
   <PageContent
     v-for="(item, index) in dialogRouter"
     :key="item.key"
@@ -417,12 +409,6 @@
 </template>
 
 <script>
-import {
-  useMessage,
-  useDialog,
-  useLoadingBar,
-  useNotification,
-} from "naive-ui";
 import {
   Message,
   Modal,
@@ -445,11 +431,6 @@ export default {
   props: ["show"],
   setup() {
     // 注册全局组件
-    /*window.message = useMessage();
-    window.dialog = useDialog();
-    window.loadingBar = useLoadingBar();
-    window.notification = useNotification();*/
-
     window.message = Message
     window.dialog = Modal
     window.notification = Notification
@@ -457,38 +438,38 @@ export default {
     window.appDialog = AppDialog
     window.appDialogTable = AppDialogTable
 
-    window.dialogAsync = {
-      //destroyAll: window.dialog.destroyAll.bind(window.dialog),
-      common(option, type) {
-        if (window.dialog[type]) {
-          return new Promise((resolve) => {
-            window.dialog?.[type]({
-              ...option,
-              onClose() {
-                resolve("close");
-              },
-              onNegativeClick() {
-                resolve("cancel");
-              },
-              onPositiveClick() {
-                resolve("ok");
-              },
-            });
-          });
-        } else {
-          return Promise.reject(type + "API不存在");
-        }
-      },
-      info(option) {
-        return dialogAsync.common.call(dialogAsync, option, "info");
-      },
-      success(option) {
-        return dialogAsync.common.call(dialogAsync, option, "success");
-      },
-      warning(option) {
-        return dialogAsync.common.call(dialogAsync, option, "warning");
-      },
-    };
+    /* window.dialogAsync = {
+       //destroyAll: window.dialog.destroyAll.bind(window.dialog),
+       common(option, type) {
+         if (window.dialog[type]) {
+           return new Promise((resolve) => {
+             window.dialog?.[type]({
+               ...option,
+               onClose() {
+                 resolve("close");
+               },
+               onNegativeClick() {
+                 resolve("cancel");
+               },
+               onPositiveClick() {
+                 resolve("ok");
+               },
+             });
+           });
+         } else {
+           return Promise.reject(type + "API不存在");
+         }
+       },
+       info(option) {
+         return dialogAsync.common.call(dialogAsync, option, "info");
+       },
+       success(option) {
+         return dialogAsync.common.call(dialogAsync, option, "success");
+       },
+       warning(option) {
+         return dialogAsync.common.call(dialogAsync, option, "warning");
+       },
+     };*/
   },
   components: {
     Login,
@@ -498,20 +479,6 @@ export default {
   data() {
     return {
       logo: logo,
-      avatarMenu: [
-        {
-          label: "返回首页",
-          key: 0,
-        },
-        {
-          label: "修改资料",
-          key: 1,
-        },
-        {
-          label: "退出登录",
-          key: 2,
-        },
-      ],
       // 移动菜单
       mobileMenuShow: false,
       // 左侧菜单
@@ -573,28 +540,6 @@ export default {
     });
   },
   methods: {
-    test() {
-      window.appDialog.prompt().then((value) => {
-        console.log(value)
-      })
-    },
-    avatarSelect(key) {
-      switch (key) {
-        case 2:
-          clearUserInfo();
-          window.location.replace(
-            window.location.pathname.split("/")[0] || "/"
-          );
-          break;
-        case 1:
-          router.push(getUrl("/userInfo/page"));
-          break;
-        case 0:
-        default:
-          window.open("/");
-          break;
-      }
-    },
     closeDialog(index) {
       const [item] = this.dialogRouter.splice(index, 1);
       event.emit("router-dialog-close", {
