@@ -1,7 +1,7 @@
 <template>
   <a-config-provider :locale="zhCN">
-    <div :class="{ dark: darkMode === 'dark' }">
-      <Page :show="show"  />
+    <div id="app">
+    <Page :show="show"/>
     </div>
   </a-config-provider>
 </template>
@@ -18,12 +18,11 @@ export default {
     Page,
   },
   data() {
-    window.derkMode = localStorage.getItem("darkMode") === "dark" ? "dark" : "light";
     return {
       show: true,
       //themeApp: window.derkMode === "dark" ? themeDark : themeLight,
       //darkTheme: window.derkMode === "dark" ? darkTheme : null,
-      darkMode: window.derkMode,
+      //darkMode: window.derkMode,
       zhCN,
     };
   },
@@ -106,17 +105,31 @@ export default {
     }
 
     event.add('switch-dark', (type) => {
-      localStorage.setItem("darkMode", type);
+      localStorage.setItem("darkMode", type)
       this.show = false
-      window.Apex.tooltip.theme = type;
-      window.derkMode = type;
-      this.darkMode = type;
+      window.Apex.tooltip.theme = type
+      window.derkMode = type
+      this.switchDark(type)
+
       this.$nextTick(() => {
         this.show = true
       })
     })
+
+    window.derkMode = localStorage.getItem("darkMode") === "dark" ? "dark" : "light"
+    this.switchDark(window.derkMode)
   },
   methods: {
+    switchDark(type) {
+      window.Apex.tooltip.theme = type
+      if (type === 'dark') {
+        document.body.classList.add('dark');
+        document.body.setAttribute('arco-theme', 'dark')
+      } else {
+        document.body.classList.remove('dark');
+        document.body.removeAttribute('arco-theme')
+      }
+    }
   },
 };
 </script>
@@ -125,10 +138,12 @@ export default {
 #app {
   height: 100%;
 }
+
 * {
   padding: 0;
   margin: 0;
 }
+
 div,
 input,
 textarea {

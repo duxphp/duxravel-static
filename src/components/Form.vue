@@ -5,13 +5,11 @@
 </template>
 <script>
 import {defineComponent, ref, nextTick, getCurrentInstance} from "vue";
-import {NForm} from "naive-ui";
 import {request} from "../utils/request";
 import {getPageContent} from "./table/DataTable";
 
 export default defineComponent({
   components: {
-    NForm,
   },
   props: {
     url: {

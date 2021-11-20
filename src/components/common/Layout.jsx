@@ -20,19 +20,22 @@ export default defineComponent({
   },
   render() {
     return <div class="flex flex-col lg:h-screen">
-      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-gray-700 bg-arco-bg-2 shadow-sm">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
             dsadsadsad
           </div>
           <div class="flex-none flex items-center gap-2">
             <div>
-              <div onClick={() => {
+              <a-button type="text"  shape="round" style={{fontSize: '20px'}} onClick={() => {
                 this.darkMode = this.darkMode === 'dark' ? 'light' : 'dark'
                 event.emit('switch-dark', this.darkMode)
               }}>
-                {this.darkMode === 'light' ? <icon-sun-fill/> : <icon-moon-fill/>}
-              </div>
+                {{
+                 icon: () => this.darkMode === 'light' ? <icon-sun-fill/> : <icon-moon-fill/>
+                  }}
+
+              </a-button>
             </div>
             <div>
               <a-dropdown>
@@ -66,7 +69,7 @@ export default defineComponent({
           </div>
         </div>}
       </div>
-      <div class="flex-grow bg-gray-100 dark:bg-gray-900 overflow-auto app-scrollbar">
+      <div class="flex-grow bg-gray-100 dark:bg-gray-800 overflow-auto app-scrollbar">
         {this.$slots.default?.()}
       </div>
     </div>

@@ -392,7 +392,7 @@
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
     <div
       v-if="show"
-      class="flex-grow bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
+      class="flex-grow bg-gray-100 dark:bg-arco-bg-2 dark:text-gray-200"
       id="page-animation"
     >
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />

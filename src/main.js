@@ -30,7 +30,6 @@ import DynamicData from './components/form/DynamicData'
 import DataEmpty from './components/common/Empty'
 import DataLayout from './components/common/Layout'
 
-//import { NTree } from './components/naive/tree'
 
 import WidgetHeader from './components/widget/Header'
 
@@ -41,7 +40,6 @@ window.NProgress = NProgress
 // 实例注册到全局
 const app = window.vueApp = Vue.createApp(App)
 
-//app.use(naive)
 app.use(ArcoVue)
 app.use(ArcoVueIcon)
 

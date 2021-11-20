@@ -13,6 +13,7 @@ export default defineConfig({
   },
   build: {
     //outDir: 'dist/resource',
+    manifest: true,
     emptyOutDir: true
   },
   server: {
