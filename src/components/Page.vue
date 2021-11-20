@@ -421,9 +421,9 @@ import FileManage from "./utils/FileManageExtend";
 import AppDialog from "./utils/DialogExtend";
 import AppDialogTable from "./utils/DialogTableExtend";
 import { router } from "../utils/router";
-import { getUrl, request } from "../utils/request";
+import { request } from "../utils/request";
 import event from "../utils/event";
-import { getLocalUserInfo, onUserLogin, clearUserInfo } from "../utils/user";
+import { getLocalUserInfo, onUserLogin } from "../utils/user";
 import logo from "../assets/images/logo.svg";
 
 export default {

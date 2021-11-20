@@ -5,7 +5,6 @@ import '@arco-design/web-vue/dist/arco.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
-import naive from 'naive-ui'
 import draggable from 'vuedraggable'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import * as heroicons from '@heroicons/vue/outline'
@@ -31,7 +30,7 @@ import DynamicData from './components/form/DynamicData'
 import DataEmpty from './components/common/Empty'
 import DataLayout from './components/common/Layout'
 
-import { NTree } from './components/naive/tree'
+//import { NTree } from './components/naive/tree'
 
 import WidgetHeader from './components/widget/Header'
 
@@ -64,7 +63,7 @@ for (const key in heroicons) {
   }
 }
 // 链接组件
-app.component('n-tree-copy', NTree)
+//app.component('n-tree-copy', NTree)
 // 链接组件
 app.component('route', Route)
 // 富文本显示组件
