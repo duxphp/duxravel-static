@@ -5,12 +5,14 @@
         text-white
         w-16
         bg-gray-800
+        dark:bg-blackgray-4
         px-2
         flex-none flex-col
         lg:flex
         hidden
-        border-r border-gray-800
-        dark:border-gray-700
+        border-r
+        border-gray-800
+        dark:border-blackgray-5
       "
     >
       <div
@@ -41,8 +43,8 @@
 
       </div>
 
-      <n-scrollbar
-        class="flex-grow bg-gray-800"
+      <div
+        class="flex-grow app-scrollbar"
       >
         <div
           v-show="!item.hidden || currentIndexs[0] === index"
@@ -61,8 +63,10 @@
               justify-center
               gap-1
               text-gray-200
-              dark:text-gray-300 dark:hover:text-gray-50
-              hover:text-white hover:bg-gray-700
+              
+              dark:hover:text-gray-50
+              hover:text-white
+              hover:bg-blackgray-1
               relative
               mb-2
             "
@@ -79,176 +83,11 @@
             <div class="text-xs">{{ item.name }}</div>
           </div>
         </div>
-      </n-scrollbar>
-
-      <div class="flex-none">
-        <div
-          class="
-            cursor-pointer
-            rounded-sm
-            py-1.5
-            text-center
-            flex
-            items-center
-            justify-center
-            gap-1
-            hover:text-white hover:bg-gray-700
-            relative
-            mb-2
-          "
-          @click="
-            (darkMode = darkMode === 'dark' ? 'light' : 'dark'),
-              $emit('switch-dark', darkMode)
-          "
-        >
-          <span class="flex items-center justify-center">
-            <svg
-              v-if="darkMode === 'light'"
-              class="fill-current text-gray-200"
-              width="16"
-              height="16"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="48" height="48" fill="white" fill-opacity="0.01" />
-              <path
-                d="M28.0527 4.41085C22.5828 5.83695 18.5455 10.8106 18.5455 16.7273C18.5455 23.7564 24.2436 29.4545 31.2727 29.4545C37.1894 29.4545 42.1631 25.4172 43.5891 19.9473C43.8585 21.256 44 22.6115 44 24C44 35.0457 35.0457 44 24 44C12.9543 44 4 35.0457 4 24C4 12.9543 12.9543 4 24 4C25.3885 4 26.744 4.14149 28.0527 4.41085Z"
-                fill="none"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <svg
-              v-if="darkMode === 'dark'"
-              class="fill-current text-gray-200"
-              width="16"
-              height="16"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="48" height="48" fill="white" fill-opacity="0.01" />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M24 3V6.15V3Z"
-                fill="#eee"
-              />
-              <path
-                d="M24 3V6.15"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M38.8492 9.15076L36.6219 11.3781L38.8492 9.15076Z"
-                fill="#eee"
-              />
-              <path
-                d="M38.8492 9.15076L36.6219 11.3781"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M45 24H41.85H45Z"
-                fill="#eee"
-              />
-              <path
-                d="M45 24H41.85"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M38.8492 38.8492L36.6219 36.6219L38.8492 38.8492Z"
-                fill="#eee"
-              />
-              <path
-                d="M38.8492 38.8492L36.6219 36.6219"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M24 45V41.85V45Z"
-                fill="#eee"
-              />
-              <path
-                d="M24 45V41.85"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M9.15076 38.8492L11.3781 36.6219L9.15076 38.8492Z"
-                fill="#eee"
-              />
-              <path
-                d="M9.15076 38.8492L11.3781 36.6219"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M3 24H6.15H3Z"
-                fill="#eee"
-              />
-              <path
-                d="M3 24H6.15"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M9.15076 9.15076L11.3781 11.3781L9.15076 9.15076Z"
-                fill="#eee"
-              />
-              <path
-                d="M9.15076 9.15076L11.3781 11.3781"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M24 36C30.6274 36 36 30.6274 36 24C36 17.3726 30.6274 12 24 12C17.3726 12 12 17.3726 12 24C12 30.6274 17.3726 36 24 36Z"
-                fill="none"
-                stroke="#eee"
-                stroke-width="4"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-        </div>
       </div>
 
+
       <div class="flex-none">
-        <n-popover placement="right-end" trigger="click" :show-arrow="false">
-          <template #trigger>
+        <a-trigger position="rb" trigger="click" :show-arrow="false">
             <div
               class="
                 cursor-pointer
@@ -259,7 +98,11 @@
                 items-center
                 justify-center
                 gap-1
-                hover:text-white hover:bg-gray-700
+                text-gray-200
+                
+                dark:hover:text-gray-50
+                hover:text-white
+                hover:bg-blackgray-1
                 relative
                 mb-2
               "
@@ -296,8 +139,8 @@
                 </svg>
               </span>
             </div>
-          </template>
-          <div class="flex flex-row flex-wrap max-w-md gap-4 p-2">
+          <template #content>
+          <div class="flex flex-row flex-wrap max-w-md gap-4 p-2 dark:bg-blackgray-3 rounded shadow border dark:border-blackgray-4">
             <div
               class="
                 flex flex-col
@@ -308,8 +151,11 @@
                 cursor-pointer
                 relative
                 rounded
-                hover:bg-gray-100
-                dark:hover:bg-gray-800
+                text-gray-200
+                
+                dark:hover:text-gray-50
+                hover:text-white
+                hover:bg-blackgray-1
                 p-2
                 transition
               "
@@ -326,7 +172,9 @@
               <div class="truncate">{{ app.name }}</div>
             </div>
           </div>
-        </n-popover>
+
+          </template>
+        </a-trigger>
       </div>
     </div>
 
@@ -392,7 +240,7 @@
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
     <div
       v-if="show"
-      class="flex-grow bg-gray-100 dark:bg-arco-bg-2 dark:text-gray-200"
+      class="flex-grow bg-gray-100 dark:text-gray-200"
       id="page-animation"
     >
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />

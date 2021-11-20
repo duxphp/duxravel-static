@@ -20,7 +20,7 @@ export default defineComponent({
   },
   render() {
     return <div class="flex flex-col lg:h-screen">
-      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-gray-700 bg-arco-bg-2 shadow-sm">
+      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
             dsadsadsad
@@ -69,7 +69,7 @@ export default defineComponent({
           </div>
         </div>}
       </div>
-      <div class="flex-grow bg-gray-100 dark:bg-gray-800 overflow-auto app-scrollbar">
+      <div class="flex-grow bg-gray-100 dark:bg-blackgray-2 overflow-auto app-scrollbar">
         {this.$slots.default?.()}
       </div>
     </div>

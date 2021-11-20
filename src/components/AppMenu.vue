@@ -1,6 +1,6 @@
 <template>
-  <n-scrollbar
-    class="menu-child-root hide lg:block hidden border-r border-white dark:bg-gray-800 dark:border-gray-700 "
+  <div
+    class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-5 dark:border-blackgray-5 app-scrollbar"
     :class="
         menuData.menu
         ? 'w-40 bg-white shadow z-20 '
@@ -45,7 +45,7 @@
         </template>
       </div>
     </template>
-  </n-scrollbar>
+  </div>
 </template>
 
 <script>

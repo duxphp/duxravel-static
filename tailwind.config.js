@@ -11,7 +11,16 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
-      colors
+      colors: {
+        'blackgray': {
+          1: '#373739',
+          2: '#313132',
+          3: '#2a2a2b',
+          4: '#232324',
+          5: '#17171a',
+        },
+        ...colors,
+      }
     },
   },
   variants: {
