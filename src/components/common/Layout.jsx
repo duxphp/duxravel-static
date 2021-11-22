@@ -8,7 +8,6 @@ export default defineComponent({
   props: {
     'title': {
       type: String,
-      default: '暂无数据'
     },
   },
   data() {
@@ -20,10 +19,10 @@ export default defineComponent({
   },
   render() {
     return <div class="flex flex-col lg:h-screen">
-      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm">
+      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  ">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
-            dsadsadsad
+            {this.title}
           </div>
           <div class="flex-none flex items-center gap-2">
             <div>

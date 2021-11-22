@@ -87,18 +87,18 @@ export default defineComponent({
       >
         {{
           item: (item) => <div
-            class="relative border border-gray-300  bg-gray-1 rounded bg-cover bg-center bg-no-repeat block flex items-end w-28 h-28"
+            class="relative bg-gray-100  hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2  rounded bg-cover bg-center bg-no-repeat block flex items-end w-28 h-28"
             style={{backgroundSize: '90%', backgroundImage: `url(${item.element || '/service/image/placeholder/180/180/选择图片'})`}}
           >
-            <div class="flex p-2 gap-2 w-full bg-white bg-opacity-60">
-              <div class="flex-grow flex justify-center text-center  hover:text-arcoblue-7 cursor-pointer "
+            <div class="flex p-2 gap-2 w-full bg-white bg-opacity-80  dark:bg-blackgray-5 dark:bg-opacity-80">
+              <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer "
                    onClick={() => {
                      this.visible = true
                      this.current = item.index
                    }}>
                 <icon-eye/>
               </div>
-              <div class="flex-grow flex justify-center text-center hover:text-arcoblue-7 cursor-pointer">
+              <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
                 <icon-share-alt type="primary" ghost size="small" onClick={() => {
                   window.appDialog.prompt({
                     title: '更改图片地址',
@@ -109,7 +109,7 @@ export default defineComponent({
                 }}>
                 </icon-share-alt>
               </div>
-              <div class="flex-grow flex justify-center text-center hover:text-arcoblue-7 cursor-pointer">
+              <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
                 <icon-delete onClick={() => {
                   this.list.splice(item.index, 1)
                 }}/>
@@ -117,7 +117,7 @@ export default defineComponent({
             </div>
           </div>,
           footer: () => this.type !== 'manage'
-            ? <div class="relative w-28 h-28 border border-gray-4 border-dashed rounded block hover:border-arcoblue-7">
+            ? <div class="relative w-28 h-28 rounded block ">
                 <a-upload
                   action={getUrl(this.upload)}
                   accept={this.accept}
@@ -129,12 +129,12 @@ export default defineComponent({
                 >
                   {
                     {
-                      'upload-button': () => <div className="text-gray-500 hover:text-arcoblue-7 absolute flex items-center justify-center w-full h-full bg-gray-1 rounded cursor-pointer text-center">
+                      'upload-button': () => <div className="text-gray-600 dark:text-gray-400 absolute flex items-center justify-center w-full h-full bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 rounded cursor-pointer text-center">
                         {this.progress.status ?
                         <div class="text-xl"> {this.progress.progress}%</div> :
                         <div className="flex items-center flex-col justify-center ">
                           <icon-upload className="text-2xl"/>
-                          <div className="mt-2 text-xs">上传图片</div>
+                          <div className="mt-2">上传图片</div>
                         </div>}
                       </div>
                     }
@@ -144,8 +144,8 @@ export default defineComponent({
 
 
             </div>
-            : <div class="relative w-28 h-28 border border-gray-4 border-dashed rounded block hover:border-arcoblue-7" onClick={this.fileManage}>
-              <div class="text-gray-500 hover:text-arcoblue-7 absolute flex items-center justify-center w-full h-full bg-gray-1 rounded cursor-pointer">
+            : <div class="relative w-28 h-28 rounded block" onClick={this.fileManage}>
+              <div class="text-gray-600 hover:text-blue-600 absolute flex items-center justify-center w-full h-full bg-gray-100  hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 rounded cursor-pointer">
                 <div class="flex items-center flex-col justify-center ">
                   <icon-upload class="text-2xl"/>
                   <div class="mt-2 text-xs">上传图片</div>

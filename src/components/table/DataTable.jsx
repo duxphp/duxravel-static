@@ -1,8 +1,8 @@
-import { defineComponent, ref, getCurrentInstance, watch } from 'vue'
-import { renderNodeList, vExec } from '../Create'
-import { request, searchQuick } from '../../utils/request'
+import {defineComponent, ref, getCurrentInstance, watch} from 'vue'
+import {renderNodeList, vExec} from '../Create'
+import {request, searchQuick} from '../../utils/request'
 import event from '../../utils/event'
-import { router, getParams } from '../../utils/router'
+import {router, getParams} from '../../utils/router'
 
 // 获取最近的pageContent组件实例
 export const getPageContent = (parent) => {
@@ -45,6 +45,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    select: {
+      type: Boolean,
+      default: false
+    },
   },
 
   created() {
@@ -69,7 +73,7 @@ export default defineComponent({
      * @param {*} title
      * @param {*} type
      */
-    const checkAction = (option, title, type = 'info') => {
+    const checkAction = (option, title, type = 'warning') => {
       if (!checkedRowKeys.value.length) {
         window.message.warning('请选择项目后再进行操作！')
         return
@@ -100,8 +104,10 @@ export default defineComponent({
       }
       if (title) {
         window.dialog[type]({
-          title,
-          onPositiveClick: callback
+          title: '操作提醒',
+          content: title,
+          hideCancel: false,
+          onOk: callback
         })
       } else {
         callback()
@@ -160,7 +166,7 @@ export default defineComponent({
       checkAction
     }
 
-    const routerChange = ({ params, agree }) => {
+    const routerChange = ({params, agree}) => {
       agree === 'routerPush' && getList(params)
     }
 
@@ -186,7 +192,11 @@ export default defineComponent({
     }
 
     // 排序
-    const sorter = ({ columnKey, sorter, order }) => {
+    const sorter = ({columnKey, sorter, order}) => {
+
+      console.log('sort1', columnKey)
+      console.log('sort2', sorter)
+      console.log('sort3', order)
       if (sorter === true) {
         if (!order) {
           sort.value = {}
@@ -223,15 +233,25 @@ export default defineComponent({
       })
     }
 
+    const colSortable = ref({
+      sortDirections: ['ascend', 'descend'],
+      sorter: () => {
+        console.log('ddd')
+      }
+    })
+
+
     return {
-      checkedRowKeys,
       sorter,
+      colSortable,
       pagination,
+      childData,
       data,
       loading,
-      columnsRender: props.columns.map(item => vExec.call({}, item, { editValue, editStatus })),
+      columnsRender: props.columns.map(item => vExec.call({}, item, {editValue, editStatus})),
       getList,
-      routerChange
+      routerChange,
+      checkedRowKeys,
     }
   },
 
@@ -240,16 +260,28 @@ export default defineComponent({
   },
 
   render() {
-    return <a-table
-    loading={this.loading}
-    remote={true}
+    return <div class="relative">
+      <a-table
+        loading={this.loading}
+        remote={true}
         {...vExec.call(this, this.nParams)}
-    pagination={this.pagination}
-    data={this.data}
-    columns={this.columnsRender}
-    onUpdate:sorter={this.sorter}
-    checkedRowKeys={this.checkedRowKeys}
-    onUpdate:checkedRowKeys={value => this.checkedRowKeys = value}
-    />
+        pagination={this.pagination}
+        data={this.data}
+        columns={this.columnsRender}
+        rowSelection={this.select ? {
+          type: 'checkbox',
+          selectedRowKeys: this.checkedRowKeys,
+          showCheckedAll: true
+        } : false}
+        //onSorterChange={this.sorter}
+        onSelectionChange={value => {
+          this.checkedRowKeys = value
+        }}
+      />
+      <div class="absolute bottom-0 z-10 ">
+        {this.$slots.footer?.(this.childData)}
+      </div>
+    </div>
+
   }
 })

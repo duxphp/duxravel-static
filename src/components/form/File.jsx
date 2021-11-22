@@ -85,7 +85,7 @@ export default defineComponent({
   render() {
     if (!this.image) {
       return <div
-        class="w-full bg-gray-1 border border-dashed rounded border-gray-4 p-4 flex justify-center items-center flex-col ">
+        class="w-full bg-gray-100  rounded hover:bg-gray-200 dark:hover:bg-blackgray-2 dark:border-blackgray-1 dark:bg-blackgray-1  p-4 flex justify-center items-center flex-col">
         <div>
           <svg class="w-12 h-12" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <path d="M918.673 883H104.327C82.578 883 65 867.368 65 848.027V276.973C65 257.632 82.578 242 104.327 242h814.346C940.422 242 958 257.632 958 276.973v571.054C958 867.28 940.323 883 918.673 883z" fill="#FFE9B4" p-id="9921"></path>
@@ -93,7 +93,7 @@ export default defineComponent({
             <path d="M918.673 883H104.327C82.578 883 65 865.42 65 843.668V335.332C65 313.58 82.578 296 104.327 296h814.346C940.422 296 958 313.58 958 335.332v508.336C958 865.32 940.323 883 918.673 883z" fill="#FFCA28" p-id="9923"></path>
           </svg>
         </div>
-        <div className="text-gray-6 mt-2">请点击上传或者拖动文件到该处</div>
+        <div className="text-gray-600 dark:text-gray-400 mt-2">请点击上传或者拖动文件到该处</div>
         {this.type !== 'manage' ? <div className="mt-2 relative">
 
           <a-upload
@@ -126,7 +126,7 @@ export default defineComponent({
       </div>
     } else {
       return <div
-        class="relative  border border-dashed border-gray-4  bg-gray-1 rounded bg-cover bg-center bg-no-repeat block flex items-end "
+        class="relative bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 rounded bg-cover bg-center bg-no-repeat block flex items-end "
         class={`h-${this.size} lg:w-${this.size} lg:h-${this.size}`}
         style={{
           backgroundSize: '90%',
@@ -135,14 +135,14 @@ export default defineComponent({
       >
         <a-image-preview src={this.value || 'http://highway.test/service/image/placeholder/180/180/选择图片'} vModel={[this.visible, 'visible']}/>
         {!this.mini ?
-          <div class="flex gap-2 h-7 w-full items-center bg-white bg-opacity-60">
-            <div class="flex-grow flex justify-center text-center  hover:text-arcoblue-7 cursor-pointer"
+          <div class="flex gap-2 h-7 w-full items-center bg-white bg-opacity-60 dark:bg-blackgray-5 dark:bg-opacity-80">
+            <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
                  onClick={() => {
                    this.visible = true
                  }}>
               <icon-eye/>
             </div>
-            {this.type !== 'manage' ? <div class="flex-grow flex justify-center text-center hover:text-arcoblue-7 cursor-pointer">
+            {this.type !== 'manage' ? <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
                 <a-upload
                   action={getUrl(this.upload)}
                   accept={this.accept}
@@ -157,10 +157,10 @@ export default defineComponent({
                   }
                 </a-upload>
               </div>
-              : <div class="flex-grow flex justify-center text-center hover:text-arcoblue-7 cursor-pointer" onClick={this.fileManage}>
+              : <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer" onClick={this.fileManage}>
                 <icon-upload/>
               </div>}
-            {this.link && <div class="flex-grow flex justify-center text-center hover:text-arcoblue-7 cursor-pointer">
+            {this.link && <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
               <icon-share-alt type="primary" ghost size="small" onClick={() => {
                 this.prompt = true
               }}>
@@ -180,21 +180,21 @@ export default defineComponent({
 
             </div>}
           </div>
-         : <div className="flex-grow flex justify-center items-center text-center w-full h-full opacity-0 hover:opacity-100 hover:bg-white bg-opacity-30 rounded cursor-pointer">
-          <a-upload
-            action={getUrl(this.upload)}
-            accept={this.accept}
-            headers={this.headers}
-            onChange={this.fileChange}
-            showFileList={false}
-          >
-            {
+          : <div className="flex-grow flex justify-center items-center text-center w-full h-full opacity-0 hover:opacity-100 hover:bg-white  bg-opacity-30 dark:bg-blackgray-1 dark:bg-opacity-80 dark:hover:bg-blackgray-2 rounded cursor-pointer">
+            <a-upload
+              action={getUrl(this.upload)}
+              accept={this.accept}
+              headers={this.headers}
+              onChange={this.fileChange}
+              showFileList={false}
+            >
               {
-                'upload-button': () => <icon-upload/>
+                {
+                  'upload-button': () => <icon-upload/>
+                }
               }
-            }
-          </a-upload>
-        </div>}
+            </a-upload>
+          </div>}
       </div>
     }
   }

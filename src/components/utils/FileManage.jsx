@@ -300,13 +300,13 @@ export default defineComponent({
           </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row items-stretch ">
+        <div class="flex flex-col lg:flex-row items-stretch  ">
           <div
-            class="flex-none manage-sidebar bg-white w-40 border-r border-gray-3 h-96 lg:overflow-y-auto lg:block hidden">
+            class="flex-none manage-sidebar w-40 border-r border-gray-300 dark:border-blackgray-2 h-96 lg:overflow-y-auto lg:block hidden">
             <ul>
               {
                 this.cate.map((item, index) => <li
-                  class={`cate-item flex justify-between py-3 px-4 cursor-pointer hover:bg-gray-100 ${this.filter.id === item.dir_id ? 'active text-arcoblue-6' : ''}`}
+                  class={`cate-item flex justify-between py-3 px-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-blackgray-2 dark:text-gray-400  ${this.filter.id === item.dir_id ? 'active text-blue-600 dark:text-blue-600' : ''}`}
                   onClick={() => this.filter.id = item.dir_id}
                 >
                   <div class="flex gap-2 items-center">
@@ -330,13 +330,13 @@ export default defineComponent({
               </li>
             </ul>
           </div>
-          <div class="flex-grow manage-main  h-96 overflow-y-auto">
+          <div class="flex-grow manage-main  dark:bg-blackgray-2 h-96 overflow-y-auto">
             <a-spin loading={this.listLoading} class="block" tip="载入文件中，请稍等...">
               {this.list.length > 0 && <ul class="files-list grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5 p-4">
                 {
                   this.list.map(item => <li onClick={() => this.selectItem(item)}>
                     <div
-                      class={`item mb-1 mt-1 rounded p-2 text-gray-800 select-none cursor-pointer${this.isSelectItem(item) ? ' active bg-gray-100 text-arcoblue-6' : ''}`}
+                      class={`item mb-1 mt-1 rounded p-2 text-gray-800 dark:text-gray-300 select-none cursor-pointer${this.isSelectItem(item) ? ' active bg-gray-100 text-blue-600 dark:bg-blackgray-3 dark:text-blue-600' : ''}`}
                       data-id="550">
                       <div
                         class="h-20 rounded bg-cover bg-center bg-no-repeat rounded"
@@ -364,13 +364,13 @@ export default defineComponent({
           </div>
         </div>
         {this.isMultiple && <div class="arco-modal-footer flex items-center gap-4 flex-row">
-          <div class="app-scrollbar flex-grow">
-            <div class="flex gap-2 flex-nowrap lg:flex flex-col lg:flex-row">
+          <div class="app-scrollbar flex-grow overflow-x-auto">
+            <div class="flex gap-2 flex-nowrap flex-row flex-shrink-0">
               {
-                this.select.map(item => <div class="relative" key={item.file_id} onClick={() => this.selectItem(item)}>
+                this.select.map(item => <div class="relative flex-shrink-0" key={item.file_id} onClick={() => this.selectItem(item)}>
                   <img class="w-8 h-8 rounded" src={item.url}/>
                   <div
-                    class="absolute inset-0 bg-black bg-opacity-60 text-xs opacity-0 flex items-center justify-center text-white hover:opacity-100 select-none">删除
+                    class="absolute inset-0 bg-black bg-opacity-60 text-xs opacity-0  flex items-center justify-center text-white hover:opacity-100 select-none">删除
                   </div>
                 </div>)
               }

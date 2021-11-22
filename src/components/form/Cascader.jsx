@@ -27,7 +27,6 @@ export default defineComponent({
       }).then(res => {
         this.nParams.options = this.formatOptions(res)
         if (this.value !== null) {
-          this.$emit('dataLabel', this.getLabel(this.value).join(' | '))
           this.modelValue = this.value.toString()
         }
 
@@ -35,7 +34,6 @@ export default defineComponent({
     } else {
       this.nParams.options = this.formatOptions(this.nParams.options)
       if (this.value !== null) {
-        this.$emit('dataLabel', this.getLabel(this.value).join(' | '))
         this.modelValue = this.value.toString()
       }
     }
@@ -81,23 +79,8 @@ export default defineComponent({
         label: labelPath.reverse().join(' / '),
       }
     },
-    getLabel(value) {
-      let labels = []
-      if (Array.isArray(value)) {
-        value.forEach(item => {
-          let data = this.formatData(item)
-          labels.push(data.label)
-        })
-      } else {
-        let data = this.formatData(value)
-        labels.push(data.label)
-      }
-      return labels
-    },
     updateValue(value) {
       this.modelVale = value
-      let labels = this.getLabel(value)
-      this.$emit('dataLabel', labels.join(' | '))
       this.$emit('update:value', value)
     },
   },

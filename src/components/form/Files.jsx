@@ -91,11 +91,11 @@ export default defineComponent({
         onStart={this.drag = true}
         onEnd={this.drag = false}
         itemKey="index"
-        class="border border-gray-3 rounded divide-y divide-gray-3 overflow-hidden "
+        class="rounded divide-y divide-gray-3 dark:divide-blackgray-3 overflow-hidden "
       >
         {{
-          item: (item) => <div class="pl-3 pr-4 py-2 flex items-center justify-between text-sm bg-white">
-            <div class="w-0 flex-1 flex items-center text-gray-8">
+          item: (item) => <div class="p-3 py-2 flex items-center justify-between text-sm bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1">
+            <div class="w-0 flex-1 flex items-center text-gray-800 dark:text-gray-400">
               <icon-file class="flex-shrink-0 "/>
               <span class="ml-2 flex-1 w-0 truncate">
                   {item.element.name}
@@ -124,14 +124,14 @@ export default defineComponent({
               >
                 {
                   {
-                    'upload-button': () => <div className="pl-3 pr-4 py-2 flex items-center justify-center cursor-pointer hover:text-arcoblue-7">
-                      {this.progress.status ? <div className="text-gray-6">已上传 {this.progress.progress}%</div> : '上传附件'}
+                    'upload-button': () => <div class="p-3 py-2 flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 text-gray-600 dark:text-gray-400 ">
+                      {this.progress.status ? <div>已上传 {this.progress.progress}%</div> : '上传附件'}
                     </div>
                   }
                 }
               </a-upload>
             </div>
-            : <div class="pl-3 pr-4 py-3 flex items-center justify-center cursor-pointer hover:text-arcoblue-7" onClick={this.fileManage}>
+            : <div class="p-3 py-2 flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 text-gray-600 dark:text-gray-400 " onClick={this.fileManage}>
               上传附件
             </div>
         }}

@@ -84,8 +84,8 @@ export default defineComponent({
             init: {
                 language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,  //引入语言包文件
                 language: 'zh_CN',  //语言类型
-                skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide`,
-                content_css: `${this.baseUrl}/tinymce/skins/content/default/content.css`,
+                skin_url: `${this.baseUrl}/tinymce/skins/ui/` + (window.darkMode === 'dark' ? 'oxide-dark' : 'oxide'),
+                content_css: `${this.baseUrl}/tinymce/skins/content/${window.darkMode === 'dark' ? 'dark' : 'default'}/content.css`,
                 emoticons_database_url: `${this.baseUrl}/tinymce/emojis.min.js`,
                 
                 plugins: this.plugins,

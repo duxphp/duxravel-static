@@ -23,15 +23,9 @@ export default defineComponent({
     if (this.dataUrl) {
       await this.handleSearch('', this.value)
     }
-    if(this.value !== null && this.nParams.options.length) {
-      const item = this.nParams.options.find((vo) => vo.value == this.value)
-      this.$emit('dataLabel', item ? item.label : null)
-    }
   },
   methods: {
     updateValue(value){
-      const item = this.nParams.options.find((vo) => vo.value == value)
-      this.$emit('dataLabel', item ? item.label : null)
       this.$emit('update:value', value)
     },
     handleSearch(query, value) {

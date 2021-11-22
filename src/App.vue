@@ -20,9 +20,9 @@ export default {
   data() {
     return {
       show: true,
-      //themeApp: window.derkMode === "dark" ? themeDark : themeLight,
-      //darkTheme: window.derkMode === "dark" ? darkTheme : null,
-      //darkMode: window.derkMode,
+      //themeApp: window.darkMode === "dark" ? themeDark : themeLight,
+      //darkTheme: window.darkMode === "dark" ? darkTheme : null,
+      //darkMode: window.darkMode,
       zhCN,
     };
   },
@@ -99,7 +99,7 @@ export default {
         defaultLocale: "zh-CN",
       },
       tooltip: {
-        theme: window.derkMode === "dark" ? "dark" : "light",
+        theme: window.darkMode === "dark" ? "dark" : "light",
       },
       colors: ["#005dff", "#b1cdec", "#00d586"],
     }
@@ -108,7 +108,7 @@ export default {
       localStorage.setItem("darkMode", type)
       this.show = false
       window.Apex.tooltip.theme = type
-      window.derkMode = type
+      window.darkMode = type
       this.switchDark(type)
 
       this.$nextTick(() => {
@@ -116,8 +116,8 @@ export default {
       })
     })
 
-    window.derkMode = localStorage.getItem("darkMode") === "dark" ? "dark" : "light"
-    this.switchDark(window.derkMode)
+    window.darkMode = localStorage.getItem("darkMode") === "dark" ? "dark" : "light"
+    this.switchDark(window.darkMode)
   },
   methods: {
     switchDark(type) {
