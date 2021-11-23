@@ -1,8 +1,8 @@
-import { h, defineComponent, resolveDynamicComponent, watch } from 'vue'
+import {h, defineComponent, resolveDynamicComponent, watch} from 'vue'
 import classnames from 'classnames'
-import { request, searchQuick } from '../../utils/request'
-import { router } from '../../utils/router'
-import { vExec } from '../Create'
+import {request, searchQuick} from '../../utils/request'
+import {router} from '../../utils/router'
+import {vExec} from '../Create'
 import event from '../../utils/event'
 
 function findSiblingsAndIndex(node, nodes) {
@@ -19,6 +19,10 @@ function findSiblingsAndIndex(node, nodes) {
 export default defineComponent({
   props: {
     columns: {
+      type: Array,
+      default: () => []
+    },
+    iconColor: {
       type: Array,
       default: () => []
     },
@@ -43,6 +47,8 @@ export default defineComponent({
   },
   data() {
     return {
+      optionEl: null,
+      popupVisible: false,
       data: []
     }
   },
@@ -85,20 +91,33 @@ export default defineComponent({
   },
   methods: {
 
-    renderData() {
+    renderData(data) {
+      const color = this.iconColor
 
+      function getNodeRoute(tree, index) {
+        //let level = index
+        return tree.map(item => {
+          item.level = index
+          item.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
+          if (item.children && item.children.length) {
+            item.children = getNodeRoute(item.children, index + 1)
+          }
+          return item;
+        })
+      }
 
+      return getNodeRoute(data, 0)
 
     },
 
-    getList({ params, agree }) {
+    getList({params, agree}) {
       if (agree === 'routerPush') {
         searchQuick({
           url: this.url,
           method: 'get',
           data: params
         }).then(res => {
-          this.data = res.data
+          this.data = this.renderData(res.data)
           console.log(this.url, this.data)
         }).catch(() => {
 
@@ -121,7 +140,7 @@ export default defineComponent({
         })
       }
     },
-    handleDrop({ node, dragNode, dropPosition }) {
+    handleDrop({node, dragNode, dropPosition}) {
       const data = this.data
       const [dragNodeSiblings, dragNodeIndex] = findSiblingsAndIndex(
         dragNode,
@@ -177,7 +196,7 @@ export default defineComponent({
       })
     },
     // 返回主体内容
-    renderLabel({ option }) {
+    renderLabel({option}) {
       const list = this.columns.map(item => {
         let child = ''
         item = vExec.call({}, item)
@@ -188,7 +207,7 @@ export default defineComponent({
         }
         return h(resolveDynamicComponent('div'), {
           class: classnames(item.className, 'tree-line'),
-          style: item.width ? { width: item.width + 'px' } : {},
+          style: item.width ? {width: item.width + 'px'} : {},
         }, child)
       })
       return list
@@ -196,7 +215,38 @@ export default defineComponent({
   },
   render() {
     return <div>
-      {
+      <a-dropdown
+        vModel={[this.popupVisible, 'popupVisible']}
+        popupContainer={this.optionEl}
+
+        >
+        {{
+          default:() => <a-button onClick={() => this.popupVisible = true}>Click Me</a-button>,
+          content: () => <div>
+            <a-doption>Option 1</a-doption>
+          </div>
+        }}
+      </a-dropdown>
+      {this.data.length > 0 && <a-tree data={this.data}
+                                       showLine={true}
+                                       blockNode={true}>
+        {
+          {
+            title: (item) => <div class="whitespace-nowrap">{item.title}</div>,
+            extra: (item) => <div class="options">
+              <span onClick={(e) => {
+                this.optionEl = e.target
+                console.log(e)
+                this.popupVisible = true
+              }}>
+              <div>dsadsad</div>
+              </span>
+            </div>
+          }
+        }
+      </a-tree>}
+
+      {/*{
         this.data.length > 0 && this.$slots.default?.({
           data: this.data,
           //renderLabel: this.renderLabel,
@@ -205,7 +255,7 @@ export default defineComponent({
       }
       {
         this.data.length === 0 && this.$slots.empty?.()
-      }
+      }*/}
     </div>
   }
 })

@@ -10,6 +10,25 @@
     }
 }
 
+.arco-tree-node-title-block {
+    @apply flex flex-row items-center;
+}
+.arco-tree-node-custom-icon {
+    @apply flex items-center;
+}
+
+.arco-tree-node {
+    @apply items-center;
+    & .options {
+        @apply hidden;
+    }
+}
+
+.arco-tree-node:hover {
+    & .options {
+        @apply block;
+    }
+}
 /*
 
 .n-data-table.n-data-table--bordered .n-data-table-wrapper {
