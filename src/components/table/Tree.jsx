@@ -84,6 +84,13 @@ export default defineComponent({
     event.remove('router-ajax-finish', this.ajaxEvent)
   },
   methods: {
+
+    renderData() {
+
+
+
+    },
+
     getList({ params, agree }) {
       if (agree === 'routerPush') {
         searchQuick({
@@ -92,6 +99,7 @@ export default defineComponent({
           data: params
         }).then(res => {
           this.data = res.data
+          console.log(this.url, this.data)
         }).catch(() => {
 
         })
@@ -191,8 +199,8 @@ export default defineComponent({
       {
         this.data.length > 0 && this.$slots.default?.({
           data: this.data,
-          renderLabel: this.renderLabel,
-          onDrop: this.handleDrop
+          //renderLabel: this.renderLabel,
+          //onDrop: this.handleDrop
         })
       }
       {
