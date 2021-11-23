@@ -136,7 +136,6 @@ export default defineComponent({
       }
     },
     closeEvent(data) {
-      console.log(data)
       if (this.closeDialogRefreshUrls.length === 0 || this.closeDialogRefreshUrls.some(item => ~data.item.url.indexOf(item))) {
         this.getList({
           params: this.filter,

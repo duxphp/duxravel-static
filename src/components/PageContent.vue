@@ -7,11 +7,15 @@
     />
   </template>
 
-  <a-modal v-else :visible="dialogShow" modalClass="page-dialog max-w-2xl w-full"  :closable="false" :mask="true" :footer="false">
-    <div
-      ref="dialogAnimation"
-      class="max-w-2xl my-4 dialog-animation"
-    >
+  <a-modal
+    v-else
+    :visible="dialogShow"
+    modalClass="page-dialog max-w-2xl w-full"
+    :closable="false"
+    :mask="true"
+    :footer="false"
+  >
+    <div ref="dialogAnimation" class="max-w-2xl my-4 dialog-animation">
       <PageRoute
         :windowType="windowType"
         :currentUrl="url"
@@ -67,10 +71,10 @@ export default {
       if (this.dialogShow) {
         this.dialogShow = false;
         setTimeout(() => {
-          this.$emit("close");
+          this.$emit("close-dialog");
         }, 200);
       } else {
-        this.$emit("close");
+        this.$emit("close-dialog");
       }
     },
     changeRouter(url, type) {
@@ -99,8 +103,8 @@ export default {
       }
     },
     closeLoading() {
-      this.dialogMsg?.close?.()
-      this.dialogMsg = null
+      this.dialogMsg?.close?.();
+      this.dialogMsg = null;
     },
     loadStatus({ type }) {
       if (this.windowType === "page") {
@@ -117,13 +121,12 @@ export default {
         if (type === "start") {
           this.dialogMsg = window.message.info("加载页面中，请稍等...");
         } else if (type === "end") {
-          this.dialogShow = true
+          this.dialogShow = true;
 
           //this.dialogAnimation();
           this.closeLoading();
         } else {
-
-          this.dialogShow = true
+          this.dialogShow = true;
           //this.dialogAnimation();
           this.closeLoading();
           if (this.urls.length === 1) {
