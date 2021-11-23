@@ -24,7 +24,7 @@ export const vExec = function (data, arg, slotProps) {
   // 插槽变量计算
   const vSlotKey = itemKeys.find(key => key.startsWith('vSlot'))
   const slotArg = (() => {
-    if (!vSlotKey || !item[vSlotKey] || typeof item[vSlotKey] !== 'string') {
+    if (!vSlotKey || !item[vSlotKey] || typeof item[vSlotKey] !== 'string' || !slotProps) {
       return {}
     }
     // 计算变量名
@@ -33,7 +33,7 @@ export const vExec = function (data, arg, slotProps) {
     const ${item[vSlotKey]} = props;
     return { ${keys} }
     `
-    return (new Function('props', script))(slotProps || {});
+    return (new Function('props', script))(slotProps);
   })();
   // 组合参数
   let newArg = { ...arg, ...slotArg }
@@ -83,9 +83,9 @@ export const vExec = function (data, arg, slotProps) {
       const paramsKeys = data[1] ? data[1].replace(/ /g, '').split(',') : []
       // 节点转换
       item[data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default()
-    } else if (key.startsWith('vData')) {
+    } else if (key.startsWith('vChild') && typeof item[key] === 'object') {
       // 处理子集数据转换
-      item[key.split(':')[1]] = vExec(item[key], arg, slotProps)
+      item[key.split(':')[1]] = vExec(item[key], newArg)
       delete item[key]
     }
   })
