@@ -26,6 +26,10 @@ export default defineComponent({
       type: Array,
       default: () => []
     },
+    contextMenus: {
+      type: Array,
+      default: () => []
+    },
     url: {
       type: String
     },
@@ -46,6 +50,7 @@ export default defineComponent({
     }
   },
   data() {
+    console.log(this.contextMenus)
     return {
       optionEl: null,
       popupVisible: false,
@@ -53,6 +58,8 @@ export default defineComponent({
     }
   },
   setup(props) {
+
+
     watch(props.filter, params => {
       if (props.urlBind) {
         router.routerPush(void 0, Object.fromEntries(Object.keys(params).filter(key => params[key] !== null).map(key => [key, params[key]])))
@@ -97,12 +104,16 @@ export default defineComponent({
       function getNodeRoute(tree, index) {
         //let level = index
         return tree.map(item => {
-          item.level = index
-          item.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
+          let node = {}
+          node.title = item.title
+          node.key = item.key
+          node.level = index
+          node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
           if (item.children && item.children.length) {
-            item.children = getNodeRoute(item.children, index + 1)
+            node.children = getNodeRoute(item.children, index + 1)
           }
-          return item;
+          node.rawData = item
+          return node;
         })
       }
 
@@ -125,6 +136,7 @@ export default defineComponent({
       }
     },
     closeEvent(data) {
+      console.log(data)
       if (this.closeDialogRefreshUrls.length === 0 || this.closeDialogRefreshUrls.some(item => ~data.item.url.indexOf(item))) {
         this.getList({
           params: this.filter,
@@ -215,33 +227,27 @@ export default defineComponent({
   },
   render() {
     return <div>
-      <a-dropdown
-        vModel={[this.popupVisible, 'popupVisible']}
-        popupContainer={this.optionEl}
 
-        >
-        {{
-          default:() => <a-button onClick={() => this.popupVisible = true}>Click Me</a-button>,
-          content: () => <div>
-            <a-doption>Option 1</a-doption>
-          </div>
-        }}
-      </a-dropdown>
-      {this.data.length > 0 && <a-tree data={this.data}
-                                       showLine={true}
-                                       blockNode={true}>
+      {this.data.length > 0 && <a-tree
+        data={this.data}
+        showLine={true}
+        blockNode={true}>
         {
           {
-            title: (item) => <div class="whitespace-nowrap">{item.title}</div>,
-            extra: (item) => <div class="options">
-              <span onClick={(e) => {
-                this.optionEl = e.target
-                console.log(e)
-                this.popupVisible = true
-              }}>
-              <div>dsadsad</div>
-              </span>
-            </div>
+            title: (item) => <div class="whitespace-nowrap">
+              <a-dropdown
+                trigger="contextMenu"
+                alignPoint
+              >
+                {{
+                  default: () => <div>{item.title}</div>,
+                  content: () => <div>
+                    {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
+                  </div>
+                }}
+              </a-dropdown>
+            </div>,
+
           }
         }
       </a-tree>}
