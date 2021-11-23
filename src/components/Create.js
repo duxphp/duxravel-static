@@ -83,6 +83,10 @@ export const vExec = function (data, arg, slotProps) {
       const paramsKeys = data[1] ? data[1].replace(/ /g, '').split(',') : []
       // 节点转换
       item[data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default()
+    } else if (key.startsWith('vData')) {
+      // 处理子集数据转换
+      item[key.split(':')[1]] = vExec(item[key], arg, slotProps)
+      delete item[key]
     }
   })
   if (nodeName && typeof nodeName === 'string') {
