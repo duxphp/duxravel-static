@@ -170,10 +170,11 @@ router.ajax = (url, data) => {
     })
   }
   if (data?._title) {
-    window.appDialog.confirm({
+    window.dialog.info({
       title: '确认操作',
       content: data?._title,
-      success: ajaxAction
+      hideCancel: false,
+      onOk: ajaxAction
     })
   } else {
     ajaxAction()

@@ -94,8 +94,7 @@
               dark:hover:text-gray-50
               hover:text-white hover:bg-blackgray-1
               relative
-              mb-2
-            "
+              mb-2"
           >
             <span class="w-5 h-6 flex items-center justify-center">
               <svg

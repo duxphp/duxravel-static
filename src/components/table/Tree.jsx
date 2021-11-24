@@ -151,37 +151,46 @@ export default defineComponent({
         })
       }
     },
-    handleDrop({node, dragNode, dropPosition}) {
+    handleDrop({dragNode, dropNode, dropPosition}) {
+
+      console.log(dragNode)
+      console.log(dropNode)
+      console.log(dropPosition)
+
       const data = this.data
-      const [dragNodeSiblings, dragNodeIndex] = findSiblingsAndIndex(
-        dragNode,
+      const [dropNodeSiblings, dropNodeIndex] = findSiblingsAndIndex(
+        dropNode,
         data
       )
       const sort = {
-        id: dragNode.key,
+        id: dropNode.key,
         parent: null,
         before: null,
         index: 0
       }
-      dragNodeSiblings.splice(dragNodeIndex, 1)
-      if (dropPosition === 'inside') {
-        if (node.children) {
-          node.children.unshift(dragNode)
+      dropNodeSiblings.splice(dropNodeIndex, 1)
+
+      // 插入子节点
+      if (dropPosition === 0) {
+        if (dragNode.children) {
+          dragNode.children.unshift(dropNode)
         } else {
-          node.children = [dragNode]
+          dragNode.children = [dropNode]
         }
-      } else if (dropPosition === 'before') {
-        const [nodeSiblings, nodeIndex] = findSiblingsAndIndex(node, data)
+      } else if (dropPosition === -1) {
+        // 插入之前
+        const [nodeSiblings, nodeIndex] = findSiblingsAndIndex(dragNode, data)
         // 计算位置
         sort.before = nodeSiblings[nodeIndex - 1]?.key || null
         sort.index = nodeIndex
-        nodeSiblings.splice(nodeIndex, 0, dragNode)
-      } else if (dropPosition === 'after') {
-        const [nodeSiblings, nodeIndex] = findSiblingsAndIndex(node, data)
+        nodeSiblings.splice(nodeIndex, 0, dropNode)
+      } else if (dropPosition === 1) {
+        // 插入之后
+        const [nodeSiblings, nodeIndex] = findSiblingsAndIndex(dragNode, data)
         // 计算位置
         sort.before = nodeSiblings[nodeIndex].key
         sort.index = nodeIndex + 1
-        nodeSiblings.splice(nodeIndex + 1, 0, dragNode)
+        nodeSiblings.splice(nodeIndex + 1, 0, dropNode)
       }
       this.data = Array.from(data)
       // 获取新的上级
@@ -199,7 +208,7 @@ export default defineComponent({
         }
         return superNode
       }
-      sort.parent = getSuper(dragNode.key)
+      sort.parent = getSuper(dropNode.key)
       request({
         url: this.sortUrl,
         data: sort,
@@ -226,26 +235,27 @@ export default defineComponent({
   },
   render() {
     return <div>
-
       {this.data.length > 0 && <a-tree
+        class="app-tree"
         data={this.data}
         showLine={true}
-        blockNode={true}>
+        blockNode={true}
+        draggable
+        onDrop={this.handleDrop}>
         {
           {
-            title: (item) => <div class="whitespace-nowrap">
-              <a-dropdown
-                trigger="contextMenu"
-                alignPoint
-              >
-                {{
-                  default: () => <div>{item.title}</div>,
-                  content: () => <div>
-                    {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
-                  </div>
-                }}
-              </a-dropdown>
-            </div>,
+            title: (item) => <a-dropdown
+              trigger="contextMenu"
+              alignPoint
+              class="w-32"
+            >
+              {{
+                default: () => <div class="flex-grow whitespace-nowrap py-2">{item.title}</div>,
+                content: () => <div>
+                  {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
+                </div>
+              }}
+            </a-dropdown>
 
           }
         }

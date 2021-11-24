@@ -10,29 +10,27 @@
     }
 }
 
-.arco-tree-node-title-block {
-    @apply flex flex-row items-center;
-}
-.arco-tree-node-custom-icon {
-    @apply flex items-center;
-}
+.app-tree {
+    /*& .arco-tree-node {
+        @apply items-center;
+    }*/
+    & .arco-tree-node-title-block {
+        @apply flex flex-row items-center;
+    }
 
-.arco-tree-node-title-text {
-    @apply flex-grow;
-}
+    & .arco-tree-node-custom-icon {
+        @apply flex items-center;
+    }
 
-.arco-tree-node {
-    @apply items-center;
-    & .options {
-        @apply hidden;
+    & .arco-tree-node-title-text {
+        @apply flex flex-grow items-center;
+    }
+
+    & .arco-tree-node-title {
+        @apply py-0;
     }
 }
 
-.arco-tree-node:hover {
-    & .options {
-        @apply block;
-    }
-}
 /*
 
 .n-data-table.n-data-table--bordered .n-data-table-wrapper {
@@ -183,17 +181,20 @@
 
 */
 
-.app-scrollbar:hover::-webkit-scrollbar-thumb  {
+.app-scrollbar:hover::-webkit-scrollbar-thumb {
     @apply bg-opacity-30;
 }
+
 .app-scrollbar::-webkit-scrollbar {
-    width : 5px;
+    width: 5px;
     height: 5px;
 }
+
 .app-scrollbar::-webkit-scrollbar-thumb {
     @apply transition-all bg-black bg-opacity-0;
     border-radius: 5px;
 }
+
 .app-scrollbar::-webkit-scrollbar-track {
     background: none;
 }
