@@ -1,20 +1,9 @@
-import { h, defineComponent, resolveDynamicComponent, watch } from 'vue'
+import {h, defineComponent, resolveDynamicComponent, watch} from 'vue'
 import classnames from 'classnames'
-import { request, searchQuick } from '../../utils/request'
-import { router } from '../../utils/router'
-import { vExec } from '../Create'
+import {request, searchQuick} from '../../utils/request'
+import {router} from '../../utils/router'
+import {vExec} from '../Create'
 import event from '../../utils/event'
-
-function findSiblingsAndIndex(node, nodes) {
-  if (!nodes) return [null, null]
-  for (let i = 0; i < nodes.length; ++i) {
-    const siblingNode = nodes[i]
-    if (siblingNode.key === node.key) return [nodes, i]
-    const [siblings, index] = findSiblingsAndIndex(node, siblingNode.children)
-    if (siblings) return [siblings, index]
-  }
-  return [null, null]
-}
 
 export default defineComponent({
   props: {
@@ -52,8 +41,10 @@ export default defineComponent({
   data() {
     console.log(this.contextMenus)
     return {
+      searchKey: '',
       optionEl: null,
       popupVisible: false,
+      loading: true,
       data: []
     }
   },
@@ -108,7 +99,7 @@ export default defineComponent({
           node.title = item.title
           node.key = item.key
           node.level = index
-          node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']} />
+          node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
           if (item.children && item.children.length) {
             node.children = getNodeRoute(item.children, index + 1)
           }
@@ -121,17 +112,19 @@ export default defineComponent({
 
     },
 
-    getList({ params, agree }) {
+    getList({params, agree}) {
       if (agree === 'routerPush') {
+        this.loading = true
         searchQuick({
           url: this.url,
           method: 'get',
           data: params
         }).then(res => {
+          this.loading = false
           this.data = this.renderData(res.data)
           console.log(this.url, this.data)
         }).catch(() => {
-
+          this.loading = false
         })
       }
     },
@@ -151,7 +144,7 @@ export default defineComponent({
         })
       }
     },
-    handleDrop({ dragNode, dropNode, dropPosition }) {
+    handleDrop({dragNode, dropNode, dropPosition}) {
 
       const sort = {
         id: dragNode.key,
@@ -192,14 +185,20 @@ export default defineComponent({
         });
       }
 
+      this.loading = true
       request({
         url: this.sortUrl,
         data: sort,
         method: 'POST'
+      }).then(() => {
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
       })
+
     },
     // 返回主体内容
-    renderLabel({ option }) {
+    renderLabel({option}) {
       const list = this.columns.map(item => {
         let child = ''
         item = vExec.call({}, item)
@@ -210,15 +209,18 @@ export default defineComponent({
         }
         return h(resolveDynamicComponent('div'), {
           class: classnames(item.className, 'tree-line'),
-          style: item.width ? { width: item.width + 'px' } : {},
+          style: item.width ? {width: item.width + 'px'} : {},
         }, child)
       })
       return list
     }
   },
   render() {
-    return <div>
-      {this.data.length > 0 && <a-tree
+    return <a-spin class="block" loading={this.loading} tip="加载节点中...">
+      <a-input-search
+        vModel={[this.searchKey, 'searchKey']}
+      />
+      {this.data.length > 0 ? <a-tree
         class="app-tree"
         data={this.data}
         showLine={true}
@@ -233,7 +235,7 @@ export default defineComponent({
               class="w-32"
             >
               {{
-                default: () => <div class="flex-grow whitespace-nowrap py-2">{item.title} {item.key}</div>,
+                default: () => <div class="flex-grow whitespace-nowrap py-2">{item.title}</div>,
                 content: () => <div>
                   {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
                 </div>
@@ -242,18 +244,8 @@ export default defineComponent({
 
           }
         }
-      </a-tree>}
-
-      {/*{
-        this.data.length > 0 && this.$slots.default?.({
-          data: this.data,
-          //renderLabel: this.renderLabel,
-          //onDrop: this.handleDrop
-        })
+      </a-tree> : <a-empty/>
       }
-      {
-        this.data.length === 0 && this.$slots.empty?.()
-      }*/}
-    </div>
+    </a-spin>
   }
 })
