@@ -49,8 +49,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-
-
     watch(props.filter, params => {
       if (props.urlBind) {
         router.routerPush(void 0, Object.fromEntries(Object.keys(params).filter(key => params[key] !== null).map(key => [key, params[key]])))
@@ -109,7 +107,26 @@ export default defineComponent({
       }
 
       return getNodeRoute(data, 0)
-
+    },
+    searchData(keyword) {
+      const loop = (data) => {
+        const result = [];
+        data.forEach(item => {
+          if (item.title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+            result.push({...item});
+          } else if (item.children) {
+            const filterData = loop(item.children);
+            if (filterData.length) {
+              result.push({
+                ...item,
+                children: filterData
+              })
+            }
+          }
+        })
+        return result;
+      }
+      return loop(this.data);
     },
 
     getList({params, agree}) {
@@ -218,7 +235,10 @@ export default defineComponent({
   render() {
     return <a-spin class="block" loading={this.loading} tip="加载节点中...">
       <a-input-search
-        vModel={[this.searchKey, 'searchKey']}
+        onInput={(value) => {
+          console.log(value)
+          this.searchData(value)
+        }}
       />
       {this.data.length > 0 ? <a-tree
         class="app-tree"
