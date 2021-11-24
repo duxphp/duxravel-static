@@ -1,8 +1,8 @@
-import {h, defineComponent, resolveDynamicComponent, watch} from 'vue'
+import { h, defineComponent, resolveDynamicComponent, watch } from 'vue'
 import classnames from 'classnames'
-import {request, searchQuick} from '../../utils/request'
-import {router} from '../../utils/router'
-import {vExec} from '../Create'
+import { request, searchQuick } from '../../utils/request'
+import { router } from '../../utils/router'
+import { vExec } from '../Create'
 import event from '../../utils/event'
 
 function findSiblingsAndIndex(node, nodes) {
@@ -108,7 +108,7 @@ export default defineComponent({
           node.title = item.title
           node.key = item.key
           node.level = index
-          node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
+          node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']} />
           if (item.children && item.children.length) {
             node.children = getNodeRoute(item.children, index + 1)
           }
@@ -121,7 +121,7 @@ export default defineComponent({
 
     },
 
-    getList({params, agree}) {
+    getList({ params, agree }) {
       if (agree === 'routerPush') {
         searchQuick({
           url: this.url,
@@ -151,64 +151,47 @@ export default defineComponent({
         })
       }
     },
-    handleDrop({dragNode, dropNode, dropPosition}) {
+    handleDrop({ dragNode, dropNode, dropPosition }) {
 
-      console.log(dragNode)
-      console.log(dropNode)
-      console.log(dropPosition)
-
-      const data = this.data
-      const [dropNodeSiblings, dropNodeIndex] = findSiblingsAndIndex(
-        dropNode,
-        data
-      )
       const sort = {
-        id: dropNode.key,
+        id: dragNode.key,
         parent: null,
-        before: null,
-        index: 0
+        before: null
       }
-      dropNodeSiblings.splice(dropNodeIndex, 1)
-
-      // 插入子节点
-      if (dropPosition === 0) {
-        if (dragNode.children) {
-          dragNode.children.unshift(dropNode)
-        } else {
-          dragNode.children = [dropNode]
-        }
-      } else if (dropPosition === -1) {
-        // 插入之前
-        const [nodeSiblings, nodeIndex] = findSiblingsAndIndex(dragNode, data)
-        // 计算位置
-        sort.before = nodeSiblings[nodeIndex - 1]?.key || null
-        sort.index = nodeIndex
-        nodeSiblings.splice(nodeIndex, 0, dropNode)
-      } else if (dropPosition === 1) {
-        // 插入之后
-        const [nodeSiblings, nodeIndex] = findSiblingsAndIndex(dragNode, data)
-        // 计算位置
-        sort.before = nodeSiblings[nodeIndex].key
-        sort.index = nodeIndex + 1
-        nodeSiblings.splice(nodeIndex + 1, 0, dropNode)
-      }
-      this.data = Array.from(data)
-      // 获取新的上级
-      const getSuper = (key, superNode = null, child = this.data) => {
-        for (let i = 0; i < child.length; i++) {
-          const item = child[i]
-          if (key === item.key) {
-            return superNode?.key || superNode
-          } else if (item.children && item.children.length) {
-            const data = getSuper(key, item, item.children)
-            if (data) {
-              return data
-            }
+      const data = this.data;
+      const loop = (data, key, callback, parent = null) => {
+        data.some((item, index, arr) => {
+          if (item.key === key) {
+            callback(item, index, arr, parent);
+            return true;
           }
-        }
-        return superNode
+          if (item.children) {
+            return loop(item.children, key, callback, item);
+          }
+          return false;
+        });
+      };
+
+      loop(data, dragNode.key, (_, index, arr) => {
+        arr.splice(index, 1);
+      });
+
+      if (dropPosition === 0) {
+        loop(data, dropNode.key, (item) => {
+          item.children = item.children || [];
+          item.children.push(dragNode);
+        });
+      } else {
+        loop(data, dropNode.key, (_, index, arr, parent) => {
+          const nodeIndex = dropPosition < 0 ? index : index + 1
+          arr.splice(nodeIndex, 0, dragNode);
+          // 上一个
+          sort.before = parent.children?.[nodeIndex - 1]?.key || null
+          // 父级
+          sort.parent = parent.key || null
+        });
       }
-      sort.parent = getSuper(dropNode.key)
+
       request({
         url: this.sortUrl,
         data: sort,
@@ -216,7 +199,7 @@ export default defineComponent({
       })
     },
     // 返回主体内容
-    renderLabel({option}) {
+    renderLabel({ option }) {
       const list = this.columns.map(item => {
         let child = ''
         item = vExec.call({}, item)
@@ -227,7 +210,7 @@ export default defineComponent({
         }
         return h(resolveDynamicComponent('div'), {
           class: classnames(item.className, 'tree-line'),
-          style: item.width ? {width: item.width + 'px'} : {},
+          style: item.width ? { width: item.width + 'px' } : {},
         }, child)
       })
       return list
@@ -250,7 +233,7 @@ export default defineComponent({
               class="w-32"
             >
               {{
-                default: () => <div class="flex-grow whitespace-nowrap py-2">{item.title}</div>,
+                default: () => <div class="flex-grow whitespace-nowrap py-2">{item.title} {item.key}</div>,
                 content: () => <div>
                   {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
                 </div>
