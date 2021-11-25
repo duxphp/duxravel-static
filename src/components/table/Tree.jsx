@@ -209,11 +209,11 @@ export default defineComponent({
           const nodeIndex = dropPosition < 0 ? index : index + 1
           arr.splice(nodeIndex, 0, dragNode);
           // 上一个
-          sort.before = parent.children?.[nodeIndex - 1]?.key || null
+          sort.before = parent ? parent.children?.[nodeIndex - 1]?.key || null : null
           // 父级
-          sort.parent = parent.key || null
-
-          if (parent.key) dragNode.level = parent.level + 1
+          sort.parent = parent ? parent.key || null : null
+          // 改变等级
+          dragNode.level = parent ? parent.level + 1 : 0
 
         })
       }
