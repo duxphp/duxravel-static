@@ -89,6 +89,7 @@ export default defineComponent({
   methods: {
     renderData(data) {
       const color = this.iconColor
+
       function getNodeRoute(tree, index) {
         //let level = index
         return tree.map(item => {
@@ -96,7 +97,7 @@ export default defineComponent({
           node.title = item.title
           node.key = item.key
           node.level = index
-          node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
+          //node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
           if (item.children && item.children.length) {
             node.children = getNodeRoute(item.children, index + 1)
           }
@@ -108,10 +109,14 @@ export default defineComponent({
       return getNodeRoute(data, 0)
     },
     searchData(keyword) {
+      this.loading = true
       this.draggable = false
       if (!keyword) {
         this.draggable = true
         this.data = this.originData
+        this.$nextTick(() => {
+          this.loading = false
+        })
         return false
       }
       const loop = (data) => {
@@ -132,6 +137,9 @@ export default defineComponent({
         return result;
       }
       this.data = loop(this.originData)
+      this.$nextTick(() => {
+        this.loading = false
+      })
     },
 
     getList({params, agree}) {
@@ -195,7 +203,7 @@ export default defineComponent({
         loop(data, dropNode.key, (item) => {
           item.children = item.children || [];
           item.children.push(dragNode);
-        });
+        })
       } else {
         loop(data, dropNode.key, (_, index, arr, parent) => {
           const nodeIndex = dropPosition < 0 ? index : index + 1
@@ -204,7 +212,10 @@ export default defineComponent({
           sort.before = parent.children?.[nodeIndex - 1]?.key || null
           // 父级
           sort.parent = parent.key || null
-        });
+
+          if (parent.key) dragNode.level = parent.level + 1
+
+        })
       }
 
       this.loading = true
@@ -238,11 +249,14 @@ export default defineComponent({
     }
   },
   render() {
+
+    const color = this.iconColor
     return <a-spin class="block" loading={this.loading} tip="加载节点中...">
       <a-input-search
         onInput={(value) => {
           this.searchData(value)
         }}
+        class="mb-2"
       />
       {this.data.length > 0 ? <a-tree
         class="app-tree"
@@ -259,7 +273,10 @@ export default defineComponent({
               class="w-32"
             >
               {{
-                default: () => <div class="flex-grow whitespace-nowrap py-2">{item.title}</div>,
+                default: () => <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
+                  <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[item.level] + '-400', 'border-' + color[item.level] + '-500']}/>
+                  {item.title}
+                </div>,
                 content: () => <div>
                   {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
                 </div>
