@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
+  <div class="flex flex-row h-screen overflow-hidden">
     <div
       class="
         text-white
@@ -8,8 +8,7 @@
         dark:bg-blackgray-4
         px-2
         flex-none flex-col
-        lg:flex
-        hidden
+        flex
         border-r border-gray-800
         dark:border-blackgray-5
       "

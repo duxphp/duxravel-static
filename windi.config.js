@@ -1,4 +1,5 @@
 const { light } = require('./arco-palette.json')
+import { all } from 'tinymce/themes/silver/theme'
 import { defineConfig } from 'windicss/helpers'
 
 const colors = Object.fromEntries(Object.keys(light).map(key => {
@@ -8,7 +9,6 @@ const colors = Object.fromEntries(Object.keys(light).map(key => {
 }))
 
 export default defineConfig({
-  preflight: false,
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
