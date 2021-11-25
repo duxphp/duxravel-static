@@ -13,6 +13,48 @@ import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage, resource } from "../utils/router";
 import event from "../utils/event";
 
+import { Processor } from "windicss/lib";
+import { HTMLParser } from "windicss/utils/parser";
+import md5 from "md5";
+
+const generateStyles = (html) => {
+  // 获取 windi processor
+  const processor = new Processor();
+
+  // 解析所有的 classes 并将它们放到一行来简化操作
+  const htmlClasses = new HTMLParser(html)
+    .parseClasses()
+    .map((i) => i.result)
+    .join(" ");
+
+  // 基于我们传入的 html 生成预检样式
+  const preflightSheet = processor.preflight(html);
+
+  // 将 html classes 处理为一个可解释的样式表
+  const interpretedSheet = processor.interpret(htmlClasses).styleSheet;
+
+  // 构建样式
+  const APPEND = true;
+  const MINIFY = true;
+  const styles = interpretedSheet.extend(preflightSheet, APPEND).build(MINIFY);
+
+  return styles;
+};
+
+const pageStyles = {};
+const loadStyle = (style) => {
+  const stylee = document.createElement("style");
+  stylee.innerHTML = style;
+  document.getElementsByTagName("head")[0].appendChild(stylee);
+  const key = md5(style);
+  pageStyles[key] = stylee;
+  return key;
+};
+const unloadStyle = (key) => {
+  console.log(key, pageStyles[key]);
+  pageStyles[key]?.parentNode?.removeChild?.(pageStyles[key]);
+};
+
 export default {
   name: "PageRoute",
   props: {
@@ -115,6 +157,14 @@ export default {
           resource.uninstall(this.oldUrl);
           this.oldUrl = url;
           this.$nextTick(() => {
+            setTimeout(() => {
+              const style = generateStyles(
+                document.querySelector("#page-animation").innerHTML
+              );
+              this.oldStyleKey && unloadStyle(this.oldStyleKey);
+              this.oldStyleKey = loadStyle(style);
+            }, 20);
+
             this.$emit("load-status", { type: "end" });
           });
         })
