@@ -39,27 +39,28 @@ export default defineComponent({
     }
   },
   data() {
-    console.log(this.contextMenus)
     return {
       searchKey: '',
       optionEl: null,
       popupVisible: false,
       loading: true,
-      data: []
+      draggable: true,
+      data: [],
+      originData: []
+
     }
   },
-  setup(props) {
-    watch(props.filter, params => {
-      if (props.urlBind) {
+  watch: {
+    filter(params) {
+      if (this.urlBind) {
         router.routerPush(void 0, Object.fromEntries(Object.keys(params).filter(key => params[key] !== null).map(key => [key, params[key]])))
       } else {
         this.getList({
-          params: props.filter,
+          params: this.filter,
           agree: 'routerPush'
         })
       }
-    })
-
+    }
   },
   created() {
     if (this.urlBind) {
@@ -86,10 +87,8 @@ export default defineComponent({
     event.remove('router-ajax-finish', this.ajaxEvent)
   },
   methods: {
-
     renderData(data) {
       const color = this.iconColor
-
       function getNodeRoute(tree, index) {
         //let level = index
         return tree.map(item => {
@@ -109,6 +108,12 @@ export default defineComponent({
       return getNodeRoute(data, 0)
     },
     searchData(keyword) {
+      this.draggable = false
+      if (!keyword) {
+        this.draggable = true
+        this.data = this.originData
+        return false
+      }
       const loop = (data) => {
         const result = [];
         data.forEach(item => {
@@ -126,7 +131,7 @@ export default defineComponent({
         })
         return result;
       }
-      return loop(this.data);
+      this.data = loop(this.originData)
     },
 
     getList({params, agree}) {
@@ -138,7 +143,7 @@ export default defineComponent({
           data: params
         }).then(res => {
           this.loading = false
-          this.data = this.renderData(res.data)
+          this.data = this.originData = this.renderData(res.data)
           console.log(this.url, this.data)
         }).catch(() => {
           this.loading = false
@@ -236,7 +241,6 @@ export default defineComponent({
     return <a-spin class="block" loading={this.loading} tip="加载节点中...">
       <a-input-search
         onInput={(value) => {
-          console.log(value)
           this.searchData(value)
         }}
       />
@@ -245,7 +249,7 @@ export default defineComponent({
         data={this.data}
         showLine={true}
         blockNode={true}
-        draggable
+        draggable={this.draggable}
         onDrop={this.handleDrop}>
         {
           {
