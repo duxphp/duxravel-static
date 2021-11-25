@@ -1,7 +1,4 @@
-import { divide } from 'lodash'
-import { onMounted, defineComponent } from 'vue'
-import { request } from '../../utils/request'
-import { vExec } from '../Create'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {

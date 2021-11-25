@@ -111,4 +111,5 @@ app.component('draggable', draggable)
 
 app.mount('#duxravel-static')
 
-import './common.pcss'
+import 'virtual:windi.css'
+import './common.css'

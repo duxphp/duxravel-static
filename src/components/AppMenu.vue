@@ -1,6 +1,6 @@
 <template>
   <div
-    class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-5 dark:border-blackgray-5 app-scrollbar"
+    class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-4 dark:border-blackgray-4 app-scrollbar"
     :class="
         menuData.menu
         ? 'w-40 bg-white shadow z-20 '
@@ -35,7 +35,7 @@
             v-for="(child2, index2) in child.menu"
             :key="child2.name"
             :class="{
-              'bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-gray-400':
+              'bg-blue-50 text-blue-600 dark:bg-blackgray-1 dark:text-gray-400':
                 select[1] === index1 && select[2] === index2,
             }"
             @click="target(child2)"

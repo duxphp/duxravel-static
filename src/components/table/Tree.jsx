@@ -7,10 +7,6 @@ import event from '../../utils/event'
 
 export default defineComponent({
   props: {
-    columns: {
-      type: Array,
-      default: () => []
-    },
     iconColor: {
       type: Array,
       default: () => []
@@ -25,17 +21,17 @@ export default defineComponent({
     sortUrl: {
       type: String
     },
-    filter: {
-      type: Object,
-      default: () => ({})
+    refreshUrls: {
+      type: Array,
+      default: () => []
     },
-    urlBind: {
+    search: {
       type: Boolean,
       default: true
     },
-    closeDialogRefreshUrls: {
-      type: Array,
-      default: () => []
+    value: {
+      type: [String, Number],
+      default: null
     }
   },
   data() {
@@ -44,60 +40,34 @@ export default defineComponent({
       optionEl: null,
       popupVisible: false,
       loading: true,
-      draggable: true,
+      draggable: !!this.sortUrl,
       data: [],
       originData: []
 
     }
   },
-  watch: {
-    filter(params) {
-      if (this.urlBind) {
-        router.routerPush(void 0, Object.fromEntries(Object.keys(params).filter(key => params[key] !== null).map(key => [key, params[key]])))
-      } else {
-        this.getList({
-          params: this.filter,
-          agree: 'routerPush'
-        })
-      }
-    }
-  },
   created() {
-    if (this.urlBind) {
-      // 监听路由参数改变重新获取列表数据
-      event.add('router-change', this.getList)
-
-      // 默认跳转到默认的filter选项
-      router.routerPush(void 0, Object.fromEntries(Object.keys(this.filter).filter(key => this.filter[key] !== null).map(key => [key, this.filter[key]])))
-    } else {
-      this.getList({
-        params: this.filter,
-        agree: 'routerPush'
-      })
-      // 监听关闭弹窗的时候刷新路由
-      event.add('router-dialog-close', this.closeEvent)
-      // 监听关闭ajax确认框时候的刷新数据
-      event.add('router-ajax-finish', this.ajaxEvent)
-    }
+    this.getList({
+      agree: 'routerPush'
+    })
+    // 监听关闭弹窗的时候刷新路由
+    event.add('router-dialog-close', this.closeEvent)
+    // 监听关闭ajax确认框时候的刷新数据
+    event.add('router-ajax-finish', this.ajaxEvent)
 
   },
   beforeUnmount() {
-    event.remove('router-change', this.getList)
     event.remove('router-dialog-close', this.closeEvent)
     event.remove('router-ajax-finish', this.ajaxEvent)
   },
   methods: {
     renderData(data) {
-      const color = this.iconColor
-
       function getNodeRoute(tree, index) {
-        //let level = index
         return tree.map(item => {
           let node = {}
           node.title = item.title
           node.key = item.key
           node.level = index
-          //node.icon = () => <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[index] + '-400', 'border-' + color[index] + '-500']}/>
           if (item.children && item.children.length) {
             node.children = getNodeRoute(item.children, index + 1)
           }
@@ -112,7 +82,7 @@ export default defineComponent({
       this.loading = true
       this.draggable = false
       if (!keyword) {
-        this.draggable = true
+        this.draggable = !!this.sortUrl
         this.data = this.originData
         this.$nextTick(() => {
           this.loading = false
@@ -159,17 +129,15 @@ export default defineComponent({
       }
     },
     closeEvent(data) {
-      if (this.closeDialogRefreshUrls.length === 0 || this.closeDialogRefreshUrls.some(item => ~data.item.url.indexOf(item))) {
+      if (this.refreshUrls.length === 0 || this.refreshUrls.some(item => ~data.item.url.indexOf(item))) {
         this.getList({
-          params: this.filter,
           agree: 'routerPush'
         })
       }
     },
     ajaxEvent(data) {
-      if (this.closeDialogRefreshUrls.length === 0 || this.closeDialogRefreshUrls.some(item => ~data.url.indexOf(item))) {
+      if (this.refreshUrls.length === 0 || this.refreshUrls.some(item => ~data.url.indexOf(item))) {
         this.getList({
-          params: this.filter,
           agree: 'routerPush'
         })
       }
@@ -230,41 +198,29 @@ export default defineComponent({
       })
 
     },
-    // 返回主体内容
-    renderLabel({option}) {
-      const list = this.columns.map(item => {
-        let child = ''
-        item = vExec.call({}, item)
-        if (item.render) {
-          child = item.render(option)
-        } else if (item.key) {
-          child = option[item.key]
-        }
-        return h(resolveDynamicComponent('div'), {
-          class: classnames(item.className, 'tree-line'),
-          style: item.width ? {width: item.width + 'px'} : {},
-        }, child)
-      })
-      return list
-    }
   },
   render() {
 
     const color = this.iconColor
-    return <a-spin class="block" loading={this.loading} tip="加载节点中...">
-      <a-input-search
+    return <a-spin class="block flex flex-col" loading={this.loading} tip="加载节点中...">
+      {this.search && <a-input-search
         onInput={(value) => {
           this.searchData(value)
         }}
-        class="mb-2"
-      />
+        class="mb-2 flex-none"
+      />}
       {this.data.length > 0 ? <a-tree
-        class="app-tree"
+        class="app-tree flex-grow overflow-y-auto overflow-x-hidden app-scrollbar"
         data={this.data}
         showLine={true}
         blockNode={true}
         draggable={this.draggable}
-        onDrop={this.handleDrop}>
+        onDrop={this.handleDrop}
+        selectedKeys={this.value ? [this.value] : null}
+        onSelect={(value) => {
+          this.$emit('update:value', this.value === value[0] ? null : value[0])
+        }}
+      >
         {
           {
             title: (item) => <a-dropdown
@@ -273,10 +229,14 @@ export default defineComponent({
               class="w-32"
             >
               {{
-                default: () => <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                  <span class={["inline-flex rounded-full border-2 w-4 h-4", 'bg-' + color[item.level] + '-400', 'border-' + color[item.level] + '-500']}/>
-                  {item.title}
-                </div>,
+                default: () => {
+                  const bgColor = "bg-"+ color[item.level] +"-400"
+                  const borderColor = "border-"+ color[item.level] +"-500"
+                  return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
+                    <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
+                    {item.title}
+                </div>
+                },
                 content: () => <div>
                   {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
                 </div>
