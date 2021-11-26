@@ -1,6 +1,6 @@
 <template>
   <a-config-provider :locale="zhCN">
-    <div id="app">
+    <div id="app" class="bg-gray-100 dark:bg-blackgray-1">
     <Page :show="show"/>
     </div>
   </a-config-provider>
@@ -20,9 +20,6 @@ export default {
   data() {
     return {
       show: true,
-      //themeApp: window.darkMode === "dark" ? themeDark : themeLight,
-      //darkTheme: window.darkMode === "dark" ? darkTheme : null,
-      //darkMode: window.darkMode,
       zhCN,
     };
   },
@@ -30,6 +27,7 @@ export default {
     // 注册图表
     window.Apex = {
       chart: {
+        background: 'transparent',
         locales: [
           {
             name: "zh-CN",
@@ -99,29 +97,32 @@ export default {
         defaultLocale: "zh-CN",
       },
       tooltip: {
-        theme: window.darkMode === "dark" ? "dark" : "light",
+        theme: 'light',
       },
-      colors: ["#005dff", "#b1cdec", "#00d586"],
+      //colors: ["#005dff", "#b1cdec", "#00d586"],
+      theme: {
+          mode: 'light', 
+          palette: 'palette1',
+          
+      }
+      //colors: ["#005dff", "#b1cdec", "#00d586"],
     }
 
     event.add('switch-dark', (type) => {
-      localStorage.setItem("darkMode", type)
-      this.show = false
-      window.Apex.tooltip.theme = type
-      window.darkMode = type
       this.switchDark(type)
-
-      this.$nextTick(() => {
-        this.show = true
-      })
     })
 
-    window.darkMode = localStorage.getItem("darkMode") === "dark" ? "dark" : "light"
-    this.switchDark(window.darkMode)
+    this.switchDark(localStorage.getItem("darkMode") === "dark" ? "dark" : "light")
   },
   methods: {
     switchDark(type) {
+      localStorage.setItem("darkMode", type)
+      this.show = false
+      window.darkMode = type
       window.Apex.tooltip.theme = type
+      window.Apex.theme.mode = type
+
+      //console.log(window.Apex.theme.mode, type)
       if (type === 'dark') {
         document.body.classList.add('dark');
         document.body.setAttribute('arco-theme', 'dark')
@@ -129,6 +130,12 @@ export default {
         document.body.classList.remove('dark');
         document.body.removeAttribute('arco-theme')
       }
+
+
+      this.$nextTick(() => {
+          this.show = true
+      })
+
     }
   },
 };
