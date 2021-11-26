@@ -1,5 +1,5 @@
 <template>
-  <a-form ref="formRef" @submit="submit" :rules="rules">
+  <a-form ref="formRef" @submit="submit" :rules="rules" :layout="layout" label-align="left" size="large">
     <slot :value="value" :submitStatus="submitStatus"></slot>
   </a-form>
 </template>
@@ -27,8 +27,13 @@ export default defineComponent({
       type: Object,
       default: () => ({}),
     },
+    layout: {
+      type: String,
+      default: 'horizontal'
+    }
   },
   setup(props, context) {
+    console.log(props)
     const formRef = ref(null);
     const rules = ref({});
     const that = getCurrentInstance();

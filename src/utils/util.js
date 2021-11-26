@@ -37,7 +37,7 @@ const generateStyles = html => {
     .join(" ");
 
   // 基于我们传入的 html 生成预检样式
-  const preflightSheet = processor.preflight(html);
+  //const preflightSheet = processor.preflight(html);
 
   // 将 html classes 处理为一个可解释的样式表
   const interpretedSheet = processor.interpret(htmlClasses).styleSheet;
@@ -45,7 +45,7 @@ const generateStyles = html => {
   // 构建样式
   const APPEND = false;
   const MINIFY = false;
-  const styles = interpretedSheet.extend(preflightSheet, APPEND).build(MINIFY);
+  const styles = interpretedSheet.build(MINIFY);
 
   return styles;
 }
