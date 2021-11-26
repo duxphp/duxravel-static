@@ -41,20 +41,19 @@ export default defineComponent({
     'n-params': {
       type: Object,
     },
-    simple: {
-      type: Boolean,
-      default: false
-    },
     select: {
       type: Boolean,
       default: false
     },
+    simple: {
+      type: Boolean,
+      default: false
+    },
+    limit: {
+      type: Number,
+      default: 20
+    },
   },
-
-  created() {
-
-  },
-
   setup(props) {
 
     // 选中的列
@@ -116,13 +115,13 @@ export default defineComponent({
     }
 
     const pagination = ref({
-      showTotal: true,
-      showJumper: true,
-      showPageSize: true,
+      showTotal: !props.simple,
+      showJumper: !props.simple,
+      showPageSize: !props.simple,
       simple: props.simple,
       total: 0,
       current: 1,
-      pageSize: 20,
+      pageSize: props.limit,
       onChange: page => {
         pagination.value.current = page
         getList(props.filter)

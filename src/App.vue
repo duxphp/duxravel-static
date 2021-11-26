@@ -1,6 +1,6 @@
 <template>
   <a-config-provider :locale="zhCN">
-    <div id="app" class="dark:bg-blackgray-1">
+    <div id="app">
     <Page :show="show"/>
     </div>
   </a-config-provider>

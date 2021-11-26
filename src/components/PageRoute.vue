@@ -163,6 +163,10 @@ export default {
               );
               this.oldStyleKey && unloadStyle(this.oldStyleKey);
               this.oldStyleKey = loadStyle(style);
+
+              const myEvent = new Event('resize')
+              window.dispatchEvent(myEvent)
+
             }, 20);
 
             this.$emit("load-status", { type: "end" });
