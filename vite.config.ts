@@ -15,7 +15,12 @@ export default defineConfig({
   build: {
     //outDir: 'dist/resource',
     manifest: true,
-    emptyOutDir: true
+    emptyOutDir: true,
+
+    rollupOptions: {
+      // 覆盖默认的 .html 入口
+      input: 'src/main.js'
+    }
   },
   server: {
     // proxy: {

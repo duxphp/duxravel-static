@@ -1,4 +1,7 @@
 /*! @import */
+button {
+  @apply !outline-none;
+}
 
 .arco-form-item-label-required-symbol {
     svg {
@@ -195,3 +198,7 @@
 .app-scrollbar::-webkit-scrollbar-track {
     background: none;
 }
+
+
+
+

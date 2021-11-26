@@ -1,9 +1,12 @@
 import * as Vue from 'vue'
 import App from './App.vue'
 import ArcoVue from '@arco-design/web-vue'
-import '@arco-design/web-vue/dist/arco.css'
 import NProgress from 'nprogress'
+
+import 'virtual:windi.css'
+import '@arco-design/web-vue/dist/arco.css'
 import 'nprogress/nprogress.css'
+import './common.css'
 
 import draggable from 'vuedraggable'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
@@ -29,7 +32,6 @@ import DataColor from './components/form/Color'
 import DynamicData from './components/form/DynamicData'
 import DataEmpty from './components/common/Empty'
 import DataLayout from './components/common/Layout'
-
 
 import WidgetHeader from './components/widget/Header'
 
@@ -111,5 +113,3 @@ app.component('draggable', draggable)
 
 app.mount('#duxravel-static')
 
-import 'virtual:windi.css'
-import './common.css'

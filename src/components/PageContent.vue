@@ -11,6 +11,7 @@
     v-else
     :visible="dialogShow"
     modalClass="page-dialog max-w-2xl w-full"
+    :render-to-body="false"
     :closable="false"
     :mask="true"
     :footer="false"
