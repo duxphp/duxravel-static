@@ -27,7 +27,6 @@ export default {
     // 注册图表
     window.Apex = {
       chart: {
-        background: 'transparent',
         locales: [
           {
             name: "zh-CN",
@@ -95,6 +94,8 @@ export default {
         ],
         fontFamily: "inherit",
         defaultLocale: "zh-CN",
+        background: 'transparent',
+        foreColor: '#373d3f'
       },
       tooltip: {
         theme: 'light',
@@ -121,6 +122,7 @@ export default {
       window.darkMode = type
       window.Apex.tooltip.theme = type
       window.Apex.theme.mode = type
+      window.Apex.chart.foreColor = type === 'dark' ? '#f6f7f8' : '#373d3f'
 
       //console.log(window.Apex.theme.mode, type)
       if (type === 'dark') {
