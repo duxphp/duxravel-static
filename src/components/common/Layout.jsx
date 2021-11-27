@@ -27,16 +27,14 @@ export default defineComponent({
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  ">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
-            {
-              MenuNavigation.map((item, index) => <>
-                {index === 0 ? '' : ' > '}
-                {
-                  index === MenuNavigation.length - 1
-                    ? item.name
-                    : <Route href={item.url}>{item.name}</Route>
-                }
-              </>)
-            }
+
+            <a-breadcrumb>
+              {
+                MenuNavigation.map((item, index) => <a-breadcrumb-item><a-link href={item.url}>{item.name}</a-link></a-breadcrumb-item>)
+              }
+            </a-breadcrumb>
+
+
           </div>
           <div class="flex-none flex items-center gap-2">
             <div>

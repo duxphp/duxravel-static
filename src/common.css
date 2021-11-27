@@ -5,27 +5,14 @@
 
 .arco-form-item-label-required-symbol {
     svg {
-        display: inline;
-        vertical-align: baseline;
+        @apply inline mr-1;
     }
 }
 
 .app-tree {
-    .arco-tree-node {
-        @apply items-center;
-    }
-    .arco-tree-node-title-block {
-        @apply flex flex-row items-center;
-    }
-
-    .arco-tree-node-custom-icon {
-        @apply flex items-center;
-    }
-
     .arco-tree-node-title-text {
         @apply flex flex-grow items-center;
     }
-
     .arco-tree-node-title {
         @apply py-0;
     }

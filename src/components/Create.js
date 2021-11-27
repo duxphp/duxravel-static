@@ -74,7 +74,13 @@ export const vExec = function (data, arg, slotProps) {
       const name = key.substr(7) || 'modelValue'
       item[name] = exec.call(this, bindKey, newArg)
       item[`onUpdate:${name}`] = _value => exec.call(this, `${bindKey} = _value`, { ...newArg, _value })
-    } else if (key.startsWith('render')) {
+    } else if (key.startsWith('render') || key.startsWith('vRender')) {
+
+      if (key.startsWith('vRender')) {
+        item[key.substr(8)] = item[key]
+        delete item[key]
+        key = key.substr(8)
+      }
       // render节点转换
       const node = item[key]
       delete item[key]
@@ -83,6 +89,7 @@ export const vExec = function (data, arg, slotProps) {
       const paramsKeys = data[1] ? data[1].replace(/ /g, '').split(',') : []
       // 节点转换
       item[data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default()
+
     } else if (key.startsWith('vChild') && typeof item[key] === 'object') {
       // 处理子集数据转换
       item[key.split(':')[1]] = vExec(item[key], newArg)

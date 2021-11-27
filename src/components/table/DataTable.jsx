@@ -232,13 +232,16 @@ export default defineComponent({
       })
     }
 
-    const colSortable = ref({
+    const colSortable = {
       sortDirections: ['ascend', 'descend'],
-      sorter: () => {
-        console.log('ddd')
+      sorter: (xxx) => {
+        console.log('ddd', xxx)
       }
-    })
+    }
 
+    const columns = props.columns.map(item => vExec.call({colSortable}, item, {editValue, editStatus}))
+
+    // const columnsRender = renderColumns(columns)
 
     return {
       sorter,
@@ -247,7 +250,7 @@ export default defineComponent({
       childData,
       data,
       loading,
-      columnsRender: props.columns.map(item => vExec.call({}, item, {editValue, editStatus})),
+      columnsRender: columns,
       getList,
       routerChange,
       checkedRowKeys,
@@ -262,7 +265,6 @@ export default defineComponent({
     return <div class="relative">
       <a-table
         loading={this.loading}
-        remote={true}
         {...vExec.call(this, this.nParams)}
         pagination={this.pagination}
         data={this.data}
@@ -272,11 +274,13 @@ export default defineComponent({
           selectedRowKeys: this.checkedRowKeys,
           showCheckedAll: true
         } : false}
-        //onSorterChange={this.sorter}
+        // onSorterChange={this.sorter}
         onSelectionChange={value => {
           this.checkedRowKeys = value
         }}
-      />
+      >
+        
+      </a-table>
       <div class="absolute bottom-0 z-10 ">
         {this.$slots.footer?.(this.childData)}
       </div>
