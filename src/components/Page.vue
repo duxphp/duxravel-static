@@ -259,7 +259,7 @@ import AppDialog from "./utils/DialogExtend";
 import AppDialogTable from "./utils/DialogTableExtend";
 import { router } from "../utils/router";
 import { request } from "../utils/request";
-import event from "../utils/event";
+import event, { menuNavigation } from "../utils/event";
 import { getLocalUserInfo, onUserLogin } from "../utils/user";
 import logo from "../assets/images/logo.svg";
 
@@ -350,7 +350,7 @@ export default {
         }
         return res;
       };
-      window.MenuNavigation = getSelect()
+      menuNavigation.emit(getSelect());
     },
   },
   created() {

@@ -3,7 +3,7 @@ import Route from '../Route.vue'
 import { router } from "../../utils/router";
 import { getUrl } from "../../utils/request";
 import { clearUserInfo } from "../../utils/user";
-import event from '../../utils/event';
+import event, { menuNavigation } from '../../utils/event';
 
 export default defineComponent({
   props: {
@@ -17,27 +17,32 @@ export default defineComponent({
   data() {
     return {
       darkMode: localStorage.getItem("darkMode") === "dark" ? "dark" : "light",
+      navList: []
     }
   },
   created() {
   },
   mounted() {
+    menuNavigation.on(data => {
+      this.navList = data
+    })
   },
   render() {
-    const { MenuNavigation = [] } = window
+    const { navList } = this
     return <div class="flex flex-col lg:h-screen">
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  ">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
             <a-breadcrumb>
               {
-                MenuNavigation.map((item, index) => <a-breadcrumb-item><Route href={item.url}>{item.name}</Route></a-breadcrumb-item>)
+                navList.map((item, index) => <a-breadcrumb-item><Route href={item.url}>{item.name}</Route></a-breadcrumb-item>)
               }
             </a-breadcrumb>
 
 
           </div>
           <div class="flex-none flex items-center gap-2">
+            {this.$slots.tools?.()}
             <div>
               <div id="weather-v2-plugin-simple"></div>
             </div>

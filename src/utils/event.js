@@ -68,3 +68,18 @@ export default {
 export const stopPropagation = e => {
   e.stopPropagation && e.stopPropagation()
 }
+
+/**
+ * 路由导航变化监听和触发
+ */
+export const menuNavigation = {
+  data: [],
+  emit(data) {
+    this.data = data
+    this.callback?.(data)
+  },
+  on(callback) {
+    callback(this.data)
+    this.callback = callback
+  }
+}
