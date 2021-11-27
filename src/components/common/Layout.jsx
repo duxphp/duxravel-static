@@ -21,22 +21,26 @@ export default defineComponent({
   },
   created() {
   },
+  mounted() {
+  },
   render() {
     const { MenuNavigation = [] } = window
     return <div class="flex flex-col lg:h-screen">
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  ">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
-
             <a-breadcrumb>
               {
-                MenuNavigation.map((item, index) => <a-breadcrumb-item><a-link href={item.url}>{item.name}</a-link></a-breadcrumb-item>)
+                MenuNavigation.map((item, index) => <a-breadcrumb-item><Route href={item.url}>{item.name}</Route></a-breadcrumb-item>)
               }
             </a-breadcrumb>
 
 
           </div>
           <div class="flex-none flex items-center gap-2">
+            <div>
+              <div id="weather-v2-plugin-simple"></div>
+            </div>
             <div>
               <a-button type="text" shape="round" style={{ fontSize: '20px' }} onClick={() => {
                 this.darkMode = this.darkMode === 'dark' ? 'light' : 'dark'
