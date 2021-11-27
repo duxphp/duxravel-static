@@ -22,11 +22,39 @@ export default defineComponent({
   created() {
   },
   mounted() {
+    window.WIDGET = {
+      "CONFIG": {
+        "modules": "012",
+        "background": "5",
+        "tmpColor": "FFFFFF",
+        "tmpSize": "14",
+        "cityColor": "FFFFFF",
+        "citySize": "14",
+        "aqiColor": "FFFFFF",
+        "aqiSize": "14",
+        "weatherIconSize": "22",
+        "alertIconSize": "14",
+        "padding": "10px 10px 10px 10px",
+        "shadow": "0",
+        "language": "auto",
+        "fixed": "false",
+        "vertical": "top",
+        "horizontal": "left",
+        "key": "a87472fd654f4df298cebd219e20c24a"
+      }
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0';
+    document.getElementsByTagName('head')[0].appendChild(script)
+
+
+    document.querySelector('#he-plugin-simple').removeEventListener('hover')
   },
   render() {
     const { MenuNavigation = [] } = window
     return <div class="flex flex-col lg:h-screen">
-      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  ">
+      <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  z-10">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
             <a-breadcrumb>
@@ -38,8 +66,8 @@ export default defineComponent({
 
           </div>
           <div class="flex-none flex items-center gap-2">
-            <div>
-              <div id="weather-v2-plugin-simple"></div>
+            <div class="absolute">
+              <div id="he-plugin-simple"></div>
             </div>
             <div>
               <a-button type="text" shape="round" style={{ fontSize: '20px' }} onClick={() => {
