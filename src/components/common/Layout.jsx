@@ -42,6 +42,9 @@ export default defineComponent({
           <div class="flex-none flex items-center gap-2">
             {this.$slots.tools?.()}
             <div>
+              <iframe width="200" scrolling="no" height="50" frameBorder="0" allowTransparency="true" src="https://i.tianqi.com?c=code&id=5&icon=1&site=12" style="color:#ffffff"></iframe>
+            </div>
+            <div>
               <a-button type="text" shape="round" style={{ fontSize: '20px' }} onClick={() => {
                 this.darkMode = this.darkMode === 'dark' ? 'light' : 'dark'
                 event.emit('switch-dark', this.darkMode)
