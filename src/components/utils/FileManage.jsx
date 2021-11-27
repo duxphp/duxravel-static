@@ -2,7 +2,6 @@ import {defineComponent, ref, watch} from 'vue'
 import {getUrl, request, searchQuick} from '../../utils/request'
 import {getLocalUserInfo} from '../../utils/user'
 import {formatType} from '../../utils/component'
-import './FileManage.scss'
 
 const api = {
   upload: 'upload',

@@ -10,7 +10,6 @@ import './common.css'
 
 import draggable from 'vuedraggable'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
-import * as heroicons from '@heroicons/vue/outline'
 import VueApexCharts from 'vue3-apexcharts'
 import './utils/global'
 import NodeCreate from './components/Create.js'
@@ -19,7 +18,6 @@ import Route from './components/Route.vue'
 import RichText from './components/RichText.vue'
 import Icon from './components/Icon.vue'
 import DataTable from './components/table/DataTable'
-import TreeTable from './components/table/TreeTable'
 import Tree from './components/table/Tree'
 import DataSelect from './components/form/Select'
 import DataCascader from './components/form/Cascader'
@@ -30,7 +28,6 @@ import DataEditor from './components/form/Editor'
 import DataChoice from './components/form/Choice'
 import DataColor from './components/form/Color'
 import DynamicData from './components/form/DynamicData'
-import DataEmpty from './components/common/Empty'
 import DataLayout from './components/common/Layout'
 
 import WidgetHeader from './components/widget/Header'
@@ -55,15 +52,6 @@ window.NProgress.configure({
 
 app.use(VueApexCharts)
 
-
-// 注册图标
-for (const key in heroicons) {
-  if (Object.hasOwnProperty.call(heroicons, key)) {
-    app.component(key, heroicons[key])
-  }
-}
-// 链接组件
-//app.component('n-tree-copy', NTree)
 // 链接组件
 app.component('route', Route)
 // 富文本显示组件
@@ -76,8 +64,6 @@ app.component('icon', Icon)
 app.component('app-form', FormSubmit)
 // 表格展示组件
 app.component('app-table', DataTable)
-// 树形列表
-app.component('app-tree', TreeTable)
 // 树形列表
 app.component('widget-tree', Tree)
 // 选择器
@@ -97,9 +83,6 @@ app.component('app-color', DataColor)
 
 // 动态数据
 app.component('app-dynamic-data', DynamicData)
-
-// 空组件
-app.component('app-empty', DataEmpty)
 
 
 app.component('app-layout', DataLayout)

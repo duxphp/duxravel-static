@@ -31,6 +31,32 @@
     }
 }
 
+.file-manage {
+  .manage-sidebar {
+    .add {
+      display: none;
+    }
+    &:hover {
+      .add {
+        display: block;
+      }
+    }
+    .cate-item {
+      .del {
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      &:hover {
+        .del {
+          opacity: 1;
+        }
+      }
+    }
+    
+  }
+}
+
+
 /*
 
 .n-data-table.n-data-table--bordered .n-data-table-wrapper {

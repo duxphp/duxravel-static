@@ -129,12 +129,12 @@ export default defineComponent({
                 >
                   {
                     {
-                      'upload-button': () => <div className="text-gray-600 dark:text-gray-400 absolute flex items-center justify-center w-full h-full bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 rounded cursor-pointer text-center">
+                      'upload-button': () => <div class="text-gray-600 dark:text-gray-400 absolute flex items-center justify-center w-full h-full bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 rounded cursor-pointer text-center">
                         {this.progress.status ?
                         <div class="text-xl"> {this.progress.progress}%</div> :
-                        <div className="flex items-center flex-col justify-center ">
-                          <icon-upload className="text-2xl"/>
-                          <div className="mt-2">上传图片</div>
+                        <div class="flex items-center flex-col justify-center ">
+                          <icon-upload class="text-2xl"/>
+                          <div class="mt-2">上传图片</div>
                         </div>}
                       </div>
                     }

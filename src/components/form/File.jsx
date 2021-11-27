@@ -93,8 +93,8 @@ export default defineComponent({
             <path d="M918.673 883H104.327C82.578 883 65 865.42 65 843.668V335.332C65 313.58 82.578 296 104.327 296h814.346C940.422 296 958 313.58 958 335.332v508.336C958 865.32 940.323 883 918.673 883z" fill="#FFCA28" p-id="9923"></path>
           </svg>
         </div>
-        <div className="text-gray-600 dark:text-gray-400 mt-2">请点击上传或者拖动文件到该处</div>
-        {this.type !== 'manage' ? <div className="mt-2 relative">
+        <div class="text-gray-600 dark:text-gray-400 mt-2">请点击上传或者拖动文件到该处</div>
+        {this.type !== 'manage' ? <div class="mt-2 relative">
 
           <a-upload
             action={getUrl(this.upload)}
@@ -114,7 +114,7 @@ export default defineComponent({
               }
             }
           </a-upload>
-        </div> : <div className="mt-2 relative">
+        </div> : <div class="mt-2 relative">
           <a-button
             type="primary"
             loading={this.progress.status}
@@ -180,7 +180,7 @@ export default defineComponent({
 
             </div>}
           </div>
-          : <div className="flex-grow flex justify-center items-center text-center w-full h-full opacity-0 hover:opacity-100 hover:bg-white  bg-opacity-30 dark:bg-blackgray-1 dark:bg-opacity-80 dark:hover:bg-blackgray-2 rounded cursor-pointer">
+          : <div class="flex-grow flex justify-center items-center text-center w-full h-full opacity-0 hover:opacity-100 hover:bg-white  bg-opacity-30 dark:bg-blackgray-1 dark:bg-opacity-80 dark:hover:bg-blackgray-2 rounded cursor-pointer">
             <a-upload
               action={getUrl(this.upload)}
               accept={this.accept}

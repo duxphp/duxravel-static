@@ -40,7 +40,7 @@ export default defineComponent({
               <a-dropdown>
                 {
                   {
-                    default: () => <div className="flex items-center gap-2 p-1 px-2 cursor-pointer">
+                    default: () => <div class="flex items-center gap-2 p-1 px-2 cursor-pointer">
                       <a-avatar size="28">A</a-avatar>
                       <div>姓名</div>
                     </div>,

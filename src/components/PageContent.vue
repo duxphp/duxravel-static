@@ -162,19 +162,17 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 .dialog-animation {
   transition: all 0.2s;
-  &.an-start {
-    transition: all 0s;
-    opacity: 0;
-    transform: scale3d(0.4, 0.4, 1);
-  }
 }
-.page-dialog {
-  .arco-modal-body {
-    padding: 0;
-  }
+.dialog-animation.an-start {
+  transition: all 0s;
+  opacity: 0;
+  transform: scale3d(0.4, 0.4, 1);
+}
+.page-dialog .arco-modal-body {
+  padding: 0;
 }
 </style>
 

@@ -43,7 +43,7 @@ export default defineComponent({
       {{
         default: () => <a-input modelValue={this.value} type="text" placeholder={this.placeholder}>
           {{
-            append: () => <div className="rounded-full w-6 h-6 border " style={{backgroundColor: this.value}}></div>
+            append: () => <div class="rounded-full w-6 h-6 border " style={{backgroundColor: this.value}}></div>
           }}
         </a-input>,
         content: () => <div class="flex flex-wrap pl-1 pr-0 py-0 gap-2 w-64">
