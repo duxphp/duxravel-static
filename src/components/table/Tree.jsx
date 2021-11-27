@@ -121,7 +121,6 @@ export default defineComponent({
         }).then(res => {
           this.loading = false
           this.data = this.originData = this.renderData(res.data)
-          console.log(this.url, this.data)
         }).catch(() => {
           this.loading = false
         })

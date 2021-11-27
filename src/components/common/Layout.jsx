@@ -1,7 +1,8 @@
-import {defineComponent} from 'vue'
-import {router} from "../../utils/router";
-import {getUrl} from "../../utils/request";
-import {clearUserInfo} from "../../utils/user";
+import { defineComponent } from 'vue'
+import Route from '../Route.vue'
+import { router } from "../../utils/router";
+import { getUrl } from "../../utils/request";
+import { clearUserInfo } from "../../utils/user";
 import event from '../../utils/event';
 
 export default defineComponent({
@@ -9,6 +10,9 @@ export default defineComponent({
     'title': {
       type: String,
     },
+  },
+  components: {
+    Route
   },
   data() {
     return {
@@ -18,21 +22,31 @@ export default defineComponent({
   created() {
   },
   render() {
+    const { MenuNavigation = [] } = window
     return <div class="flex flex-col lg:h-screen">
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  ">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
-            {this.title}
+            {
+              MenuNavigation.map((item, index) => <>
+                {index === 0 ? '' : ' > '}
+                {
+                  index === MenuNavigation.length - 1
+                    ? item.name
+                    : <Route href={item.url}>{item.name}</Route>
+                }
+              </>)
+            }
           </div>
           <div class="flex-none flex items-center gap-2">
             <div>
-              <a-button type="text"  shape="round" style={{fontSize: '20px'}} onClick={() => {
+              <a-button type="text" shape="round" style={{ fontSize: '20px' }} onClick={() => {
                 this.darkMode = this.darkMode === 'dark' ? 'light' : 'dark'
                 event.emit('switch-dark', this.darkMode)
               }}>
                 {{
-                 icon: () => this.darkMode === 'light' ? <icon-sun-fill/> : <icon-moon-fill/>
-                  }}
+                  icon: () => this.darkMode === 'light' ? <icon-sun-fill /> : <icon-moon-fill />
+                }}
 
               </a-button>
             </div>

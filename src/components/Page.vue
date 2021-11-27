@@ -7,8 +7,7 @@
         bg-gray-800
         dark:bg-blackgray-4
         px-2
-        flex-none flex-col
-        flex
+        flex-none flex-col flex
         border-r border-gray-800
         dark:border-blackgray-5
       "
@@ -93,7 +92,8 @@
               dark:hover:text-gray-50
               hover:text-white hover:bg-blackgray-1
               relative
-              mb-2"
+              mb-2
+            "
           >
             <span class="w-5 h-6 flex items-center justify-center">
               <svg
@@ -235,11 +235,7 @@
       </n-drawer>
     </div>
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
-    <div
-      v-if="show"
-      class="flex-grow dark:text-gray-200"
-      id="page-animation"
-    >
+    <div v-if="show" class="flex-grow dark:text-gray-200" id="page-animation">
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
   </div>
@@ -339,6 +335,23 @@ export default {
       // 颜色模式
       darkMode: localStorage.getItem("darkMode") === "dark" ? "dark" : "light",
     };
+  },
+
+  watch: {
+    currentIndexs(newval) {
+      const getSelect = (select = newval, menu = this.menu, res = []) => {
+        const item = menu[select[0]];
+        if (!item) {
+          return res;
+        }
+        res.push({ name: item.name, url: item.url });
+        if (item.menu?.length) {
+          getSelect(select.slice(1), item.menu, res);
+        }
+        return res;
+      };
+      window.MenuNavigation = getSelect()
+    },
   },
   created() {
     // 监听路由改变
