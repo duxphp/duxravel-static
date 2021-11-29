@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="flex-grow app-scrollbar">
+      <c-scrollbar class="flex-grow" trigger="hover">
         <div
           v-show="!item.hidden || currentIndexs[0] === index"
           v-for="(item, index) in menu"
@@ -56,13 +56,15 @@
               justify-center
               gap-1
               text-gray-200
+              hover:bg-gray-700
+              hover:text-white
               dark:hover:text-gray-50
-              hover:text-white hover:bg-blackgray-1
+              dark:hover:bg-blackgray-1
               relative
               mb-2
             "
             :class="{
-              'bg-blue-600 hover:bg-blue-600 text-white':
+              '!bg-blue-600 !hover:bg-blue-600 text-white':
                 currentIndexs[0] === index,
             }"
           >
@@ -74,7 +76,7 @@
             <div class="text-xs">{{ item.name }}</div>
           </div>
         </div>
-      </div>
+      </c-scrollbar>
 
       <div class="flex-none">
         <a-trigger position="rb" trigger="click" :show-arrow="false">
@@ -89,8 +91,10 @@
               justify-center
               gap-1
               text-gray-200
+              hover:bg-gray-700
               dark:hover:text-gray-50
-              hover:text-white hover:bg-blackgray-1
+              hover:text-white
+              dark:hover:bg-blackgray-1
               relative
               mb-2
             "
@@ -134,6 +138,8 @@
                 max-w-md
                 gap-4
                 p-2
+                bg-white
+                border-gray-100
                 dark:bg-blackgray-3
                 rounded
                 shadow
@@ -151,9 +157,13 @@
                   cursor-pointer
                   relative
                   rounded
-                  text-gray-200
+                  text-gray-700
+                  hover:bg-gray-100
+
+                  dark:text-gray-200
                   dark:hover:text-gray-50
-                  hover:text-white hover:bg-blackgray-1
+                  dark:hover:text-white
+                  dark:hover:bg-blackgray-1
                   p-2
                   transition
                 "

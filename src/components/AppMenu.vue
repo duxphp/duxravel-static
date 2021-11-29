@@ -1,7 +1,9 @@
 <template>
-  <div
-    class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-4 dark:border-blackgray-4 app-scrollbar"
-    :class="
+  <c-scrollbar
+      trigger="hover"
+      direction="y"
+      class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-4 dark:border-blackgray-5"
+      :class="
         menuData.menu
         ? 'w-40 bg-white shadow z-20 '
         : ''
@@ -12,16 +14,16 @@
         {{ menuData.name }}
       </div>
       <div
-        class="px-2"
-        v-for="(child, index1) in menuData.menu"
-        :key="child.name"
+          class="px-2"
+          v-for="(child, index1) in menuData.menu"
+          :key="child.name"
       >
         <span class="text-xs text-gray-400 dark:text-gray-500 py-3 px-2 block">{{
-          child.name
-        }}</span>
+            child.name
+          }}</span>
         <template v-if="child.menu">
           <div
-            class="
+              class="
               text-gray-800
               dark:text-gray-400
               hover:text-blue-600
@@ -32,24 +34,24 @@
               truncate
               cursor-pointer
             "
-            v-for="(child2, index2) in child.menu"
-            :key="child2.name"
-            :class="{
+              v-for="(child2, index2) in child.menu"
+              :key="child2.name"
+              :class="{
               'bg-blue-50 text-blue-600 dark:bg-blackgray-1 dark:text-gray-400':
                 select[1] === index1 && select[2] === index2,
             }"
-            @click="target(child2)"
+              @click="target(child2)"
           >
             {{ child2.name }}
           </div>
         </template>
       </div>
     </template>
-  </div>
+  </c-scrollbar>
 </template>
 
 <script>
-import { router } from "../utils/router";
+import {router} from "../utils/router";
 
 export default {
   name: "AppMenu",
@@ -119,11 +121,13 @@ export default {
   transition: all 0.2s;
   flex: none;
 }
+
 .menu-child-root.an-start {
   transform: translate3D(10px, 0, 0);
   opacity: 0;
   transition: all 0s;
 }
+
 .menu-child-root.hide {
   opacity: 0;
   width: 0;

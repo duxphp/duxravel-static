@@ -640,6 +640,13 @@ browserslist@^4.17.5:
     node-releases "^2.0.1"
     picocolors "^1.0.0"
 
+c-scrollbar@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/c-scrollbar/-/c-scrollbar-1.0.1.tgz#13422cfec14e3a9108bcc2f6419d6acbe082a912"
+  integrity sha512-ANMpG6ac9kIhCejlSchvN1zgaeb3HXFal4/8aEUXlLjglugt35kc9wKE5JTBn76cgZ+85ILQ8S3GQNJLKZRf4g==
+  dependencies:
+    vue "^3.0.0"
+
 call-bind@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/call-bind/-/call-bind-1.0.2.tgz#b1d4e89e688119c3c9a903ad30abb2f6a919be3c"
@@ -1378,7 +1385,7 @@ vue3-apexcharts@^1.4.1:
   resolved "https://registry.yarnpkg.com/vue3-apexcharts/-/vue3-apexcharts-1.4.1.tgz#ea561308430a1c5213b7f17c44ba3c845f6c490d"
   integrity sha512-96qP8JDqB9vwU7bkG5nVU+E0UGQn7yYQVqUUCLQMYWDuQyu2vE77H/UFZ1yI+hwzlSTBKT9BqnNG8JsFegB3eg==
 
-vue@^3.2.23:
+vue@^3.0.0, vue@^3.2.23:
   version "3.2.23"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.23.tgz#fe17e4a98bee1afe2aed351a0a80e052728f9ce2"
   integrity sha512-MGp9JZC37lzGhwSu6c1tQxrQbXbw7XKFqtYh7SFwNrNK899FPxGAHwSHMZijMChTSC3uZrD2BGO/3EHOgMJ0cw==

@@ -194,6 +194,11 @@
 
 */
 
+.overlay {
+    overflow:auto;
+    overflow: overlay;
+}
+
 .app-scrollbar:hover::-webkit-scrollbar-thumb {
     @apply bg-opacity-30;
 }

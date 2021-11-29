@@ -10,7 +10,6 @@ export default defineComponent({
     'max': Number
   },
   data() {
-    console.log(this.$props)
     const list = this.value || []
     if (!list.length) {
       this.onCreate ? list.push(this.onCreate(0)) : list.push({})

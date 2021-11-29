@@ -125,7 +125,6 @@ export default defineComponent({
         }
       } else {
         // 单选直接返回
-        console.log('dd', props.callback)
         props.callback?.(item)
         showModal.value = false
       }
@@ -363,7 +362,7 @@ export default defineComponent({
           </div>
         </div>
         {this.isMultiple && <div class="arco-modal-footer flex items-center gap-4 flex-row">
-          <div class="app-scrollbar flex-grow overflow-x-auto">
+          <c-scrollbar class="flex-grow" trigger="hover" direction="x">
             <div class="flex gap-2 flex-nowrap flex-row flex-shrink-0">
               {
                 this.select.map(item => <div class="relative flex-shrink-0" key={item.file_id} onClick={() => this.selectItem(item)}>
@@ -374,7 +373,7 @@ export default defineComponent({
                 </div>)
               }
             </div>
-          </div>
+          </c-scrollbar>
 
 
           <div class="flex-none justify-end flex gap-2">

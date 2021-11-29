@@ -2,6 +2,7 @@ import * as Vue from 'vue'
 import App from './App.vue'
 import ArcoVue from '@arco-design/web-vue'
 import NProgress from 'nprogress'
+import CScrollbar from 'c-scrollbar'
 
 import 'virtual:windi.css'
 import '@arco-design/web-vue/dist/arco.css'
@@ -41,6 +42,7 @@ const app = window.vueApp = Vue.createApp(App)
 
 app.use(ArcoVue)
 app.use(ArcoVueIcon)
+app.use(CScrollbar)
 
 window.NProgress.configure({
   easing: 'ease',

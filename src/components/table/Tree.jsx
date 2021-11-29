@@ -207,8 +207,11 @@ export default defineComponent({
         }}
         class="mb-2 flex-none"
       />}
-      {this.data.length > 0 ? <a-tree
-        class="app-tree flex-grow overflow-y-auto overflow-x-hidden app-scrollbar"
+      {this.data.length > 0 ? <c-scrollbar
+        direction="y"
+        class="flex-grow"
+      ><a-tree
+        class="app-tree"
         data={this.data}
         showLine={true}
         blockNode={true}
@@ -243,7 +246,7 @@ export default defineComponent({
 
           }
         }
-      </a-tree> : <a-empty/>
+      </a-tree></c-scrollbar> : <a-empty/>
       }
     </a-spin>
   }

@@ -191,18 +191,12 @@ export default defineComponent({
     }
 
     // 排序
-    const sorter = ({columnKey, sorter, order}) => {
-
-      console.log('sort1', columnKey)
-      console.log('sort2', sorter)
-      console.log('sort3', order)
-      if (sorter === true) {
-        if (!order) {
-          sort.value = {}
-        } else {
-          sort.value = {}
-          sort.value[columnKey] = order === 'ascend' ? 'asc' : 'desc'
-        }
+    const sorter = (key, order) => {
+      if (!order) {
+        sort.value = {}
+      } else {
+        sort.value = {}
+        sort.value[key] = order === 'ascend' ? 'asc' : 'desc'
       }
       getList(props.filter)
     }
@@ -210,6 +204,7 @@ export default defineComponent({
     const editStatus = ref({
       status: false
     })
+
     // 默认修改数据方法
     const editValue = (url = this.editUrl, data, index) => {
       if (editStatus.value.status) {
@@ -234,18 +229,12 @@ export default defineComponent({
 
     const colSortable = {
       sortDirections: ['ascend', 'descend'],
-      sorter: (xxx) => {
-        console.log('ddd', xxx)
-      }
     }
 
     const columns = props.columns.map(item => vExec.call({colSortable}, item, {editValue, editStatus}))
 
-    // const columnsRender = renderColumns(columns)
-
     return {
       sorter,
-      colSortable,
       pagination,
       childData,
       data,
@@ -274,12 +263,12 @@ export default defineComponent({
           selectedRowKeys: this.checkedRowKeys,
           showCheckedAll: true
         } : false}
-        // onSorterChange={this.sorter}
+        onSorterChange={this.sorter}
         onSelectionChange={value => {
           this.checkedRowKeys = value
         }}
       >
-        
+
       </a-table>
       <div class="absolute bottom-0 z-10 ">
         {this.$slots.footer?.(this.childData)}

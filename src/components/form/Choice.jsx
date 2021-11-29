@@ -158,7 +158,6 @@ export default defineComponent({
           const list = this.value.map(item => {
             return {...item, ...tmp[item[this.key]] || {}}
           })
-          console.log('init2', list)
 
           this.setData(list, true)
           this.loading = false

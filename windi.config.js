@@ -5,7 +5,8 @@ import {defineConfig} from 'windicss/helpers'
 const safelist = []
 
 const colors = Object.fromEntries(Object.keys(light).map(key => {
-  // 树形组件
+  // 安全 tree 色彩
+  safelist.push(`text-${key}-400`)
   safelist.push(`bg-${key}-400`)
   safelist.push(`border-${key}-500`)
 
@@ -15,6 +16,8 @@ const colors = Object.fromEntries(Object.keys(light).map(key => {
   }))]
 }))
 
+// 筛选器样式
+safelist.push('my-2 mt-2 mb-2 mx-2')
 
 export default defineConfig({
   darkMode: 'class', // or 'media' or 'class'

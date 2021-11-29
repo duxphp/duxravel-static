@@ -12,6 +12,7 @@
     "@tinymce/tinymce-vue": "^4.0.5",
     "apexcharts": "^3.30.0",
     "axios": "^0.24.0",
+    "c-scrollbar": "^1.0.1",
     "md5": "^2.3.0",
     "nprogress": "^0.2.0",
     "qs": "^6.10.1",

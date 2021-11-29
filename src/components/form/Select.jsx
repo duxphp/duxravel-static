@@ -45,7 +45,6 @@ export default defineComponent({
           }
         })
 
-        console.log(this.nParams.options)
         this.loading = false
       }).catch(() => {
         this.loading = false

@@ -1,9 +1,9 @@
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 import Route from '../Route.vue'
-import { router } from "../../utils/router";
-import { getUrl } from "../../utils/request";
-import { clearUserInfo } from "../../utils/user";
-import event, { menuNavigation } from '../../utils/event';
+import {router} from "../../utils/router";
+import {getUrl, request} from "../../utils/request";
+import {clearUserInfo} from "../../utils/user";
+import event, {menuNavigation} from '../../utils/event';
 
 export default defineComponent({
   props: {
@@ -17,10 +17,25 @@ export default defineComponent({
   data() {
     return {
       darkMode: localStorage.getItem("darkMode") === "dark" ? "dark" : "light",
-      navList: []
+      navList: [],
+      weather: {}
     }
   },
   created() {
+    let weather = localStorage.getItem('weather')
+    weather = weather ? JSON.parse(weather) : {}
+    if (weather.time + 10800000 > new Date().getTime()) {
+      this.weather = weather.data
+    } else {
+      request({
+        url: "map/weather",
+        errorMsg: false,
+      }).then(res => {
+
+        localStorage.setItem('weather', JSON.stringify({time: new Date().getTime(), data: res}))
+        this.weather = res
+      })
+    }
   },
   mounted() {
     menuNavigation.on(data => {
@@ -28,7 +43,7 @@ export default defineComponent({
     })
   },
   render() {
-    const { navList } = this
+    const {navList} = this
     return <div class="flex flex-col lg:h-screen">
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  z-10">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
@@ -41,16 +56,16 @@ export default defineComponent({
           </div>
           <div class="flex-none flex items-center gap-2">
             {this.$slots.tools?.()}
+            {this.weather.city && <div>
+              <a href="http://www.weather.com.cn/" target="_blank" class="dark:hover:bg-blackgray-2 hover:bg-gray-100 p-2 rounded">{this.weather.city} {this.weather.weather} {this.weather.temperature}°</a>
+            </div>}
             <div>
-              <iframe width="200" scrolling="no" height="50" frameBorder="0" allowTransparency="true" src="https://i.tianqi.com?c=code&id=5&icon=1&site=12" style="color:#ffffff"></iframe>
-            </div>
-            <div>
-              <a-button type="text" shape="round" style={{ fontSize: '20px' }} onClick={() => {
+              <a-button type="text" shape="round" style={{fontSize: '20px'}} onClick={() => {
                 this.darkMode = this.darkMode === 'dark' ? 'light' : 'dark'
                 event.emit('switch-dark', this.darkMode)
               }}>
                 {{
-                  icon: () => this.darkMode === 'light' ? <icon-sun-fill /> : <icon-moon-fill />
+                  icon: () => this.darkMode === 'light' ? <icon-sun-fill/> : <icon-moon-fill/>
                 }}
 
               </a-button>
@@ -59,7 +74,7 @@ export default defineComponent({
               <a-dropdown>
                 {
                   {
-                    default: () => <div class="flex items-center gap-2 p-1 px-2 cursor-pointer">
+                    default: () => <div class="flex items-center gap-2 px-2 cursor-pointer">
                       <a-avatar size="28">A</a-avatar>
                       <div>姓名</div>
                     </div>,
@@ -87,7 +102,7 @@ export default defineComponent({
           </div>
         </div>}
       </div>
-      <div class="flex-grow bg-gray-100 dark:bg-blackgray-2 overflow-auto app-scrollbar">
+      <div class="flex-grow bg-gray-100 dark:bg-blackgray-2 overflow-y-auto app-scrollbar">
         {this.$slots.default?.()}
       </div>
     </div>
