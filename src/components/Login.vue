@@ -1,129 +1,92 @@
 <template>
-  <div v-if="data.show" class="absolute inset-0 bg-cover bg-center" style="z-index: 100 " :style="{ 'backgroundImage':'url('+ config.image +')' }">
+  <div v-if="data.show" class="absolute inset-0 bg-cover bg-center overflow-y-auto" style="z-index: 100 " :style="{ 'backgroundImage':'url('+ config.background +')' }">
 
-    <div class="max-w-8xl mx-auto min-h-screen px-4 flex flex-col">
-      <div class="flex-none flex py-4 text-white items-center">
-          <div class="flex-grow  flex gap-4 items-center">
-            <div class="">
-              <img :src="config.logo" class="h-12">
-            </div>
-            <div class="flex flex-col gap-1">
-              <div class="text-2xl">{{config.title}}</div>
-              <div class="opacity-50">
-                {{config.desc}}
-              </div>
+    <div class="max-w-7xl  mx-auto  px-4 md:h-screen md:flex md:flex-col">
+      <div class="flex-none md:flex py-4 text-gray-100  dark:text-gray-200 items-center ">
+        <div class="flex-grow  flex gap-4 items-center justify-center md:justify-start my-4 md:my-0">
+          <div class="">
+            <img :src="config.logo" class="h-12">
+          </div>
+          <div class="flex flex-col gap-1">
+            <div class="text-2xl">{{ config.title }}</div>
+            <div v-if="config.desc" class="opacity-50">
+              {{ config.desc }}
             </div>
           </div>
-        <div class="flex-none flex items-center gap-4 text-right">
+        </div>
+        <div class="flex-none hidden md:flex items-center gap-4 text-right" v-if="nowDate">
           <div class="flex flex-col gap-1 flex-grow">
             <div>{{ nowDate }}</div>
-            <div>长沙 晴天 38°</div>
+            <div v-if="weatherData">{{ weatherData.city }} {{ weatherData.weather }} {{ weatherData.temperature }}°</div>
+            <div v-else>获取天气中...</div>
           </div>
           <div class="flex-none text-4xl">
-            {{nowTime}}
+            {{ nowTime }}
           </div>
 
         </div>
       </div>
 
-      <div class="flex-grow h-10 flex items-center justify-center">
+      <div class="flex-grow md:flex items-center justify-center">
 
-        <div class="max-w-5xl w-full flex bg-white dark:bg-blackgray-5 shadow rounded">
-          <div class="w-1/2 bg-black">
-2
+        <div class="max-w-4xl w-full flex flex-col md:flex-row bg-white dark:bg-blackgray-5 shadow rounded">
+          <div class="md:w-1/2 bg-black hidden md:block">
+            <a-carousel class="w-full h-full"
+                        :auto-play="true"
+                        indicator-type="dot"
+                        show-arrow="hover"
+            >
+              <a-carousel-item v-for="image in config.side">
+                <img
+                    :src="image"
+                    :style="{
+                      width: '100%',
+                      height: '100%',
+                    }"
+                />
+              </a-carousel-item>
+            </a-carousel>
           </div>
-          <div class="w-1/2 flex justify-center  p-4" style="height: 600px; background-repeat: repeat-x; background-position: center bottom" :style="{ 'backgroundImage':'url('+ config.foot +')' }">
+          <div class="md:w-1/2 flex flex-col justify-center items-center  p-4 pt-0" style="height: 600px; background-repeat: repeat-x; background-position: center bottom" :style="{ 'backgroundImage':'url('+ config.foot +')' }">
 
-            <div class=" flex flex-col max-w-sm w-full">
-              <div class="text-blue-600 text-2xl text-center mt-20 mb-10">平台登录</div>
-              <a-form class="flex flex-col gap-6">
+            <div class=" flex-grow flex flex-col max-w-xs w-full">
+              <div class="text-center mt-20 mb-10">
+                <div class="text-blue-600 text-2xl ">平台登录</div>
+              </div>
+
+              <form class="flex flex-col gap-6" @submit="login">
+                <input type="hidden" name="remember" value="true"/>
                 <div>
-                  <a-input placeholder="请输入登录账号" size="large" :readonly="readonly">
+                  <a-input placeholder="请输入登录账号" size="large" :readonly="readonly" @update:modelValue="input('username', $event)">
                     <template #prefix>
-                      <icon-user />
+                      <icon-user/>
                     </template>
                   </a-input>
                 </div>
                 <div>
-                  <a-input-password placeholder="请输入登录密码" size="large" :readonly="readonly">
+                  <a-input-password placeholder="请输入登录密码" size="large" :readonly="readonly" @update:modelValue="input('password', $event)">
                     <template #prefix>
-                      <icon-lock />
+                      <icon-lock/>
                     </template>
                   </a-input-password>
                 </div>
                 <div>
-                  <a-button type="primary" size="large" long>登录</a-button>
+                  <a-button html-type="submit"
+                            type="primary"
+                            size="large"
+                            :loading="data.status"
+                            long>登录
+                  </a-button>
                 </div>
-              </a-form>
+              </form>
+            </div>
+
+            <div class="flex-none text-center dark:text-white dark:opacity-30 text-gray-400">
+              {{ config.contact }}
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
-
-
-
-    <div
-        class="
-        hidden
-        min-h-screen
-        flex
-        items-center
-        justify-center
-        bg-gray-50
-        dark:bg-gray-900
-        py-12
-        px-4
-        sm:px-6
-        lg:px-8
-      "
-    >
-      <div class="max-w-md w-full space-y-8">
-        <div>
-          <div class="mx-auto h-16 w-16 text-blue-900">
-            <img class="w-16 h-16" :src="appInfo.logo || data.logo"/>
-          </div>
-          <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-300">
-            {{ appInfo.name }}
-          </h2>
-          <p class="mt-2 text-center text-sm ">
-            <span class="text-blue-900  dark:text-gray-500"> 欢迎使用后台管理系统 </span>
-          </p>
-        </div>
-        <form class="mt-8 space-y-6" @submit="login">
-          <input type="hidden" name="remember" value="true"/>
-          <div class="rounded-md flex flex-col gap-2">
-            <div>
-              <a-input
-                  type="input"
-                  size="large"
-                  placeholder="用户名"
-                  @update:modelValue="input('username', $event)"
-              />
-            </div>
-            <div>
-              <a-input
-                  type="password"
-                  size="large"
-                  placeholder="密码"
-                  @update:modelValue="input('password', $event)"
-              />
-            </div>
-          </div>
-
-          <div>
-            <a-button
-                html-type="submit"
-                type="primary"
-                size="large"
-                :loading="data.status"
-                long
-            >
-              登录
-            </a-button>
-          </div>
-        </form>
       </div>
     </div>
   </div>
@@ -136,6 +99,7 @@ import event from "../utils/event";
 import {isLogin, setLocalUserInfo} from "../utils/user";
 import logo from "../assets/images/logo.svg";
 import loginFoot from "../assets/images/login-foot.png";
+import {weather} from "../utils/util";
 
 
 export default {
@@ -162,39 +126,48 @@ export default {
       }
     })
 
-    const nowDate = ref('');
-    const nowTime = ref('');
+    const nowDate = ref('')
+    const nowTime = ref('')
+    const weatherData = ref({})
+
+    weather((res) => {
+      weatherData.value = res
+    })
 
     return {
       data,
       nowDate,
       nowTime,
-      config:  {
+      config: {
         logo: window.appConfig.login.logo || logo,
-        image: window.appConfig.login.image || `${window.location.origin}/images/login-bg.png`,
+        background: window.appConfig.login.background || `${window.location.origin}/images/login-bg.png`,
         title: window.appConfig.login.title || 'DuxRavel',
         desc: window.appConfig.login.desc || '',
+        contact: window.appConfig.login.contact || '',
+        side: window.appConfig.login.side || [
+          `${window.location.origin}/images/login-side.png`
+        ],
         foot: loginFoot
       },
       readonly: ref(true),
-      appInfo: window.appConfig,
+      weatherData,
       formatDate() {
         let date = new Date();
-        let year = date.getFullYear(); // 年
-        let month = date.getMonth() + 1; // 月
-        month = month < 10 ? "0" + month : month; // 如果只有一位，则前面补零
-        let day = date.getDate(); // 日
-        day = day < 10 ? "0" + day : day; // 如果只有一位，则前面补零
-        let week = date.getDay(); // 星期
-        let weekArr = [ "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ];
-        let hour = date.getHours(); // 时
-        hour = hour < 10 ? "0" + hour : hour; // 如果只有一位，则前面补零
-        let minute = date.getMinutes(); // 分
-        minute = minute < 10 ? "0" + minute : minute; // 如果只有一位，则前面补零
-        let second = date.getSeconds(); // 秒
-        second = second < 10 ? "0" + second : second; // 如果只有一位，则前面补零
-        nowDate.value = `${year} 年 ${month} 月 ${day} 日    ${weekArr[week]}`;
-        nowTime.value = `${hour}:${minute}`;
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        month = month < 10 ? "0" + month : month
+        let day = date.getDate()
+        day = day < 10 ? "0" + day : day
+        let week = date.getDay()
+        let weekArr = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
+        let hour = date.getHours()
+        hour = hour < 10 ? "0" + hour : hour
+        let minute = date.getMinutes()
+        minute = minute < 10 ? "0" + minute : minute
+        let second = date.getSeconds()
+        second = second < 10 ? "0" + second : second
+        nowDate.value = `${year} 年 ${month} 月 ${day} 日    ${weekArr[week]}`
+        nowTime.value = `${hour}:${minute}`
       },
       currentTime() {
         setInterval(this.formatDate, 500);

@@ -4,6 +4,7 @@ import {router} from "../../utils/router";
 import {getUrl, request} from "../../utils/request";
 import {clearUserInfo} from "../../utils/user";
 import event, {menuNavigation} from '../../utils/event';
+import {weather} from "../../utils/util";
 
 export default defineComponent({
   props: {
@@ -22,20 +23,9 @@ export default defineComponent({
     }
   },
   created() {
-    let weather = localStorage.getItem('weather')
-    weather = weather ? JSON.parse(weather) : {}
-    if (weather.time + 10800000 > new Date().getTime()) {
-      this.weather = weather.data
-    } else {
-      request({
-        url: "map/weather",
-        errorMsg: false,
-      }).then(res => {
-
-        localStorage.setItem('weather', JSON.stringify({time: new Date().getTime(), data: res}))
-        this.weather = res
-      })
-    }
+    weather((res) => {
+      this.weather = res
+    })
   },
   mounted() {
     menuNavigation.on(data => {

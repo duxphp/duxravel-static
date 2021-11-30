@@ -3,10 +3,10 @@
     <div
       class="
         text-white
-        w-16
+        w-17
         bg-gray-800
         dark:bg-blackgray-4
-        px-2
+        px-1.5
         flex-none flex-col flex
         border-r border-gray-800
         dark:border-blackgray-5
@@ -64,7 +64,7 @@
               mb-2
             "
             :class="{
-              '!bg-blue-600 !hover:bg-blue-600 text-white':
+              '!bg-blue-600 !hover:bg-blue-600 !text-white':
                 currentIndexs[0] === index,
             }"
           >
@@ -354,7 +354,7 @@ export default {
         if (!item) {
           return res;
         }
-        res.push({ name: item.name, url: item.url });
+        res.push({ name: item.title || item.name, url: item.url });
         if (item.menu?.length) {
           getSelect(select.slice(1), item.menu, res);
         }

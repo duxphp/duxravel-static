@@ -1,5 +1,6 @@
 import {Processor} from "windicss/lib";
 import {HTMLParser} from "windicss/utils/parser";
+import {request} from "./request";
 
 
 /**
@@ -50,7 +51,24 @@ const generateStyles = html => {
   return styles;
 }
 
+const weather = (callback) => {
+  let res = localStorage.getItem('weather')
+  res = res ? JSON.parse(res) : {}
+  if (res.time + 10800000 > new Date().getTime()) {
+    callback(res.data)
+  } else {
+    request({
+      url: "map/weather",
+      errorMsg: false,
+    }).then(res => {
+      localStorage.setItem('weather', JSON.stringify({time: new Date().getTime(), data: res}))
+      callback(res)
+    })
+  }
+}
+
 export {
   generateStyles,
-  asyncTimeOut
+  asyncTimeOut,
+  weather
 }

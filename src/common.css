@@ -44,6 +44,18 @@
 }
 
 
+.app-tab-average {
+    .arco-tabs-nav-tab {
+        @apply flex-grow w-full;
+    }
+    .arco-tabs-nav-tab-list {
+        @apply flex-grow flex;
+    }
+    .arco-tabs-tab {
+        @apply flex-1 flex justify-center;
+    }
+}
+
 /*
 
 .n-data-table.n-data-table--bordered .n-data-table-wrapper {

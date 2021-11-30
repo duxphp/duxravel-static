@@ -20,6 +20,10 @@ export default defineComponent({
     sortUrl: {
       type: String
     },
+    filter: {
+      type: Object,
+      default: () => ({})
+    },
     refreshUrls: {
       type: Array,
       default: () => []
@@ -31,6 +35,14 @@ export default defineComponent({
     value: {
       type: [String, Number],
       default: null
+    }
+  },
+  watch: {
+    filter() {
+        this.getList({
+          params: this.filter,
+          agree: 'routerPush'
+        })
     }
   },
   data() {
@@ -46,13 +58,13 @@ export default defineComponent({
     }
   },
   created() {
-    this.getList({
-      agree: 'routerPush'
-    })
-    // 监听关闭弹窗的时候刷新路由
-    event.add('router-dialog-close', this.closeEvent)
-    // 监听关闭ajax确认框时候的刷新数据
-    event.add('router-ajax-finish', this.ajaxEvent)
+      this.getList({
+        agree: 'routerPush'
+      })
+      // 监听关闭弹窗的时候刷新路由
+      event.add('router-dialog-close', this.closeEvent)
+      // 监听关闭ajax确认框时候的刷新数据
+      event.add('router-ajax-finish', this.ajaxEvent)
 
   },
   beforeUnmount() {
@@ -129,6 +141,7 @@ export default defineComponent({
     closeEvent(data) {
       if (this.refreshUrls.length === 0 || this.refreshUrls.some(item => ~data.item.url.indexOf(item))) {
         this.getList({
+          params: this.filter,
           agree: 'routerPush'
         })
       }
@@ -136,6 +149,7 @@ export default defineComponent({
     ajaxEvent(data) {
       if (this.refreshUrls.length === 0 || this.refreshUrls.some(item => ~data.url.indexOf(item))) {
         this.getList({
+          params: this.filter,
           agree: 'routerPush'
         })
       }
@@ -210,43 +224,45 @@ export default defineComponent({
       {this.data.length > 0 ? <c-scrollbar
         direction="y"
         class="flex-grow"
-      ><a-tree
-        class="app-tree"
-        data={this.data}
-        showLine={true}
-        blockNode={true}
-        draggable={this.draggable}
-        onDrop={this.handleDrop}
-        selectedKeys={this.value ? [this.value] : null}
-        onSelect={(value) => {
-          this.$emit('update:value', this.value === value[0] ? null : value[0])
-        }}
       >
-        {
+        <a-tree
+          class="app-tree"
+          data={this.data}
+          showLine={true}
+          blockNode={true}
+          draggable={this.draggable}
+          onDrop={this.handleDrop}
+          selectedKeys={this.value ? [this.value] : null}
+          onSelect={(value) => {
+            this.$emit('update:value', this.value === value[0] ? null : value[0])
+          }}
+        >
           {
-            title: (item) => <a-dropdown
-              trigger="contextMenu"
-              alignPoint
-              class="w-32"
-            >
-              {{
-                default: () => {
-                  const bgColor = "bg-"+ color[item.level] +"-400"
-                  const borderColor = "border-"+ color[item.level] +"-500"
-                  return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                    <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
-                    {item.title}
-                </div>
-                },
-                content: () => <div>
-                  {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
-                </div>
-              }}
-            </a-dropdown>
+            {
+              title: (item) => <a-dropdown
+                trigger="contextMenu"
+                alignPoint
+                class="w-32"
+              >
+                {{
+                  default: () => {
+                    const bgColor = "bg-" + color[item.level] + "-400"
+                    const borderColor = "border-" + color[item.level] + "-500"
+                    return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
+                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
+                      {item.title}
+                    </div>
+                  },
+                  content: () => <div>
+                    {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
+                  </div>
+                }}
+              </a-dropdown>
 
+            }
           }
-        }
-      </a-tree></c-scrollbar> : <a-empty/>
+        </a-tree>
+      </c-scrollbar> : <a-empty/>
       }
     </a-spin>
   }
