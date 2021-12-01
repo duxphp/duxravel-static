@@ -30,6 +30,7 @@ import DataChoice from './components/form/Choice'
 import DataColor from './components/form/Color'
 import DynamicData from './components/form/DynamicData'
 import DataLayout from './components/common/Layout'
+import DataDialog from './components/common/Dialog'
 
 import WidgetHeader from './components/widget/Header'
 
@@ -88,6 +89,7 @@ app.component('app-dynamic-data', DynamicData)
 
 
 app.component('app-layout', DataLayout)
+app.component('app-dialog', DataDialog)
 
 // 头部件
 app.component('widget-header', WidgetHeader)
