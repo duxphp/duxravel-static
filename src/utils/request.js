@@ -86,6 +86,7 @@ export const request = window.ajax = async params => {
     }
   }).catch(async (error) => {
     const result = error.response
+
     const xLocation = result.headers['x-Location']
     if (xLocation) {
       router(xLocation)
