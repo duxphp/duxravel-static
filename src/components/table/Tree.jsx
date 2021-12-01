@@ -1,7 +1,7 @@
-import {h, defineComponent, resolveDynamicComponent, watch} from 'vue'
-import {request, searchQuick} from '../../utils/request'
-import {router} from '../../utils/router'
-import {vExec} from '../Create'
+import { h, defineComponent, resolveDynamicComponent, watch } from 'vue'
+import { request, searchQuick } from '../../utils/request'
+import { router } from '../../utils/router'
+import { vExec } from '../Create'
 import event from '../../utils/event'
 
 export default defineComponent({
@@ -60,13 +60,13 @@ export default defineComponent({
     }
   },
   created() {
-      this.getList({
-        agree: 'routerPush'
-      })
-      // 监听关闭弹窗的时候刷新路由
-      event.add('router-dialog-close', this.closeEvent)
-      // 监听关闭ajax确认框时候的刷新数据
-      event.add('router-ajax-finish', this.ajaxEvent)
+    this.getList({
+      agree: 'routerPush'
+    })
+    // 监听关闭弹窗的时候刷新路由
+    event.add('router-dialog-close', this.closeEvent)
+    // 监听关闭ajax确认框时候的刷新数据
+    event.add('router-ajax-finish', this.ajaxEvent)
 
   },
   beforeUnmount() {
@@ -106,7 +106,7 @@ export default defineComponent({
         const result = [];
         data.forEach(item => {
           if (item.title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-            result.push({...item});
+            result.push({ ...item });
           } else if (item.children) {
             const filterData = loop(item.children);
             if (filterData.length) {
@@ -124,7 +124,7 @@ export default defineComponent({
         this.loading = false
       })
     },
-    getList({params, agree}) {
+    getList({ params, agree }) {
       if (agree === 'routerPush') {
         this.loading = true
         this.data = []
@@ -156,7 +156,7 @@ export default defineComponent({
         })
       }
     },
-    handleDrop({dragNode, dropNode, dropPosition}) {
+    handleDrop({ dragNode, dropNode, dropPosition }) {
 
       const sort = {
         id: dragNode.key,
@@ -185,6 +185,8 @@ export default defineComponent({
         loop(data, dropNode.key, (item) => {
           item.children = item.children || [];
           item.children.push(dragNode);
+          // 父级
+          sort.parent = item.key
         })
       } else {
         loop(data, dropNode.key, (_, index, arr, parent) => {
@@ -193,7 +195,7 @@ export default defineComponent({
           // 上一个
           sort.before = parent ? parent.children?.[nodeIndex - 1]?.key || null : null
           // 父级
-          sort.parent = parent ? parent.key || null : null
+          sort.parent = parent ? parent.key : null
           // 改变等级
           dragNode.level = parent ? parent.level + 1 : 0
 
@@ -252,8 +254,8 @@ export default defineComponent({
                     const bgColor = "bg-" + color[item.level] + "-400"
                     const borderColor = "border-" + color[item.level] + "-500"
                     return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
-                       {this.$slots.label ? this.$slots.label(item) : item.title}
+                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
+                      {this.$slots.label ? this.$slots.label(item) : item.title}
                     </div>
                   },
                   content: () => <div>
@@ -265,7 +267,7 @@ export default defineComponent({
             }
           }
         </a-tree>
-      </c-scrollbar> : <a-empty/>
+      </c-scrollbar> : <a-empty />
       }
     </a-spin>
   }
