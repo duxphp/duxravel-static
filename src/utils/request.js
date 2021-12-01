@@ -14,7 +14,7 @@ export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `${import.meta.env.DEV ? 'http://highway.test' : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
+  return `${import.meta.env.DEV ? 'http://a.dezhi-highway.com' : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
 }
 
 /**
@@ -75,6 +75,11 @@ export const request = window.ajax = async params => {
       setLocalUserInfo({token})
     }
 
+    const xLocation = response.headers['x-location']
+    if (xLocation) {
+      router(xLocation)
+    }
+
     result.data = response.data
 
     if (isJson) {
@@ -86,11 +91,6 @@ export const request = window.ajax = async params => {
     }
   }).catch(async (error) => {
     const result = error.response
-
-    const xLocation = result.headers['x-Location']
-    if (xLocation) {
-      router(xLocation)
-    }
     if (result.code === 401) {
       // token失效 登录重新获取token
       clearUserInfo()
