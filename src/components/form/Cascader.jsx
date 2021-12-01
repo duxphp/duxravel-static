@@ -25,62 +25,13 @@ export default defineComponent({
         url: this.dataUrl,
         method: 'get',
       }).then(res => {
-        this.nParams.options = this.formatOptions(res)
-        if (this.value !== null) {
-          this.modelValue = this.value.toString()
-        }
+        this.nParams.options = res
 
       })
-    } else {
-      this.nParams.options = this.formatOptions(this.nParams.options)
-      if (this.value !== null) {
-        this.modelValue = this.value.toString()
-      }
     }
   },
   methods: {
-    formatOptions(data) {
-      let format = (data) => {
-        return data.map((item) => {
-          let tmp = {
-            label: item.label.toString(),
-            value: item.value.toString(),
-          }
-          if (item.children && item.children.length) {
-            tmp.children = format(item.children)
-          }
-          return tmp;
-        })
-      }
-      return format(data)
-    },
-
-    formatData(value) {
-      let labelPath = []
-
-      function getNodeRoute(tree) {
-        for (let index = 0; index < tree.length; index++) {
-          if (tree[index].children) {
-            let endRecursiveLoop = getNodeRoute(tree[index].children)
-            if (endRecursiveLoop) {
-              labelPath.push(tree[index].label)
-              return true
-            }
-          }
-          if (tree[index].value == value) {
-            labelPath.push(tree[index].label)
-            return true
-          }
-        }
-      }
-
-      getNodeRoute(this.nParams.options)
-      return {
-        label: labelPath.reverse().join(' / '),
-      }
-    },
     updateValue(value) {
-      this.modelVale = value
       this.$emit('update:value', value)
     },
   },
@@ -88,7 +39,7 @@ export default defineComponent({
     return <a-cascader
       {...vExec.call(this, this.nParams)}
       formatLabel={this.formatLabel}
-      modelValue={this.modelValue}
+      modelValue={this.value}
       onChange={this.updateValue}
     />
   }

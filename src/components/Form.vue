@@ -1,5 +1,5 @@
 <template>
-  <a-form ref="formRef" @submit="submit" :rules="rules" :layout="layout" label-align="left">
+  <a-form ref="formRef" @submit="submit" @submit-failed="submitError" :model="value" @submit-success="submitSuccess" :rules="rules" :layout="layout" label-align="left">
     <slot :value="value" :submitStatus="submitStatus"></slot>
   </a-form>
 </template>
@@ -37,8 +37,13 @@ export default defineComponent({
     const rules = ref({});
     const that = getCurrentInstance();
     const submitStatus = ref(false);
-    const submit = (e) => {
-      //e.preventDefault();
+    const submitSuccess = () => {
+      submitStatus.value = false
+    }
+    const submitError = () => {
+      submitStatus.value = true
+    }
+    const submit = (data, e) => {
       if (submitStatus.value) {
         return false;
       }
@@ -59,8 +64,7 @@ export default defineComponent({
         submitStatus.value = false;
       }).catch((err) => {
         submitStatus.value = false;
-
-        if (err.code === 422) {
+        if (err.status === 422) {
           const data = err.data.error
           const fields = {};
           for (const key in data) {
@@ -79,7 +83,10 @@ export default defineComponent({
       formRef,
       rules,
       submit,
+      submitError,
+      submitSuccess,
       submitStatus,
+
     };
   },
 });

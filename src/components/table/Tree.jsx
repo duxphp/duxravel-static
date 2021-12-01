@@ -38,11 +38,13 @@ export default defineComponent({
     }
   },
   watch: {
-    filter() {
+    filter(val, oldVal) {
+      if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
         this.getList({
           params: this.filter,
           agree: 'routerPush'
         })
+      }
     }
   },
   data() {
@@ -122,10 +124,10 @@ export default defineComponent({
         this.loading = false
       })
     },
-
     getList({params, agree}) {
       if (agree === 'routerPush') {
         this.loading = true
+        this.data = []
         searchQuick({
           url: this.url,
           method: 'get',
@@ -250,7 +252,7 @@ export default defineComponent({
                     const borderColor = "border-" + color[item.level] + "-500"
                     return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
                       <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
-                      {item.title}
+                       {this.$slots.label ? this.$slots.label(item) : item.title}
                     </div>
                   },
                   content: () => <div>
