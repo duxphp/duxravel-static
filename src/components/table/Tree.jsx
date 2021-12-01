@@ -222,6 +222,7 @@ export default defineComponent({
           this.searchData(value)
         }}
         class="mb-2 flex-none"
+        placeholder="搜索"
       />}
       {this.data.length > 0 ? <c-scrollbar
         direction="y"
