@@ -218,7 +218,8 @@ export default defineComponent({
   render() {
 
     const color = this.iconColor
-    return <a-spin class="block flex flex-col" loading={this.loading} tip="加载节点中...">
+    return <a-spin class="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
+      <div class="flex flex-col h-full">
       {this.search && <a-input-search
         onInput={(value) => {
           this.searchData(value)
@@ -228,7 +229,7 @@ export default defineComponent({
       />}
       {this.data.length > 0 ? <c-scrollbar
         direction="y"
-        class="flex-grow"
+        class="flex-grow h-10"
       >
         <a-tree
           class="app-tree"
@@ -269,6 +270,7 @@ export default defineComponent({
         </a-tree>
       </c-scrollbar> : <a-empty />
       }
+      </div>
     </a-spin>
   }
 })

@@ -16,12 +16,19 @@ export default defineComponent({
   },
   data() {
     return {
+      keyword: '',
       loading: false
     }
   },
   async created() {
     if (this.dataUrl) {
       await this.handleSearch('', this.value)
+    }
+  },
+  watch: {
+    dataUrl() {
+       this.handleSearch()
+      this.$emit('update:value', null)
     }
   },
   methods: {
@@ -54,7 +61,6 @@ export default defineComponent({
   render() {
     return <a-select
       {...vExec.call(this, this.nParams)}
-
       modelValue={this.value}
       loading={this.loading}
       onSearch={this.handleSearch}
