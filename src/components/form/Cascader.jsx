@@ -8,7 +8,7 @@ export default defineComponent({
       type: Object,
     },
     'value': {
-      type: [String, Number]
+      type: [String, Number, Array]
     },
     'data-url': {
       type: String
