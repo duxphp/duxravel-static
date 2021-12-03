@@ -27,12 +27,12 @@ export default defineComponent({
   },
   watch: {
     dataUrl() {
-       this.handleSearch()
+      this.handleSearch()
       this.$emit('update:value', null)
     }
   },
   methods: {
-    updateValue(value){
+    updateValue(value) {
       this.$emit('update:value', value)
     },
     handleSearch(query, value) {
@@ -45,12 +45,12 @@ export default defineComponent({
           id: value
         }
       }).then(res => {
-        this.nParams.options = res.data.map((item) => {
+        this.nParams.options = res.data instanceof Array ? res.data.map((item) => {
           return {
             label: item.name,
             value: item.id
           }
-        })
+        }) : []
 
         this.loading = false
       }).catch(() => {

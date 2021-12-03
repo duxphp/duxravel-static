@@ -11,6 +11,13 @@ export default defineComponent({
     'title': {
       type: String,
     },
+    'form': {
+      type: Boolean,
+      default: false
+    },
+    'onSubmit': {
+      type: Function,
+    }
   },
   components: {
     Route
@@ -93,7 +100,27 @@ export default defineComponent({
         </div>}
       </div>
       <div class="flex-grow bg-gray-100 dark:bg-blackgray-2 overflow-y-auto app-scrollbar">
-        {this.$slots.default?.()}
+
+        <div class="p-5 pb-0 flex">
+          <div class="flex-grow">
+            <a-breadcrumb>
+              {
+                navList.map((item, index) => <a-breadcrumb-item>{item.name}</a-breadcrumb-item>)
+              }
+            </a-breadcrumb>
+          </div>
+          {this.form && <div class="flex-none flex gap-2">
+            <route type="back">
+              <a-button type="outline">
+                返回
+              </a-button>
+            </route>
+            <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit || null}>保存</a-button>
+          </div>
+          }
+        </div>
+
+        {this.$slots.default?.({navList})}
       </div>
     </div>
   }

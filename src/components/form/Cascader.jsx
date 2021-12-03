@@ -5,7 +5,8 @@ import {vExec} from '../Create'
 export default defineComponent({
   props: {
     'n-params': {
-      type: Object,
+      type: Array,
+      default: [],
     },
     'value': {
       type: [String, Number, Array]
@@ -16,33 +17,38 @@ export default defineComponent({
   },
   data() {
     return {
+      loading: false,
       search : false
     }
   },
-  created() {
+  async created() {
     if (this.dataUrl) {
-      this.getData()
+      await this.getData()
     }
   },
   mounted() {
-    console.log(this.value)
     // BUG FIX 偶尔会出现搜索输入变小问题
     this.search = true
   },
   watch: {
     dataUrl() {
-      this.$emit('update:value', '')
-      this.nParams.options = []
+      this.$emit('update:value', null)
       this.getData()
     }
   },
   methods: {
     getData() {
-      requestCache({
+      this.loading = true
+      this.nParams.options = []
+      return requestCache({
         url: this.dataUrl,
         method: 'get',
-      }).then(res => {
-        this.nParams.options = res
+      }).then(res => {z
+        this.nParams.options = res  instanceof Array ? res : []
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
+
       })
     },
     updateValue(value) {
@@ -50,12 +56,13 @@ export default defineComponent({
     },
   },
   render() {
-    return <a-cascader
+    return <a-spin loading={this.loading} class="black w-full"><a-cascader
       {...vExec.call(this, this.nParams)}
       formatLabel={this.formatLabel}
       modelValue={this.value}
       allowSearch={this.search}
       onChange={this.updateValue}
     />
+  </a-spin>
   }
 })
