@@ -1,7 +1,7 @@
-import { h, defineComponent, resolveDynamicComponent, watch } from 'vue'
-import { request, searchQuick } from '../../utils/request'
-import { router } from '../../utils/router'
-import { vExec } from '../Create'
+import {h, defineComponent, resolveDynamicComponent, watch} from 'vue'
+import {request, searchQuick} from '../../utils/request'
+import {router} from '../../utils/router'
+import {vExec} from '../Create'
 import event from '../../utils/event'
 
 export default defineComponent({
@@ -32,6 +32,10 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
+    keywords: {
+      type: Array,
+      default: () => []
+    },
     value: {
       type: [String, Number],
       default: null
@@ -48,8 +52,10 @@ export default defineComponent({
     }
   },
   data() {
+
+    console.log(this.keywords)
+
     return {
-      searchKey: '',
       optionEl: null,
       popupVisible: false,
       loading: true,
@@ -105,8 +111,20 @@ export default defineComponent({
       const loop = (data) => {
         const result = [];
         data.forEach(item => {
+          let status = false;
           if (item.title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-            result.push({ ...item });
+            status = true
+          }
+          if (!status && item.rawData) {
+            for (let key of this.keywords) {
+              if (item.rawData[key] && item.rawData[key].toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+                status = true
+                break
+              }
+            }
+          }
+          if (status) {
+            result.push({...item});
           } else if (item.children) {
             const filterData = loop(item.children);
             if (filterData.length) {
@@ -124,7 +142,7 @@ export default defineComponent({
         this.loading = false
       })
     },
-    getList({ params, agree }) {
+    getList({params, agree}) {
       if (agree === 'routerPush') {
         this.loading = true
         this.data = []
@@ -156,7 +174,7 @@ export default defineComponent({
         })
       }
     },
-    handleDrop({ dragNode, dropNode, dropPosition }) {
+    handleDrop({dragNode, dropNode, dropPosition}) {
 
       const sort = {
         id: dragNode.key,
@@ -218,8 +236,7 @@ export default defineComponent({
   render() {
 
     const color = this.iconColor
-    return <a-spin class="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
-      <div class="flex flex-col h-full">
+    return <div class="flex flex-col h-full">
       {this.search && <a-input-search
         onInput={(value) => {
           this.searchData(value)
@@ -231,46 +248,47 @@ export default defineComponent({
         direction="y"
         class="flex-grow h-10"
       >
-        <a-tree
-          class="app-tree"
-          data={this.data}
-          showLine={true}
-          blockNode={true}
-          draggable={this.draggable}
-          onDrop={this.handleDrop}
-          selectedKeys={this.value ? [this.value] : null}
-          onSelect={(value) => {
-            this.$emit('update:value', this.value === value[0] ? null : value[0])
-          }}
-        >
-          {
+        <a-spin className="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
+          <a-tree
+            class="app-tree"
+            data={this.data}
+            showLine={true}
+            blockNode={true}
+            draggable={this.draggable}
+            onDrop={this.handleDrop}
+            selectedKeys={this.value ? [this.value] : null}
+            onSelect={(value) => {
+              this.$emit('update:value', this.value === value[0] ? null : value[0])
+            }}
+          >
             {
-              title: (item) => <a-dropdown
-                trigger="contextMenu"
-                alignPoint
-                class="w-32"
-              >
-                {{
-                  default: () => {
-                    const bgColor = "bg-" + color[item.level] + "-400"
-                    const borderColor = "border-" + color[item.level] + "-500"
-                    return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
-                      {this.$slots.label ? this.$slots.label(item) : item.title}
+              {
+                title: (item) => <a-dropdown
+                  trigger="contextMenu"
+                  alignPoint
+                  class="w-32"
+                >
+                  {{
+                    default: () => {
+                      const bgColor = "bg-" + color[item.level] + "-400"
+                      const borderColor = "border-" + color[item.level] + "-500"
+                      return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
+                        <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
+                        {this.$slots.label ? this.$slots.label(item) : item.title}
+                      </div>
+                    },
+                    content: () => <div>
+                      {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
                     </div>
-                  },
-                  content: () => <div>
-                    {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
-                  </div>
-                }}
-              </a-dropdown>
+                  }}
+                </a-dropdown>
 
+              }
             }
-          }
-        </a-tree>
-      </c-scrollbar> : <a-empty />
+          </a-tree>
+        </a-spin>
+      </c-scrollbar> : <a-empty/>
       }
-      </div>
-    </a-spin>
+    </div>
   }
 })

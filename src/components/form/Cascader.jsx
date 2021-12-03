@@ -16,21 +16,35 @@ export default defineComponent({
   },
   data() {
     return {
-      modelVale: '',
+      search : false
     }
   },
   created() {
     if (this.dataUrl) {
+      this.getData()
+    }
+  },
+  mounted() {
+    console.log(this.value)
+    // BUG FIX 偶尔会出现搜索输入变小问题
+    this.search = true
+  },
+  watch: {
+    dataUrl() {
+      this.$emit('update:value', '')
+      this.nParams.options = []
+      this.getData()
+    }
+  },
+  methods: {
+    getData() {
       requestCache({
         url: this.dataUrl,
         method: 'get',
       }).then(res => {
         this.nParams.options = res
-
       })
-    }
-  },
-  methods: {
+    },
     updateValue(value) {
       this.$emit('update:value', value)
     },
@@ -40,6 +54,7 @@ export default defineComponent({
       {...vExec.call(this, this.nParams)}
       formatLabel={this.formatLabel}
       modelValue={this.value}
+      allowSearch={this.search}
       onChange={this.updateValue}
     />
   }
