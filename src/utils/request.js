@@ -89,7 +89,7 @@ export const request = window.ajax = async params => {
     }
   }).catch(async (error) => {
     const result = error.response
-    if (result.code === 401) {
+    if (result.status === 401) {
       // token失效 登录重新获取token
       clearUserInfo()
       await login()

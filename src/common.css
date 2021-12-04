@@ -1,4 +1,8 @@
 /*! @import */
+body {
+    overflow: hidden;
+}
+
 .arco-btn:focus {
   @apply outline-none;
 }
