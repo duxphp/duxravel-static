@@ -177,7 +177,8 @@ export default defineComponent({
       const sort = {
         id: dragNode.key,
         parent: null,
-        before: null
+        before: null,
+        after: null
       }
       const data = this.data;
       const loop = (data, key, callback, parent = null) => {
@@ -210,11 +211,12 @@ export default defineComponent({
           arr.splice(nodeIndex, 0, dragNode);
           // 上一个
           sort.before = parent ? parent.children?.[nodeIndex - 1]?.key || null : null
+          // 下一个
+          sort.after = parent ? parent.children?.[nodeIndex + 1]?.key || null : null
           // 父级
           sort.parent = parent ? parent.key : null
           // 改变等级
           dragNode.level = parent ? parent.level + 1 : 0
-
         })
       }
 

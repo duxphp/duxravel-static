@@ -212,12 +212,23 @@ const CompCreate = defineComponent({
     // 共享数据
     provide(createPropsProvideKey, props)
 
-    const res = (new Function('props', 'context', props.setupScript))(toRefs(props), context)
-    return typeof res === 'object' ? res : {}
+    let res = (new Function('props', 'context', props.setupScript))(toRefs(props), context)
+
+    if (typeof res !== 'object') {
+      res = {}
+    }
+    if (typeof props.data !== 'undefined' && typeof res.data === 'undefined') {
+      res.data = props.data
+    }
+    res.keys = Object.keys(res)
+    return res
   },
 
   render() {
-    return renderNodeList.call(this, this.node).default?.()
+    return renderNodeList.call(
+      Object.fromEntries(this.keys.map(key => [key, this[key]])),
+      this.node
+    ).default?.()
   }
 })
 

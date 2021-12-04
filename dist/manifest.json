@@ -1,20 +1,20 @@
 {
   "src/main.js": {
-    "file": "static/manage/main.df7edb37.js",
+    "file": "static/manage/main.b1a997a5.js",
     "src": "src/main.js",
     "isEntry": true,
     "imports": [
-      "_vendor.da99c278.js"
+      "_vendor.d942caf8.js"
     ],
     "css": [
-      "static/manage/main.cf304fb4.css"
+      "static/manage/main.04d99c28.css"
     ],
     "assets": [
-      "static/manage/logo.d66db2fc.svg",
+      "static/manage/logo.5d56d6f7.svg",
       "static/manage/login-foot.1c6cc2f5.png"
     ]
   },
-  "_vendor.da99c278.js": {
-    "file": "static/manage/vendor.da99c278.js"
+  "_vendor.d942caf8.js": {
+    "file": "static/manage/vendor.d942caf8.js"
   }
 }
