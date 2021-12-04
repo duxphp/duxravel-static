@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data.show" class="absolute inset-0 bg-cover bg-center overflow-y-auto" style="z-index: 100 " :style="{ 'backgroundImage':'url('+ config.background +')' }">
+  <div v-if="data.show" class="absolute inset-0 bg-cover bg-center overflow-y-auto bg-gray-100 dark:bg-blackgray-3" style="z-index: 100 " :style="{ 'backgroundImage':'url('+ config.background +')' }">
 
     <div class="max-w-7xl  mx-auto  px-4 md:h-screen md:flex md:flex-col">
       <div class="flex-none md:flex py-4 text-gray-100  dark:text-gray-200 items-center ">
