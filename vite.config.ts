@@ -20,7 +20,19 @@ export default defineConfig({
 
     rollupOptions: {
       // 覆盖默认的 .html 入口
-      input: 'src/main.js'
+      input: 'src/main.js',
+      /*output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            let name = id.toString().split('node_modules/')[1].split('/')[0].toString()
+            if (name === 'tinymce' || name === 'apexcharts') {
+              return name
+            }else {
+              return 'vendors'
+            }
+          }
+        }
+      }*/
     }
   },
   server: {
