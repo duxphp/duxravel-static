@@ -140,13 +140,11 @@ export default {
       nowTime,
       config: {
         logo: window.appConfig.login.logo || logo,
-        background: window.appConfig.login.background || `${window.location.origin}/images/login-bg.png`,
+        background: window.appConfig.login.background,
         title: window.appConfig.login.title || 'DuxRavel',
         desc: window.appConfig.login.desc || '',
         contact: window.appConfig.login.contact || '',
-        side: window.appConfig.login.side || [
-          `${window.location.origin}/images/login-side.png`
-        ],
+        side: window.appConfig.login.side || [],
         foot: loginFoot
       },
       readonly: ref(true),
