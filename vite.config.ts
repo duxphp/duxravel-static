@@ -22,6 +22,7 @@ export default defineConfig({
       input: 'src/main.js'
     }
   },
+  base: 'http://highway.test',
   server: {
     // proxy: {
     //   '/': {

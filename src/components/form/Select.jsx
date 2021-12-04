@@ -1,5 +1,5 @@
 import {defineComponent} from 'vue'
-import {request} from '../../utils/request'
+import {getUrl, request} from '../../utils/request'
 import {vExec} from '../Create'
 
 export default defineComponent({
@@ -8,7 +8,7 @@ export default defineComponent({
       type: Object,
     },
     'value': {
-      type: [String, Number]
+      type: [String, Number, Array]
     },
     'data-url': {
       type: String
@@ -17,28 +17,32 @@ export default defineComponent({
   data() {
     return {
       keyword: '',
-      loading: false
+      loading: false,
+      modelValue: null
     }
   },
   async created() {
     if (this.dataUrl) {
       await this.handleSearch('', this.value)
     }
+    this.modelValue = this.value
   },
   watch: {
     dataUrl() {
-      this.handleSearch()
+      this.modelValue = null
       this.$emit('update:value', null)
+      this.handleSearch()
     }
   },
   methods: {
     updateValue(value) {
+      this.modelValue = value
       this.$emit('update:value', value)
     },
     handleSearch(query, value) {
       this.loading = true
       return request({
-        url: this.dataUrl,
+        url: getUrl(this.dataUrl),
         method: 'get',
         data: {
           query: query,
@@ -61,7 +65,7 @@ export default defineComponent({
   render() {
     return <a-select
       {...vExec.call(this, this.nParams)}
-      modelValue={this.value}
+      modelValue={this.modelValue}
       loading={this.loading}
       onSearch={this.handleSearch}
       onChange={this.updateValue}

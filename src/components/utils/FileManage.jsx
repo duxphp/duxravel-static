@@ -89,7 +89,7 @@ export default defineComponent({
     const getList = () => {
       listLoading.value = true
       searchQuick({
-        url: api.list,
+        url: getUrl(api.list),
         data: filter.value
       }).then(res => {
         list.value = res.data
@@ -169,7 +169,7 @@ export default defineComponent({
       }
       cateAddStatus.value = true
       request({
-        url: api.cateAdd,
+        url: getUrl(api.cateAdd),
         data: {
           name: cateAddValue.value
         }
@@ -194,7 +194,7 @@ export default defineComponent({
         hideCancel: false,
         onOk: () => {
           request({
-            url: api.cateDel,
+            url: getUrl(api.cateDel),
             data: {
               id: item.dir_id
             }

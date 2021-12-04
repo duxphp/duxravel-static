@@ -1,5 +1,5 @@
 import {defineComponent, nextTick} from 'vue'
-import {requestCache} from '../../utils/request'
+import {getUrl, requestCache} from '../../utils/request'
 import {vExec} from '../Create'
 
 export default defineComponent({
@@ -18,13 +18,15 @@ export default defineComponent({
   data() {
     return {
       loading: false,
-      search : false
+      search : false,
+      modelValue: null
     }
   },
   async created() {
     if (this.dataUrl) {
       await this.getData()
     }
+    this.modelValue = this.value
   },
   mounted() {
     // BUG FIX 偶尔会出现搜索输入变小问题
@@ -32,6 +34,7 @@ export default defineComponent({
   },
   watch: {
     dataUrl() {
+      this.modelValue = null
       this.$emit('update:value', null)
       this.getData()
     }
@@ -41,17 +44,17 @@ export default defineComponent({
       this.loading = true
       this.nParams.options = []
       return requestCache({
-        url: this.dataUrl,
+        url: getUrl(this.dataUrl),
         method: 'get',
-      }).then(res => {z
+      }).then(res => {
         this.nParams.options = res  instanceof Array ? res : []
         this.loading = false
       }).catch(() => {
         this.loading = false
-
       })
     },
     updateValue(value) {
+      this.modelValue = value
       this.$emit('update:value', value)
     },
   },
@@ -59,7 +62,7 @@ export default defineComponent({
     return <a-spin loading={this.loading} class="black w-full"><a-cascader
       {...vExec.call(this, this.nParams)}
       formatLabel={this.formatLabel}
-      modelValue={this.value}
+      modelValue={this.modelValue}
       allowSearch={this.search}
       onChange={this.updateValue}
     />

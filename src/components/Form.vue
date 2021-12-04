@@ -50,7 +50,7 @@ export default defineComponent({
       const page = getPageContent(that.proxy.$parent);
       submitStatus.value = true;
       request({
-        url: props.url,
+        url: getUrl(props.url),
         method: props.method,
         data: props.value,
         successMsg: true,

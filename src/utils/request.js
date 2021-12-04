@@ -14,7 +14,7 @@ export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `${import.meta.env.DEV ? 'http://highway.test' : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
+  return `${import.meta.env.DEV ? 'http://highway.test' : window.location.origin}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
 }
 
 /**
@@ -48,8 +48,6 @@ export const request = window.ajax = async params => {
   }
   if (method.toUpperCase() !== 'GET') {
     init.data = data
-    //init.body = body || JSON.stringify(data)
-    //!body && headers.append('Content-Type', 'application/json')
   } else {
     const params = qs.stringify(data)
     if (params && ~url.indexOf('?')) {

@@ -1,5 +1,6 @@
 import {defineComponent, h} from 'vue'
 import {searchQuick} from "@/utils/request";
+import {getUrl} from "../../utils/request";
 
 export default defineComponent({
   props: {
@@ -94,7 +95,7 @@ export default defineComponent({
     getList(params) {
       this.loading = true
       searchQuick({
-        url: this.url,
+        url: getUrl(this.url),
         data: {
           ...params,
           page: this.pagination.current

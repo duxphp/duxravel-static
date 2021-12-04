@@ -1,5 +1,5 @@
 import {h, defineComponent, resolveDynamicComponent, watch} from 'vue'
-import {request, searchQuick} from '../../utils/request'
+import {getUrl, request, searchQuick} from '../../utils/request'
 import {router} from '../../utils/router'
 import {vExec} from '../Create'
 import event from '../../utils/event'
@@ -52,8 +52,6 @@ export default defineComponent({
     }
   },
   data() {
-
-    console.log(this.keywords)
 
     return {
       optionEl: null,
@@ -147,7 +145,7 @@ export default defineComponent({
         this.loading = true
         this.data = []
         searchQuick({
-          url: this.url,
+          url: getUrl(this.url),
           method: 'get',
           data: params
         }).then(res => {

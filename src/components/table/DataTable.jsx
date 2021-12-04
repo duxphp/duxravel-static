@@ -1,6 +1,6 @@
 import {defineComponent, ref, getCurrentInstance, watch} from 'vue'
 import {renderNodeList, vExec} from '../Create'
-import {request, searchQuick} from '../../utils/request'
+import {getUrl, request, searchQuick} from '../../utils/request'
 import event from '../../utils/event'
 import {router, getParams} from '../../utils/router'
 
@@ -140,7 +140,7 @@ export default defineComponent({
     const getList = (params = {}) => {
       loading.value = true
       searchQuick({
-        url: props.url,
+        url: getUrl(props.url),
         data: {
           ...params,
           _sort: sort.value,

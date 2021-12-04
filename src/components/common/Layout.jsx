@@ -15,8 +15,12 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    'onSubmit': {
+    'submit': {
       type: Function,
+    },
+    'submitStatus': {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -24,6 +28,7 @@ export default defineComponent({
   },
   data() {
     return {
+      appInfo: window.appConfig,
       darkMode: localStorage.getItem("darkMode") === "dark" ? "dark" : "light",
       navList: [],
       weather: {}
@@ -45,11 +50,7 @@ export default defineComponent({
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  z-10">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
-            <a-breadcrumb>
-              {
-                navList.map((item, index) => <a-breadcrumb-item><Route href={item.url}>{item.name}</Route></a-breadcrumb-item>)
-              }
-            </a-breadcrumb>
+            {this.appInfo.name}
           </div>
           <div class="flex-none flex items-center gap-2">
             {this.$slots.tools?.()}
@@ -101,7 +102,7 @@ export default defineComponent({
       </div>
       <div class="flex-grow bg-gray-100 dark:bg-blackgray-2 overflow-y-auto app-scrollbar">
 
-        <div class="p-5 pb-0 flex">
+        <div class="p-4 pb-0 flex  items-center">
           <div class="flex-grow">
             <a-breadcrumb>
               {
@@ -115,12 +116,11 @@ export default defineComponent({
                 返回
               </a-button>
             </route>
-            <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit || null}>保存</a-button>
+            <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit}  loading={this.submitStatus}>保存</a-button>
           </div>
           }
         </div>
-
-        {this.$slots.default?.({navList})}
+        {this.$slots.default?.()}
       </div>
     </div>
   }

@@ -29,7 +29,7 @@
               hover:text-blue-600
               dark:hover:text-gray-300
               block
-              p-2
+              p-2.5
               rounded
               truncate
               cursor-pointer

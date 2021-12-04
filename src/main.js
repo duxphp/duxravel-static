@@ -32,8 +32,6 @@ import DynamicData from './components/form/DynamicData'
 import DataLayout from './components/common/Layout'
 import DataDialog from './components/common/Dialog'
 
-import WidgetHeader from './components/widget/Header'
-
 // 注册到全局
 window.Vue = Vue
 window.NProgress = NProgress
@@ -91,8 +89,6 @@ app.component('app-dynamic-data', DynamicData)
 app.component('app-layout', DataLayout)
 app.component('app-dialog', DataDialog)
 
-// 头部件
-app.component('widget-header', WidgetHeader)
 
 // 拖动排序
 app.component('draggable', draggable)

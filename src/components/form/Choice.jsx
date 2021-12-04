@@ -1,5 +1,5 @@
 import {defineComponent} from 'vue'
-import {request} from '../../utils/request'
+import {getUrl, request} from '../../utils/request'
 import {renderNodeList} from '../Create'
 
 export default defineComponent({
@@ -147,7 +147,7 @@ export default defineComponent({
       params[this.key] = ids;
       if (ids) {
         request({
-          url: this.url,
+          url: getUrl(this.url),
           data: params
         }).then(res => {
           // 合并数据
