@@ -82,7 +82,6 @@ const recursionRepeat = (form, key, childKey, indexs = []) => {
   form.forEach((item, index) => {
     const newIndexs = [...indexs, index]
     if (recursionRepeatData.includes(item[key])) {
-      console.log('重复位置:' + newIndexs + ' 重复值:' + item[key], item)
     } else {
       recursionRepeatData.push(item[key])
     }
