@@ -2,7 +2,7 @@ import {defineComponent} from 'vue'
 import Route from '../Route.vue'
 import {router} from "../../utils/router";
 import {getUrl, request} from "../../utils/request";
-import {clearUserInfo} from "../../utils/user";
+import {clearUserInfo, getLocalUserInfo} from "../../utils/user";
 import event, {menuNavigation} from '../../utils/event';
 import {weather} from "../../utils/util";
 
@@ -31,6 +31,7 @@ export default defineComponent({
       appInfo: window.appConfig,
       darkMode: localStorage.getItem("darkMode") === "dark" ? "dark" : "light",
       navList: [],
+      userInfo: getLocalUserInfo(),
       weather: {}
     }
   },
@@ -45,6 +46,7 @@ export default defineComponent({
     })
   },
   render() {
+    console.log(this.userInfo)
     const {navList} = this
     return <div class="flex flex-col lg:h-screen">
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  z-10">
@@ -73,8 +75,8 @@ export default defineComponent({
                 {
                   {
                     default: () => <div class="flex items-center gap-2 px-2 cursor-pointer">
-                      <a-avatar size="28">A</a-avatar>
-                      <div>姓名</div>
+                      <a-avatar size="28" src={this.userInfo.avatar}>{!this.userInfo.avatar && this.userInfo.avatar_text}</a-avatar>
+                      <div>{this.userInfo.rolename}</div>
                     </div>,
                     content: () => <div>
                       <a-doption onClick={() => {

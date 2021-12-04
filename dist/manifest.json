@@ -1,0 +1,20 @@
+{
+  "src/main.js": {
+    "file": "static/manage/main.9277c888.js",
+    "src": "src/main.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor.da99c278.js"
+    ],
+    "css": [
+      "static/manage/main.39d0e42c.css"
+    ],
+    "assets": [
+      "static/manage/logo.d66db2fc.svg",
+      "static/manage/login-foot.1c6cc2f5.png"
+    ]
+  },
+  "_vendor.da99c278.js": {
+    "file": "static/manage/vendor.da99c278.js"
+  }
+}
