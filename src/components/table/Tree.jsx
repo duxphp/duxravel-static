@@ -246,7 +246,7 @@ export default defineComponent({
         direction="y"
         class="flex-grow h-10"
       >
-        <a-spin className="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
+        <a-spin class="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
           <a-tree
             class="app-tree"
             data={this.data}
