@@ -70,7 +70,7 @@ export default {
     loadStyle(style) {
       const element = document.createElement("style");
       element.innerHTML = style;
-      document.getElementsByTagName("head")[0].appendChild(element);
+      document.getElementsByTagName("html")[0].appendChild(element);
       appStyle = element
     },
     // 卸载样式

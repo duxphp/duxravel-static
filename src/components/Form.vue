@@ -5,7 +5,7 @@
 </template>
 <script>
 import {defineComponent, ref, nextTick, getCurrentInstance} from "vue";
-import {request} from "../utils/request";
+import {getUrl, request} from "../utils/request";
 import {getPageContent} from "./table/DataTable";
 
 export default defineComponent({

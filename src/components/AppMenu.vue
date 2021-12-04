@@ -1,29 +1,29 @@
 <template>
-  <c-scrollbar
-      trigger="hover"
-      direction="y"
-      class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-4 dark:border-blackgray-5"
-      :class="
+  <div class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-4 dark:border-blackgray-5"
+       :class="
         menuData.menu
         ? 'w-40 bg-white shadow z-20 '
         : ''
-    "
-  >
-    <template v-if="menuData.menu">
-      <div class="p-4 py-3 dark:text-gray-400">
-        {{ menuData.name }}
-      </div>
-      <div
-          class="px-2"
-          v-for="(child, index1) in menuData.menu"
-          :key="child.name"
-      >
+    ">
+    <c-scrollbar
+        trigger="hover"
+        direction="y"
+    >
+      <template v-if="menuData.menu">
+        <div class="p-4 py-3 dark:text-gray-400">
+          {{ menuData.name }}
+        </div>
+        <div
+            class="px-2"
+            v-for="(child, index1) in menuData.menu"
+            :key="child.name"
+        >
         <span class="text-xs text-gray-400 dark:text-gray-500 py-3 px-2 block">{{
             child.name
           }}</span>
-        <template v-if="child.menu">
-          <div
-              class="
+          <template v-if="child.menu">
+            <div
+                class="
               text-gray-800
               dark:text-gray-400
               hover:text-blue-600
@@ -34,20 +34,21 @@
               truncate
               cursor-pointer
             "
-              v-for="(child2, index2) in child.menu"
-              :key="child2.name"
-              :class="{
+                v-for="(child2, index2) in child.menu"
+                :key="child2.name"
+                :class="{
               'bg-blue-50 text-blue-600 dark:bg-blackgray-1 dark:text-gray-400':
                 select[1] === index1 && select[2] === index2,
             }"
-              @click="target(child2)"
-          >
-            {{ child2.name }}
-          </div>
-        </template>
-      </div>
-    </template>
-  </c-scrollbar>
+                @click="target(child2)"
+            >
+              {{ child2.name }}
+            </div>
+          </template>
+        </div>
+      </template>
+    </c-scrollbar>
+  </div>
 </template>
 
 <script>

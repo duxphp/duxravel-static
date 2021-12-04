@@ -13,7 +13,8 @@ export default defineConfig({
     }
   },
   build: {
-    //outDir: 'dist/resource',
+
+    assetsDir: 'static/manage',
     manifest: true,
     emptyOutDir: true,
 
