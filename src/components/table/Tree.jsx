@@ -210,9 +210,9 @@ export default defineComponent({
           const nodeIndex = dropPosition < 0 ? index : index + 1
           arr.splice(nodeIndex, 0, dragNode);
           // 上一个
-          sort.before = parent ? parent.children?.[nodeIndex - 1]?.key || null : null
+          sort.before = arr[nodeIndex - 1]?.key || null
           // 下一个
-          sort.after = parent ? parent.children?.[nodeIndex + 1]?.key || null : null
+          sort.after = arr[nodeIndex + 1]?.key || null
           // 父级
           sort.parent = parent ? parent.key : null
           // 改变等级
