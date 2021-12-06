@@ -1,5 +1,5 @@
 import {defineComponent, nextTick} from 'vue'
-import {getUrl, requestCache} from '../../utils/request'
+import {getUrl, request, requestCache} from '../../utils/request'
 import {vExec} from '../Create'
 
 export default defineComponent({
@@ -43,7 +43,7 @@ export default defineComponent({
     getData() {
       this.loading = true
       this.nParams.options = []
-      return requestCache({
+      return request({
         url: getUrl(this.dataUrl),
         method: 'get',
       }).then(res => {
