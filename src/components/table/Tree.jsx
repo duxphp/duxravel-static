@@ -204,6 +204,8 @@ export default defineComponent({
           item.children.push(dragNode);
           // 父级
           sort.parent = item.key
+          // 改变等级
+          dragNode.level = item.level + 1
         })
       } else {
         loop(data, dropNode.key, (_, index, arr, parent) => {
