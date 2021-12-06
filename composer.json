@@ -21,10 +21,6 @@
             "providers": [
                 "Duxravel\\UI\\Providers\\UIServiceProvider"
             ]
-        },
-        "duxravel": {
-            "type": "static",
-            "name": "system"
         }
     }
 }
