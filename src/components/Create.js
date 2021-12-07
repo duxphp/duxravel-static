@@ -148,15 +148,17 @@ export const renderItem = function (data, arg, slotProps) {
       if (typeof value !== 'object') {
         return
       }
+      const node = []
       for (const key in value) {
         if (Object.hasOwnProperty.call(value, key)) {
           const newAgr = { ...arg, [data[0][0]]: value[key] }
           if (data[0][1]) {
             newAgr[data[0][1]] = key
           }
-          return vExec.call(this, item, newAgr, slotProps)
+          node.push(vExec.call(this, item, newAgr, slotProps))
         }
       }
+      return node
     } else {
       return vExec.call(this, item, arg, slotProps)
     }

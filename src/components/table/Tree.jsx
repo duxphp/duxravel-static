@@ -59,8 +59,8 @@ export default defineComponent({
       loading: true,
       draggable: !!this.sortUrl,
       data: [],
-      originData: []
-
+      originData: [],
+      options: {},
     }
   },
   created() {
@@ -280,7 +280,7 @@ export default defineComponent({
                       </div>
                     },
                     content: () => <div>
-                      {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', menu.event)(item)}>{menu.text}</a-doption>)}
+                      {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', 'options', menu.event)(item, this.options)}>{menu.text}</a-doption>)}
                     </div>
                   }}
                 </a-dropdown>
