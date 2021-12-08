@@ -124,8 +124,9 @@ export default defineComponent({
     expandedKeysName(oldFilter) {
       return this.expandedKeysNamePrefix + '-' + this.url + '-' + qs.stringify(oldFilter || this.filter)
     },
+    // 处理数据以适应tree组件
     renderData(data) {
-      function getNodeRoute(tree, index) {
+      function getNodeRoute(tree, index = 0) {
         return tree.map(item => {
           let node = {}
           node.title = item.title
@@ -139,7 +140,16 @@ export default defineComponent({
         })
       }
 
-      return getNodeRoute(data, 0)
+      return getNodeRoute(data)
+    },
+    // 重新生成level
+    resetLevel(data = this.data, level = 0) {
+      data.forEach(item => {
+        item.level = level
+        if (item.children && item.children.length) {
+          this.resetLevel(item.children, level + 1)
+        }
+      })
     },
     searchData(keyword) {
       this.loading = true
@@ -219,6 +229,9 @@ export default defineComponent({
           (item, index, arr) => {
             if (action.type === 'edit') {
               arr[index] = this.renderData([action.data])[0]
+              if (!arr[index].children?.length && item.children) {
+                arr[index].children = item.children
+              }
             } else if (action.type === 'del') {
               arr.splice(index, 1)
             } else if (action.type === 'add') {
@@ -233,6 +246,8 @@ export default defineComponent({
           }
         )
       })
+
+      this.resetLevel()
     },
     handleDrop({ dragNode, dropNode, dropPosition }) {
 
