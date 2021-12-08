@@ -1,6 +1,39 @@
 import { defineComponent } from 'vue'
-import { getUrl, request, searchQuick } from '../../utils/request'
+import qs from 'qs'
+import { request, searchQuick } from '../../utils/request'
 import { requestEvent } from '../../utils/event'
+
+/**
+ * 将展开的级别keys保存在本地
+ */
+const treeExpanded = {
+  key: 'treeExpandedKeysData',
+  get(name) {
+    let data = localStorage.getItem(this.key)
+    if (!data) {
+      return []
+    }
+    try {
+      data = JSON.parse(data)
+      return data[name] || []
+    } catch (error) {
+      return []
+    }
+  },
+  set(name, value) {
+    try {
+      let data = localStorage.getItem(this.key)
+      if (!data) {
+        data = "{}"
+      }
+      data = JSON.parse(data)
+      data[name] = value
+      localStorage.setItem(this.key, JSON.stringify(data))
+    } catch (error) {
+
+    }
+  }
+}
 
 export default defineComponent({
   props: {
@@ -46,15 +79,12 @@ export default defineComponent({
   watch: {
     filter(val, oldVal) {
       if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
-        this.getList({
-          params: this.filter,
-          agree: 'routerPush'
-        })
+        this.data.length && treeExpanded.set(this.expandedKeysName(oldVal), this.expandedKeys)
+        this.getList()
       }
     }
   },
   data() {
-
     return {
       optionEl: null,
       popupVisible: false,
@@ -63,15 +93,17 @@ export default defineComponent({
       data: [],
       originData: [],
       options: {},
+      expandedKeys: [],
     }
   },
   created() {
-    this.getList({
-      agree: 'routerPush'
-    })
+    this.expandedKeysNamePrefix = location.pathname
+    this.getList()
     requestEvent.add(this.requestEventName, this.requestEvent)
   },
   beforeUnmount() {
+    // 保存key
+    treeExpanded.set(this.expandedKeysName(), this.expandedKeys)
     requestEvent.remove(this.requestEventName, this.requestEvent)
   },
   methods: {
@@ -87,6 +119,10 @@ export default defineComponent({
         }
         return false;
       });
+    },
+    // 获取展开状态保存名称
+    expandedKeysName(oldFilter) {
+      return this.expandedKeysNamePrefix + '-' + this.url + '-' + qs.stringify(oldFilter || this.filter)
     },
     renderData(data) {
       function getNodeRoute(tree, index) {
@@ -150,20 +186,19 @@ export default defineComponent({
         this.loading = false
       })
     },
-    getList({ params, agree }) {
-      if (agree === 'routerPush') {
-        this.loading = true
-        this.data = []
-        searchQuick({
-          url: this.url,
-          data: params
-        }).then(res => {
-          this.loading = false
-          this.data = this.originData = this.renderData(res.data)
-        }).catch(() => {
-          this.loading = false
-        })
-      }
+    getList() {
+      this.loading = true
+      this.data = []
+      searchQuick({
+        url: this.url,
+        data: this.filter || {}
+      }).then(res => {
+        this.loading = false
+        this.expandedKeys = treeExpanded.get(this.expandedKeysName())
+        this.data = this.originData = this.renderData(res.data)
+      }).catch(() => {
+        this.loading = false
+      })
     },
     requestEvent(res) {
       if (!res) {
@@ -191,6 +226,9 @@ export default defineComponent({
                 item.children = []
               }
               item.children[action.pos === 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
+              if (!this.expandedKeys.includes(action.parentKey)) {
+                this.expandedKeys.push(action.parentKey)
+              }
             }
           }
         )
@@ -273,32 +311,42 @@ export default defineComponent({
             onSelect={(value) => {
               this.$emit('update:value', this.value === value[0] ? null : value[0])
             }}
+            expandedKeys={this.expandedKeys}
+            onExpand={res => this.expandedKeys = res}
           >
             {
               {
-                title: (item) => <a-dropdown
-                  trigger="contextMenu"
-                  alignPoint
-                  class="w-32"
-                >
-                  {{
-                    default: () => {
-                      const bgColor = "bg-" + color[item.level] + "-400"
-                      const borderColor = "border-" + color[item.level] + "-500"
-                      return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                        <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
-                        {this.$slots.label ? this.$slots.label(item) : item.title}
-                      </div>
-                    },
-                    content: () => <div>
-                      {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => {
-                        new Function('item', 'options', menu.event)(item, this.options)
-                      }}>{menu.text}</a-doption>)}
-                    </div>
-                  }}
-                </a-dropdown>
+                title: (item) => {
+                  const bgColor = "bg-" + color[item.level] + "-400"
+                  const borderColor = "border-" + color[item.level] + "-500"
+                  return this.contextMenus.length
+                    ? <a-dropdown
+                      trigger="contextMenu"
+                      alignPoint
+                      class="w-32"
+                    >
+                      {{
+                        default: () => {
+                          return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
+                            <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
+                            {this.$slots.label ? this.$slots.label(item) : item.title}
+                          </div>
+                        },
+                        content: () => <>
+                          {this.contextMenus.map(menu => <a-doption onClick={() => {
+                            new Function('item', 'options', menu.event)(item, this.options)
+                          }}>{menu.text}</a-doption>)}
+                        </>
 
+                      }}
+                    </a-dropdown>
+                    : <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
+                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
+                      {this.$slots.label ? this.$slots.label(item) : item.title}
+                    </div>
+                }
               }
+
             }
           </a-tree>
         </a-spin>
