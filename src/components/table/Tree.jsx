@@ -166,7 +166,7 @@ export default defineComponent({
         const result = [];
         data.forEach(item => {
           let status = false;
-          if (item.title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+          if (item.title.toString().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
             status = true
           }
           if (!status && item.rawData) {
