@@ -155,8 +155,7 @@ export default defineComponent({
         this.loading = true
         this.data = []
         searchQuick({
-          url: getUrl(this.url),
-          method: 'get',
+          url: this.url,
           data: params
         }).then(res => {
           this.loading = false
@@ -191,7 +190,7 @@ export default defineComponent({
               if (!item.children) {
                 item.children = []
               }
-              item.children.push(this.renderData([action.data])[0])
+              item.children[action.pos === 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
             }
           }
         )

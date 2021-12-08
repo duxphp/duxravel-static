@@ -1,8 +1,8 @@
-import {defineComponent, ref, getCurrentInstance, watch} from 'vue'
-import {renderNodeList, vExec} from '../Create'
-import {getUrl, request, searchQuick} from '../../utils/request'
-import event from '../../utils/event'
-import {router, getParams} from '../../utils/router'
+import { defineComponent, ref, getCurrentInstance, watch } from 'vue'
+import { renderNodeList, vExec } from '../Create'
+import { getUrl, request, searchQuick } from '../../utils/request'
+import event, { requestEvent } from '../../utils/event'
+import { router, getParams } from '../../utils/router'
 
 // 获取最近的pageContent组件实例
 export const getPageContent = (parent) => {
@@ -53,6 +53,10 @@ export default defineComponent({
       type: Number,
       default: 20
     },
+    requestEventName: {
+      type: String,
+      default: null
+    }
   },
   setup(props) {
 
@@ -165,7 +169,43 @@ export default defineComponent({
       checkAction
     }
 
-    const routerChange = ({params, agree}) => {
+    const requestEventCallBack = res => {
+      if (!res) {
+        return
+      }
+      if (!Array.isArray(res)) {
+        res = [res]
+      }
+      const getIndex = key => data.value.findIndex(item => item[props.nParams['row-key']] === key)
+      res.forEach(action => {
+        switch (action.type) {
+          case 'edit': {
+            const index = getIndex(action.key)
+            ~index && (data.value[index] = action.data)
+            break
+          }
+          case 'add': {
+            data.value[action.pos === 'end' ? 'push' : 'unshift'](action.data)
+            break
+          }
+          case 'del': {
+            const index = getIndex(action.key)
+            ~index && data.value.splice(index, 1)
+            break
+          }
+          default: {
+            break
+          }
+        }
+      })
+    }
+
+    // 请求事件监听 更新数据
+    if (props.requestEventName) {
+      requestEvent.add(props.requestEventName, requestEventCallBack)
+    }
+
+    const routerChange = ({ params, agree }) => {
       agree === 'routerPush' && getList(params)
     }
 
@@ -231,7 +271,7 @@ export default defineComponent({
       sortDirections: ['ascend', 'descend'],
     }
 
-    const columns = props.columns.map(item => vExec.call({colSortable}, item, {editValue, editStatus}))
+    const columns = props.columns.map(item => vExec.call({ colSortable }, item, { editValue, editStatus }))
 
     return {
       sorter,
@@ -243,11 +283,13 @@ export default defineComponent({
       getList,
       routerChange,
       checkedRowKeys,
+      requestEventCallBack
     }
   },
 
   beforeUnmount() {
     event.remove('router-change', this.routerChange)
+    requestEvent.remove(this.requestEventName, this.requestEventCallBack)
   },
 
   render() {

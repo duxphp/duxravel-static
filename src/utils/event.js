@@ -35,6 +35,9 @@ export const event = {
         }
         return true
       })
+      if (!list.length) {
+        delete this.funcs[name]
+      }
     }
   },
   /**

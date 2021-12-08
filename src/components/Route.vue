@@ -39,8 +39,6 @@ export default {
         method: this.method,
         successMsg: true,
         urlType: 'absolute',
-      }).then(res => {
-        router('routerPush:')
       })
     },
     jump(e) {
