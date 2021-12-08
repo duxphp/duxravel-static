@@ -169,6 +169,19 @@ export default defineComponent({
       checkAction
     }
 
+    const loopData = (key, callback, list = data.value, parent = null) => {
+      list.some((item, index, arr) => {
+        if (item[props.nParams['row-key']] === key) {
+          callback(item, index, arr, parent);
+          return true;
+        }
+        if (item.children) {
+          return this.loopData(key, callback, item.children, item);
+        }
+        return false;
+      });
+    }
+
     const requestEventCallBack = res => {
       if (!res) {
         return
@@ -176,27 +189,41 @@ export default defineComponent({
       if (!Array.isArray(res)) {
         res = [res]
       }
-      const getIndex = key => data.value.findIndex(item => item[props.nParams['row-key']] === key)
       res.forEach(action => {
-        switch (action.type) {
-          case 'edit': {
-            const index = getIndex(action.key)
-            ~index && (data.value[index] = action.data)
-            break
-          }
-          case 'add': {
-            data.value[action.pos === 'end' ? 'push' : 'unshift'](action.data)
-            break
-          }
-          case 'del': {
-            const index = getIndex(action.key)
-            ~index && data.value.splice(index, 1)
-            break
-          }
-          default: {
-            break
-          }
+        // 新增数据到顶级
+        if (action.type === 'add' && !action.parentKey) {
+          data.value[action.pos === 'end' ? 'push' : 'unshift'](action.data)
+          return
         }
+        loopData(
+          action.type === 'add' ? action.parentKey : action.key,
+          (item, index, arr) => {
+            switch (action.type) {
+              case 'edit': {
+                arr[index] = action.data
+                if (!arr[index].children?.length && item.children) {
+                  arr[index].children = item.children
+                }
+                break
+              }
+              case 'add': {
+                if (!item.children) {
+                  item.children = []
+                }
+                item.children[action.pos === 'end' ? 'push' : 'unshift'](action.data)
+                break
+              }
+              case 'del': {
+                arr.splice(index, 1)
+                break
+              }
+              default: {
+                break
+              }
+            }
+          }
+        )
+
       })
     }
 
