@@ -310,9 +310,8 @@ export default defineComponent({
         class="mb-2 flex-none"
         placeholder="搜索"
       />}
-      {this.data.length > 0 ? <c-scrollbar
-        direction="y"
-        class="flex-grow h-10"
+      {this.data.length > 0 ? <div
+        class="flex-grow h-10 app-scrollbar overflow-y-auto"
       >
         <a-spin class="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
           <a-tree
@@ -365,7 +364,7 @@ export default defineComponent({
             }
           </a-tree>
         </a-spin>
-      </c-scrollbar> : <a-empty />
+      </div> : <a-empty />
       }
     </div>
   }
