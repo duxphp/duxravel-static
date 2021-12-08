@@ -1,7 +1,9 @@
 import qs from 'qs'
-import {deepCopy} from './object'
-import {router} from './router'
-import {clearUserInfo, getLocalUserInfo, login, setLocalUserInfo} from './user'
+import config from '../config/request'
+import { deepCopy } from './object'
+import { requestEvent } from './event'
+import { router } from './router'
+import { clearUserInfo, getLocalUserInfo, login, setLocalUserInfo } from './user'
 import axios from 'axios'
 
 /**
@@ -14,7 +16,7 @@ export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `${import.meta.env.DEV ? 'http://highway.test' : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || 'admin') + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
+  return `${import.meta.env.DEV ? config.domain : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || config.defaultModule) + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
 }
 
 /**
@@ -26,7 +28,7 @@ export const request = window.ajax = async params => {
       url: params
     }
   }
-  let {url, urlType, data = {}, method = 'GET', header = {}, onProgress, successMsg, errorMsg = true} = params
+  let { url, urlType, data = {}, method = 'GET', header = {}, onProgress, successMsg, errorMsg = true } = params
 
   // 请求头
   const headers = {
@@ -72,7 +74,7 @@ export const request = window.ajax = async params => {
     // 设置新的验证值
     const token = response.headers['authorization']
     if (token) {
-      setLocalUserInfo({token})
+      setLocalUserInfo({ token })
     }
 
     const xLocation = response.headers['x-location']
@@ -81,6 +83,9 @@ export const request = window.ajax = async params => {
     }
 
     result.data = response.data
+    if (result.data?.data?.__event) {
+      requestEvent.emit(result.data.data.__event.name, result.data.data.__event.data)
+    }
 
     if (isJson) {
       successMsg && window.message.success(result.data.message)
@@ -91,13 +96,13 @@ export const request = window.ajax = async params => {
     }
   }).catch(async (error) => {
     const result = error.response
-    if (result.status === 401) {
+    if (result?.status === 401) {
       // token失效 登录重新获取token
       clearUserInfo()
       await login()
       return request(params)
     }
-    errorMsg && window.message.error(result.data?.error?.message || result.data?.message || error.message || '业务繁忙，请稍后再试')
+    errorMsg && window.message.error(result?.data?.error?.message || result?.data?.message || error?.message || '业务繁忙，请稍后再试')
     throw result
   })
 }
@@ -114,9 +119,9 @@ const requestCacheData = {}
  */
 export const requestCache = (option = {}, copy) => {
   if (typeof option === 'string') {
-    option = {url: option}
+    option = { url: option }
   }
-  const {url, data} = option
+  const { url, data } = option
   const key = `${url}-${JSON.stringify(data)}`
   let keyData = requestCacheData[key]
   if (!keyData || (!keyData.data && !keyData.request)) {
@@ -170,12 +175,12 @@ export const searchQuick = (params, mark = '') => {
   return new Promise((resolve, reject) => {
     if (item.timer) {
       clearTimeout(item.timer)
-      item.prevReject({message: '过快请求', code: 1})
+      item.prevReject({ message: '过快请求', code: 1 })
     }
     if (item.requestTask) {
       item.requestTask.abort?.()
       item.requestTask = null
-      item.prevReject({message: '请求被覆盖', code: 2})
+      item.prevReject({ message: '请求被覆盖', code: 2 })
     }
     item.prevReject = reject
     item.timer = setTimeout(() => {

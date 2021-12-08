@@ -1,7 +1,7 @@
 /**
  * 全局事件系统
  */
-export default {
+export const event = {
   /**
    * 保存的函数
    */
@@ -62,6 +62,29 @@ export default {
       }
       return list.every(item => item === func)
     }
+  }
+}
+
+export default event
+
+/**
+ * 请求返回数据事件系统
+ */
+export const requestEvent = {
+  key(name) {
+    return 'request-' + name
+  },
+  add(name, func) {
+    event.add(this.key(name), func)
+  },
+  remove(name, func) {
+    event.remove(this.key(name), func)
+  },
+  emit(name, ...args) {
+    event.emit(this.key(name), ...args)
+  },
+  is(name, func) {
+    event.is(this.key(name), func)
   }
 }
 

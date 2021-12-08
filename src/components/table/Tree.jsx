@@ -1,8 +1,6 @@
-import {h, defineComponent, resolveDynamicComponent, watch} from 'vue'
-import {getUrl, request, searchQuick} from '../../utils/request'
-import {router} from '../../utils/router'
-import {vExec} from '../Create'
-import event from '../../utils/event'
+import { defineComponent } from 'vue'
+import { getUrl, request, searchQuick } from '../../utils/request'
+import { requestEvent } from '../../utils/event'
 
 export default defineComponent({
   props: {
@@ -39,6 +37,10 @@ export default defineComponent({
     value: {
       type: [String, Number],
       default: null
+    },
+    requestEventName: {
+      type: String,
+      default: null
     }
   },
   watch: {
@@ -67,17 +69,25 @@ export default defineComponent({
     this.getList({
       agree: 'routerPush'
     })
-    // 监听关闭弹窗的时候刷新路由
-    event.add('router-dialog-close', this.closeEvent)
-    // 监听关闭ajax确认框时候的刷新数据
-    event.add('router-ajax-finish', this.ajaxEvent)
-
+    requestEvent.add(this.requestEventName, this.requestEvent)
   },
   beforeUnmount() {
-    event.remove('router-dialog-close', this.closeEvent)
-    event.remove('router-ajax-finish', this.ajaxEvent)
+    requestEvent.remove(this.requestEventName, this.requestEvent)
   },
   methods: {
+    // 通过key递归查找节点
+    loopData(key, callback, data = this.data, parent = null) {
+      data.some((item, index, arr) => {
+        if (item.key === key) {
+          callback(item, index, arr, parent);
+          return true;
+        }
+        if (item.children) {
+          return this.loopData(key, callback, item.children, item);
+        }
+        return false;
+      });
+    },
     renderData(data) {
       function getNodeRoute(tree, index) {
         return tree.map(item => {
@@ -122,7 +132,7 @@ export default defineComponent({
             }
           }
           if (status) {
-            result.push({...item});
+            result.push({ ...item });
           } else if (item.children) {
             const filterData = loop(item.children);
             if (filterData.length) {
@@ -140,7 +150,7 @@ export default defineComponent({
         this.loading = false
       })
     },
-    getList({params, agree}) {
+    getList({ params, agree }) {
       if (agree === 'routerPush') {
         this.loading = true
         this.data = []
@@ -156,23 +166,38 @@ export default defineComponent({
         })
       }
     },
-    closeEvent(data) {
-      if (this.refreshUrls.length === 0 || this.refreshUrls.some(item => ~data.item.url.indexOf(item))) {
-        this.getList({
-          params: this.filter,
-          agree: 'routerPush'
-        })
+    requestEvent(res) {
+      if (!res) {
+        return
       }
-    },
-    ajaxEvent(data) {
-      if (this.refreshUrls.length === 0 || this.refreshUrls.some(item => ~data.url.indexOf(item))) {
-        this.getList({
-          params: this.filter,
-          agree: 'routerPush'
-        })
+      if (!Array.isArray(res)) {
+        res = [res]
       }
+      res.forEach(action => {
+        // 新增数据到顶级
+        if (action.type === 'add' && !action.parentKey) {
+          this.data.push(this.renderData([action.data])[0])
+          return
+        }
+        // 新增编辑删除操作
+        this.loopData(
+          action.type === 'add' ? action.parentKey : action.key,
+          (item, index, arr) => {
+            if (action.type === 'edit') {
+              arr[index] = this.renderData([action.data])[0]
+            } else if (action.type === 'del') {
+              arr.splice(index, 1)
+            } else if (action.type === 'add') {
+              if (!item.children) {
+                item.children = []
+              }
+              item.children.push(this.renderData([action.data])[0])
+            }
+          }
+        )
+      })
     },
-    handleDrop({dragNode, dropNode, dropPosition}) {
+    handleDrop({ dragNode, dropNode, dropPosition }) {
 
       const sort = {
         id: dragNode.key,
@@ -180,26 +205,13 @@ export default defineComponent({
         before: null,
         after: null
       }
-      const data = this.data;
-      const loop = (data, key, callback, parent = null) => {
-        data.some((item, index, arr) => {
-          if (item.key === key) {
-            callback(item, index, arr, parent);
-            return true;
-          }
-          if (item.children) {
-            return loop(item.children, key, callback, item);
-          }
-          return false;
-        });
-      };
 
-      loop(data, dragNode.key, (_, index, arr) => {
+      this.loopData(dragNode.key, (_, index, arr) => {
         arr.splice(index, 1);
       });
 
       if (dropPosition === 0) {
-        loop(data, dropNode.key, (item) => {
+        this.loopData(dropNode.key, (item) => {
           item.children = item.children || [];
           item.children.push(dragNode);
           // 父级
@@ -208,7 +220,7 @@ export default defineComponent({
           dragNode.level = item.level + 1
         })
       } else {
-        loop(data, dropNode.key, (_, index, arr, parent) => {
+        this.loopData(dropNode.key, (_, index, arr, parent) => {
           const nodeIndex = dropPosition < 0 ? index : index + 1
           arr.splice(nodeIndex, 0, dragNode);
           // 上一个
@@ -275,12 +287,14 @@ export default defineComponent({
                       const bgColor = "bg-" + color[item.level] + "-400"
                       const borderColor = "border-" + color[item.level] + "-500"
                       return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                        <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
+                        <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
                         {this.$slots.label ? this.$slots.label(item) : item.title}
                       </div>
                     },
                     content: () => <div>
-                      {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => new Function('item', 'options', menu.event)(item, this.options)}>{menu.text}</a-doption>)}
+                      {this.contextMenus.length && this.contextMenus.map(menu => <a-doption onClick={() => {
+                        new Function('item', 'options', menu.event)(item, this.options)
+                      }}>{menu.text}</a-doption>)}
                     </div>
                   }}
                 </a-dropdown>
@@ -289,7 +303,7 @@ export default defineComponent({
             }
           </a-tree>
         </a-spin>
-      </c-scrollbar> : <a-empty/>
+      </c-scrollbar> : <a-empty />
       }
     </div>
   }
