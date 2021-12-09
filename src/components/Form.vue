@@ -9,8 +9,7 @@ import {getUrl, request} from "../utils/request";
 import {getPageContent} from "./table/DataTable";
 
 export default defineComponent({
-  components: {
-  },
+  components: {},
   props: {
     url: {
       type: String,
@@ -37,20 +36,19 @@ export default defineComponent({
     const rules = ref({});
     const that = getCurrentInstance();
     const submitStatus = ref(false);
+    const validatorStatus = ref(true)
     const submitSuccess = () => {
-      submitStatus.value = false
+      validatorStatus.value = false
     }
     const submitError = () => {
-      submitStatus.value = true
+      validatorStatus.value = true
     }
     const submit = (data, e) => {
-      if (submitStatus.value) {
+      if (submitStatus.value || validatorStatus.value) {
         return false;
       }
-      const page = getPageContent(that.proxy.$parent);
       submitStatus.value = true;
-
-      console.log(submitStatus.value)
+      const page = getPageContent(that.proxy.$parent);
       request({
         url: getUrl(props.url),
         method: props.method,
