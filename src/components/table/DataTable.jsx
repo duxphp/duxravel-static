@@ -211,10 +211,12 @@ export default defineComponent({
                   item.children = []
                 }
                 item.children[action.pos === 'end' ? 'push' : 'unshift'](action.data)
+                pagination.value.total += 1
                 break
               }
               case 'del': {
                 arr.splice(index, 1)
+                pagination.value.total -= 1
                 break
               }
               default: {
