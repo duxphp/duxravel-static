@@ -220,7 +220,7 @@ export default defineComponent({
       res.forEach(action => {
         // 新增数据到顶级
         if (action.type === 'add' && !action.parentKey) {
-          this.data[action.pos === 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
+          this.data[action.pos !== 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
           return
         }
         // 新增编辑删除操作
@@ -238,7 +238,7 @@ export default defineComponent({
               if (!item.children) {
                 item.children = []
               }
-              item.children[action.pos === 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
+              item.children[action.pos !== 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
               if (!this.expandedKeys.includes(action.parentKey)) {
                 this.expandedKeys.push(action.parentKey)
               }

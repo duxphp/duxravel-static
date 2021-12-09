@@ -161,6 +161,7 @@ router.ajax = (url, data) => {
       successMsg: true,
       urlType: data?._urlType || 'absolute',
     }).then(result => {
+      data._callback && data._callback(result)
       router('routerPush:')
       event.emit('router-ajax-finish', {
         url: getUrl(toUrl(url, data), data?._urlType || 'absolute'),
