@@ -5,9 +5,10 @@
 </template>
 
 <script>
-import { request } from "../utils/request";
-import { router } from "../utils/router";
-import { getPageContent } from "./table/DataTable";
+import {request} from "../utils/request";
+import {router} from "../utils/router";
+import {getPageContent} from "./table/DataTable";
+
 export default {
   name: "Route",
   data() {
@@ -28,18 +29,26 @@ export default {
       default: "GET",
     },
     title: String,
+    before: Function,
+    after: Function
   },
   created() {
     this.className = this.class;
   },
   methods: {
     ajaxAction() {
+      this.before && this.before()
       request({
         url: this.href,
         method: this.method,
         successMsg: true,
         urlType: 'absolute',
+      }).then(res => {
+        this.after && this.after(res)
+      }).catch(err => {
+        this.after && this.after(err)
       })
+
     },
     jump(e) {
       // 处理跳转

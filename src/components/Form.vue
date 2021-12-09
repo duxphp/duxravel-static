@@ -49,6 +49,8 @@ export default defineComponent({
       }
       const page = getPageContent(that.proxy.$parent);
       submitStatus.value = true;
+
+      console.log(submitStatus.value)
       request({
         url: getUrl(props.url),
         method: props.method,
@@ -86,7 +88,6 @@ export default defineComponent({
       submitError,
       submitSuccess,
       submitStatus,
-
     };
   },
 });

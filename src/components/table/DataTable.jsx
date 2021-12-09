@@ -1,8 +1,8 @@
-import { defineComponent, ref, getCurrentInstance, watch } from 'vue'
-import { renderNodeList, vExec } from '../Create'
-import { getUrl, request, searchQuick } from '../../utils/request'
-import event, { requestEvent } from '../../utils/event'
-import { router, getParams } from '../../utils/router'
+import {defineComponent, ref, getCurrentInstance, watch} from 'vue'
+import {renderNodeList, vExec} from '../Create'
+import {getUrl, request, searchQuick} from '../../utils/request'
+import event, {requestEvent} from '../../utils/event'
+import {router, getParams} from '../../utils/router'
 
 // 获取最近的pageContent组件实例
 export const getPageContent = (parent) => {
@@ -140,6 +140,17 @@ export default defineComponent({
     // loading显示
     const loading = ref(false)
 
+    // 格式化数据
+    const formatData = (data) => {
+      return data.map(item => {
+        item.__loading = false
+        if (item.children) {
+          item.children = formatData(item.children);
+        }
+        return item
+      })
+    }
+
     // 获取列表
     const getList = (params = {}) => {
       loading.value = true
@@ -154,7 +165,7 @@ export default defineComponent({
       }, 'data-table').then(res => {
         pagination.value.total = res.total
         pagination.value.pageSize = res.pageSize
-        data.value = res.data
+        data.value = formatData(res.data)
         loading.value = false
       }).catch(() => {
         loading.value = false
@@ -172,11 +183,12 @@ export default defineComponent({
     const loopData = (key, callback, list = data.value, parent = null) => {
       list.some((item, index, arr) => {
         if (item[props.nParams['row-key']] === key) {
+          item.__loading = false;
           callback(item, index, arr, parent);
           return true;
         }
         if (item.children) {
-          return this.loopData(key, callback, item.children, item);
+          return loopData(key, callback, item.children, item);
         }
         return false;
       });
@@ -234,7 +246,7 @@ export default defineComponent({
       requestEvent.add(props.requestEventName, requestEventCallBack)
     }
 
-    const routerChange = ({ params, agree }) => {
+    const routerChange = ({params, agree}) => {
       agree === 'routerPush' && getList(params)
     }
 
@@ -300,7 +312,7 @@ export default defineComponent({
       sortDirections: ['ascend', 'descend'],
     }
 
-    const columns = props.columns.map(item => vExec.call({ colSortable }, item, { editValue, editStatus }))
+    const columns = props.columns.map(item => vExec.call({colSortable}, item, {editValue, editStatus}))
 
     return {
       sorter,
