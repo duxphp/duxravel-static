@@ -285,38 +285,6 @@ export default {
     window.appDialog = AppDialog;
     window.appDialogTable = AppDialogTable;
 
-    /* window.dialogAsync = {
-       //destroyAll: window.dialog.destroyAll.bind(window.dialog),
-       common(option, type) {
-         if (window.dialog[type]) {
-           return new Promise((resolve) => {
-             window.dialog?.[type]({
-               ...option,
-               onClose() {
-                 resolve("close");
-               },
-               onNegativeClick() {
-                 resolve("cancel");
-               },
-               onPositiveClick() {
-                 resolve("ok");
-               },
-             });
-           });
-         } else {
-           return Promise.reject(type + "API不存在");
-         }
-       },
-       info(option) {
-         return dialogAsync.common.call(dialogAsync, option, "info");
-       },
-       success(option) {
-         return dialogAsync.common.call(dialogAsync, option, "success");
-       },
-       warning(option) {
-         return dialogAsync.common.call(dialogAsync, option, "warning");
-       },
-     };*/
   },
   components: {
     Login,

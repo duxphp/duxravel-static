@@ -133,7 +133,7 @@ export default defineComponent({
               type="button"
               vModel={[this.filter.type, 'modelValue']}
             >
-              {this.type.map((item, key) => <a-radio value={key}>{item}</a-radio>)}
+              {this.type.map((item, key) => <a-radio value={item.key}>{item.name}</a-radio>)}
             </a-radio-group>
           </div>}
           {this.search && <div class="flex-none flex gap-4">
