@@ -311,7 +311,7 @@ export default defineComponent({
         placeholder="搜索"
       />}
       {this.data.length > 0 ? <div
-        class="flex-grow h-10 app-scrollbar overflow-y-auto"
+        class="flex-grow h-10 app-scrollbar overflow-y-auto overflow-x-hidden"
       >
         <a-spin class="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
           <a-tree
