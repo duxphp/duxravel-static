@@ -100,13 +100,11 @@ export default {
       tooltip: {
         theme: 'light',
       },
-      //colors: ["#005dff", "#b1cdec", "#00d586"],
       theme: {
           mode: 'light', 
           palette: 'palette1',
           
       }
-      //colors: ["#005dff", "#b1cdec", "#00d586"],
     }
 
     event.add('switch-dark', (type) => {
