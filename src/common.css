@@ -7,6 +7,30 @@ body {
   @apply outline-none;
 }
 
+.arco-modal-simple {
+    @apply p-4;
+    .arco-modal-header {
+        margin-bottom: 5px;
+
+    }
+    .arco-modal-title {
+        @apply justify-start;
+        .arco-modal-title-icon {
+
+        }
+        .arco-icon {
+        }
+    }
+    .arco-modal-body {
+        @apply ml-7 text-gray-600;
+    }
+    .arco-modal-footer {
+        @apply text-right mt-4;
+        .arco-btn {
+        }
+    }
+}
+
 .arco-form-item-label-required-symbol {
     svg {
         @apply inline mr-1;
@@ -43,7 +67,7 @@ body {
         }
       }
     }
-    
+
   }
 }
 
@@ -59,156 +83,6 @@ body {
         @apply flex-1 flex justify-center;
     }
 }
-
-/*
-
-.n-data-table.n-data-table--bordered .n-data-table-wrapper {
-  @apply overflow-hidden;
-}
-
-.n-menu .n-menu-item {
-  @apply h-10;
-}
-
-.n-menu .n-submenu .n-menu-item-content {
-  @apply h-10;
-}
-
-.n-tree .n-tree-node-switcher {
-  height: 38px;
-}
-
-.n-tree .n-tree-node-content {
-  min-height: 38px;
-}
-
-.n-tree .n-tree-node-checkbox {
-  height: 38px;
-}
-
-.table-nohead .n-data-table .n-data-table-thead {
-  @apply hidden;
-}
-!*
-
-.table-list {
-  & .n-data-table-empty {
-    @apply mt-0 p-0 shadow-sm rounded;
-  }
-
-  & .n-data-table {
-    & .n-data-table-thead {
-      @apply bg-transparent;
-
-      & .n-data-table-tr {
-        &:hover {
-          @apply bg-transparent;
-        }
-        & .n-data-table-th {
-          @apply border-none font-normal text-gray-500 py-2 bg-gray-100 dark:bg-gray-800 dark:text-gray-400;
-          &:hover {
-            @apply text-gray-900 dark:text-gray-300;
-          }
-        }
-      }
-    }
-
-    & .n-data-table-tbody {
-      & .n-data-table-td {
-        @apply border-none ;
-      }
-
-      & .n-data-table-tr {
-        @apply rounded overflow-hidden shadow-sm;
-
-        &>.n-data-table-td:first-child,
-        &>.n-data-table-th:first-child {
-          @apply rounded-l;
-        }
-
-        &>.n-data-table-td:last-child,
-        &>.n-data-table-th:last-child {
-          @apply rounded-r;
-        }
-      }
-    }
-
-    & .n-data-table-wrapper,
-    &.n-data-table--bordered {
-      & .n-data-table-wrapper {
-        @apply shadow-none border-0 overflow-visible;
-      }
-    }
-
-    & .n-data-table-table {
-      border-collapse: separate;
-      border-spacing: 0px theme('spacing.2');
-      background: none;
-    }
-  }
-
-}
-*!
-
-!*
-.n-data-table {
-   & .n-data-table-th, & .n-data-table-td {
-    @apply whitespace-nowrap ;
-  }
-
-  &.n-data-table--bordered {
-    & .n-data-table-wrapper {
-      @apply shadow overflow-hidden rounded-md border-0;
-    }
-  }
-  & .n-data-table-empty {
-    @apply bg-white dark:bg-gray-800;
-  }
-}*!
-
-.table-tree {
-  @apply flex flex-col;
-}
-
-.table-tree .n-tree-node {
-  @apply flex items-center;
-}
-
-.table-tree .n-tree-node-wrapper {
-  @apply mb-1;
-}
-
-.table-tree .n-tree-node-switcher {}
-
-.table-tree .n-tree-node-content {
-  text-decoration-line: none;
-  @apply px-4 py-3.5 bg-white rounded shadow-sm;
-}
-
-.table-tree .n-tree-node-content__text {
-  @apply flex flex-row flex-grow items-center gap-4;
-}
-
-.table-tree .n-tree-node-content__text .tree-line {
-  @apply flex-none;
-}
-
-.table-tree .n-tree-node-content__text .tree-line:last-child {
-  @apply flex-grow flex justify-end;
-}
-
-.global-menus {
-  @apply absolute flex flex-col bg-white left-0 top-0  shadow rounded;
-  z-index: 99999;
-}
-.global-menus .item {
-  @apply py-1.5 px-6 cursor-pointer;
-}
-.global-menus .item:hover {
-  @apply bg-gray-50;
-}
-
-*/
 
 .overlay {
     overflow:auto;
