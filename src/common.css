@@ -84,6 +84,26 @@ body {
     }
 }
 
+.app-collapse-full {
+    @apply flex flex-col;
+    .arco-collapse-item {
+        @apply flex-none flex flex-col;
+        .arco-collapse-item-header {
+            @apply flex-none;
+        }
+        .arco-collapse-item-content {
+            background-color: transparent;
+            @apply flex-grow h-10 overflow-y-auto overflow-x-hidden px-0;
+        }
+        .arco-collapse-item-content-box {
+            @apply h-full;
+        }
+    }
+    .arco-collapse-item-active {
+        @apply flex-grow h-10;
+    }
+}
+
 .overlay {
     overflow:auto;
     overflow: overlay;

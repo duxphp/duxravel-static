@@ -1,7 +1,7 @@
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 import qs from 'qs'
-import { request, searchQuick } from '../../utils/request'
-import { requestEvent } from '../../utils/event'
+import {request, searchQuick} from '../../utils/request'
+import {requestEvent} from '../../utils/event'
 
 /**
  * 将展开的级别keys保存在本地
@@ -178,7 +178,7 @@ export default defineComponent({
             }
           }
           if (status) {
-            result.push({ ...item });
+            result.push({...item});
           } else if (item.children) {
             const filterData = loop(item.children);
             if (filterData.length) {
@@ -249,7 +249,7 @@ export default defineComponent({
 
       this.resetLevel()
     },
-    handleDrop({ dragNode, dropNode, dropPosition }) {
+    handleDrop({dragNode, dropNode, dropPosition}) {
 
       const sort = {
         id: dragNode.key,
@@ -297,7 +297,7 @@ export default defineComponent({
         this.loading = false
       })
 
-    },
+    }
   },
   render() {
 
@@ -336,26 +336,27 @@ export default defineComponent({
                   return this.contextMenus.length
                     ? <a-dropdown
                       trigger="contextMenu"
+                      onSelect={(key) => {
+                        const menu = this.contextMenus.find(menu => menu.key === key)
+                        new Function('item', 'options', menu.event)(item, this.options)
+                      }}
                       alignPoint
                       class="w-32"
                     >
                       {{
                         default: () => {
                           return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                            <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
+                            <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
                             {this.$slots.label ? this.$slots.label(item) : item.title}
                           </div>
                         },
-                        content: () => <>
-                          {this.contextMenus.map(menu => <a-doption onClick={() => {
-                            new Function('item', 'options', menu.event)(item, this.options)
-                          }}>{menu.text}</a-doption>)}
-                        </>
-
+                        content: () => {
+                          return this.contextMenus.map(menu => <a-doption value={menu.key}>{menu.text}</a-doption>)
+                        }
                       }}
                     </a-dropdown>
-                    : <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
-                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
+                    : <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center ">
+                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
                       {this.$slots.label ? this.$slots.label(item) : item.title}
                     </div>
                 }
@@ -364,7 +365,7 @@ export default defineComponent({
             }
           </a-tree>
         </a-spin>
-      </div> : <a-empty />
+      </div> : <a-empty/>
       }
     </div>
   }
