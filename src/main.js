@@ -21,6 +21,7 @@ import Icon from './components/Icon.vue'
 import DataTable from './components/table/DataTable'
 import Tree from './components/table/Tree'
 import DataSelect from './components/form/Select'
+import DataTreeSelect from './components/form/TreeSelect'
 import DataCascader from './components/form/Cascader'
 import DataFile from './components/form/File'
 import DataFiles from './components/form/Files'
@@ -69,6 +70,8 @@ app.component('app-table', DataTable)
 app.component('widget-tree', Tree)
 // 选择器
 app.component('app-select', DataSelect)
+// 树形选择器
+app.component('app-tree-select', DataTreeSelect)
 // 级联选择器
 app.component('app-cascader', DataCascader)
 // 文件上传

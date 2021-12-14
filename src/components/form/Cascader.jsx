@@ -53,18 +53,52 @@ export default defineComponent({
         this.loading = false
       })
     },
-    updateValue(value) {
+    formatData(value) {
+      let labelPath = []
+      function getNodeRoute(tree) {
+        for (let index = 0; index < tree.length; index++) {
+          if (tree[index].children) {
+            let endRecursiveLoop = getNodeRoute(tree[index].children)
+            if (endRecursiveLoop) {
+              labelPath.push(tree[index].label)
+              return true
+            }
+          }
+          if (tree[index].value == value) {
+            labelPath.push(tree[index].label)
+            return true
+          }
+        }
+      }
+      getNodeRoute(this.nParams.options)
+      return labelPath.reverse()
+    },
+    getLabel(value) {
+      let labels = []
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          labels.push(this.formatData(item))
+        })
+      } else {
+        labels.push(this.formatData(value))
+      }
+      return labels
+    },
+    updateValue(value, label) {
       this.modelValue = value
+      let labels = this.getLabel(value)
+      this.$emit('label', labels)
       this.$emit('update:value', value)
     },
   },
   render() {
     return <a-spin loading={this.loading} class="black w-full"><a-cascader
       {...vExec.call(this, this.nParams)}
-      formatLabel={this.formatLabel}
       modelValue={this.modelValue}
       allowSearch={this.search}
+      allowClear={true}
       onChange={this.updateValue}
+      onInputValueChange={(xx) => {console.log(xx)}}
     />
   </a-spin>
   }

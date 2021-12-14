@@ -336,11 +336,12 @@ export default defineComponent({
                   return this.contextMenus.length
                     ? <a-dropdown
                       trigger="contextMenu"
+                      position="tr"
                       onSelect={(key) => {
                         const menu = this.contextMenus.find(menu => menu.key === key)
                         new Function('item', 'options', menu.event)(item, this.options)
                       }}
-                      alignPoint
+
                       class="w-32"
                     >
                       {{
