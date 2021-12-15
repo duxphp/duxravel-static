@@ -104,6 +104,18 @@ body {
     }
 }
 
+.app-list-small {
+    .arco-list-header {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+    .arco-list-content {
+        .arco-list-item {
+            padding: 5px 10px;
+        }
+    }
+}
+
 .overlay {
     overflow:auto;
     overflow: overlay;
