@@ -98,7 +98,6 @@ export default defineComponent({
       allowSearch={this.search}
       allowClear={true}
       onChange={this.updateValue}
-      onInputValueChange={(xx) => {console.log(xx)}}
     />
   </a-spin>
   }

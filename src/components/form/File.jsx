@@ -130,10 +130,10 @@ export default defineComponent({
         class={`h-${this.size} lg:w-${this.size} lg:h-${this.size}`}
         style={{
           backgroundSize: '90%',
-          backgroundImage: `url(${this.value || 'http://highway.test/service/image/placeholder/180/180/选择图片'})`
+          backgroundImage: `url(${this.value || '/service/image/placeholder/180/180/选择图片'})`
         }}
       >
-        <a-image-preview src={this.value || 'http://highway.test/service/image/placeholder/180/180/选择图片'} vModel={[this.visible, 'visible']}/>
+        <a-image-preview src={this.value || '/service/image/placeholder/180/180/选择图片'} vModel={[this.visible, 'visible']}/>
         {!this.mini ?
           <div class="flex gap-2 h-7 w-full items-center bg-white bg-opacity-60 dark:bg-blackgray-5 dark:bg-opacity-80">
             <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
