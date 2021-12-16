@@ -90,6 +90,7 @@ export default defineComponent({
                 
                 plugins: this.plugins,
                 toolbar: this.toolbar,
+                width: '100%',
                 min_height: 500,
                 fontsize_formats: '12px 14px 16px 18px 24px 36px 48px 56px 72px',
                 convert_urls: false,
@@ -214,6 +215,6 @@ export default defineComponent({
         },
     },
     render() {
-        return <div><Editor vModel={this.content} init={this.init} disabled={this.disabled} onClick={this.onClick} /></div>
+        return <Editor vModel={this.content} init={this.init} disabled={this.disabled} onClick={this.onClick} />
     }
 })
