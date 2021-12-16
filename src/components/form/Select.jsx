@@ -19,28 +19,16 @@ export default defineComponent({
   async created() {
     if (this.dataUrl) {
       await this.handleSearch('', this.value)
-      if (this.optionRender) {
-        this.nParams.formatLabel = (item) => {
-          if (item) {
-            return this.optionRender?.(item.rowData) || item.label
-          }
-        }
-      }
-    } else {
-      this.nParams.options.map((item) => {
-        item.render = () => {
-          return this.optionRender?.(item) || item.label
-        }
-        return item;
-      })
-      if (this.optionRender) {
-        this.nParams.formatLabel = (item) => {
-          if (item) {
-            return this.optionRender?.(item) || item.label
-          }
-        }
+    }
+    if (this.optionRender) {
+      this.nParams.formatLabel = (item) => {
+        return item && (this.optionRender(item) || item.label)
       }
     }
+    this.nParams.options.map(item => {
+      item.label = item.label.toString()
+      return item
+    })
     this.modelValue = this.value
   },
   watch: {
@@ -66,18 +54,15 @@ export default defineComponent({
         }
       }).then(res => {
         this.nParams.options = res.data instanceof Array ? res.data.map((item) => {
-          return {
-            label: item.name,
+          const data = {
+            label: item.name.toString(),
             value: item.id,
-            render: () => {
-
-              const ddd = this.$slots.option(item)
-              console.log(ddd)
-              return ddd
-              //return this.optionRender?.(item) || item.name
-            },
             rowData: item
           }
+          data.render = () => {
+            return this.optionRender(data)
+          }
+          return data
         }) : []
 
         this.loading = false
