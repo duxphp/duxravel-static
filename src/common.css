@@ -7,6 +7,16 @@ body {
   @apply outline-none;
 }
 
+.arco-form-item-label {
+    position: relative;
+}
+
+.arco-form-item-label .arco-form-item-label-required-symbol{
+    position: absolute;
+    margin-left: -16px;
+    margin-top: 3px;
+}
+
 .arco-modal-simple {
     @apply p-4;
     .arco-modal-header {
