@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data.show" class="absolute inset-0 bg-cover bg-center overflow-y-auto bg-blackgray-3" style="z-index: 100 " :style="{ 'backgroundImage':'url('+ config.background +')' }">
+  <div v-if="data.show" class="absolute inset-0 bg-cover bg-center overflow-y-auto bg-blackgray-3 bg-gradient-to-r from-pinkpurple-300 to-arcoblue-300" style="z-index: 100 " :style="config.background ? { 'backgroundImage':'url('+ config.background +')' } : ''">
 
     <div class="max-w-7xl  mx-auto  px-4 md:h-screen md:flex md:flex-col">
       <div class="flex-none md:flex py-4 text-gray-100  dark:text-gray-200 items-center ">
@@ -30,7 +30,7 @@
       <div class="flex-grow md:flex items-center justify-center">
 
         <div class="max-w-4xl w-full flex flex-col md:flex-row bg-white dark:bg-blackgray-5 shadow rounded">
-          <div class="md:w-1/2 bg-black hidden md:block">
+          <div class="md:w-1/2 bg-white hidden md:block rounded-l">
             <a-carousel class="w-full h-full"
                         :auto-play="true"
                         indicator-type="dot"
@@ -51,7 +51,7 @@
 
             <div class=" flex-grow flex flex-col max-w-xs w-full">
               <div class="text-center mt-20 mb-10">
-                <div class="text-blue-600 text-2xl ">平台登录</div>
+                <div class="text-blue-600 text-2xl ">{{ config.name }}</div>
               </div>
 
               <form class="flex flex-col gap-6" @submit="login">
@@ -99,6 +99,7 @@ import event from "../utils/event";
 import {isLogin, setLocalUserInfo} from "../utils/user";
 import logo from "../assets/images/logo.svg";
 import loginFoot from "../assets/images/login-foot.png";
+import loginSode from "../assets/images/login-side.png";
 import {weather} from "../utils/util";
 
 
@@ -142,9 +143,10 @@ export default {
         logo: window.appConfig.login.logo || logo,
         background: window.appConfig.login.background,
         title: window.appConfig.login.title || 'DuxRavel',
+        name: window.appConfig.login.name || '系统登录',
         desc: window.appConfig.login.desc || '',
         contact: window.appConfig.login.contact || '',
-        side: window.appConfig.login.side || [],
+        side: window.appConfig.login.side || [loginSode],
         foot: loginFoot
       },
       readonly: ref(true),
