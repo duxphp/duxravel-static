@@ -34,6 +34,6 @@ class UIServiceProvider extends ServiceProvider
             __DIR__.'/../dist/static/manage' => public_path('static/manage'),
             __DIR__.'/../dist/static/tinymce' => public_path('static/tinymce'),
             __DIR__.'/../dist/manifest.json' => public_path('static/manage-manifest.json'),
-        ], 'duxravel-system');
+        ], 'duxravel');
     }
 }
