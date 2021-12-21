@@ -28,6 +28,10 @@ export default {
       type: String,
       default: "GET",
     },
+    mode: {
+      type: String,
+      default: "modal",
+    },
     title: String,
     before: Function,
     after: Function
@@ -68,7 +72,7 @@ export default {
         }
       } else if (this.type === "dialog") {
         // 弹出路由
-        router.dialog(this.href);
+        router.dialog(this.href, this.mode);
       } else if (["replace", "back", "push"].includes(this.type)) {
         const page = getPageContent(this.$parent);
         if (page) {

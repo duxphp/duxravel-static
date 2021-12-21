@@ -195,6 +195,7 @@
     :key="item.key"
     :currentUrl="item.url"
     :windowType="'dialog'"
+    :mode="item.mode"
     @close-dialog="closeDialog(index)"
   />
   <Login />
@@ -281,10 +282,11 @@ export default {
     // 弹窗key
     let dialogKey = 0;
     // 弹出路由
-    event.add("router-dialog", ({ url }) => {
+    event.add("router-dialog", ({ url, mode}) => {
       this.dialogRouter.push({
         key: dialogKey++,
         url,
+        mode
       });
     });
 

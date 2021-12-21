@@ -126,13 +126,6 @@ body {
     }
 }
 
-/**
- * fix bug 临时解决
- */
-.arco-cascader-panel-column {
-    z-index: 1 !important;
-}
-
 .overlay {
     overflow:auto;
     overflow: overlay;

@@ -1,33 +1,52 @@
 <template>
   <template v-if="windowType === 'page'">
     <PageRoute
-      :windowType="windowType"
-      :currentUrl="url"
-      @load-status="loadStatus"
+        :windowType="windowType"
+        :currentUrl="url"
+        @load-status="loadStatus"
     />
   </template>
 
   <a-modal
-    v-else
-    :visible="dialogShow"
-    modalClass="page-dialog max-w-2xl w-full"
-    :closable="false"
-    :mask="true"
-    :footer="false"
+      v-else-if="mode === 'modal'"
+      :visible="dialogShow"
+      modalClass="page-dialog max-w-2xl w-full"
+      :closable="false"
+      :mask="true"
+      :footer="false"
   >
-    <div ref="dialogAnimation" class="max-w-2xl my-4 dialog-animation">
+    <div ref="dialogAnimation" class="dialog-animation">
       <PageRoute
-        :windowType="windowType"
-        :currentUrl="url"
-        @load-status="loadStatus"
+          :windowType="windowType"
+          :currentUrl="url"
+          @load-status="loadStatus"
       />
     </div>
   </a-modal>
+
+  <a-drawer
+      v-else
+      :visible="dialogShow"
+      class="page-drawer"
+      :mask="true"
+      :footer="false"
+      :width="350"
+      @cancel="() => {this.changeRouter('', 'back')}"
+  >
+    <div ref="dialogAnimation" class="dialog-animation">
+      <PageRoute
+          :windowType="windowType"
+          :currentUrl="url"
+          @load-status="loadStatus"
+      />
+    </div>
+  </a-drawer>
+
 </template>
 
 <script>
 import PageRoute from "./PageRoute.vue";
-import { router } from "../utils/router";
+import {router} from "../utils/router";
 
 export default {
   name: "PageContent",
@@ -37,6 +56,10 @@ export default {
       default: "",
     },
     windowType: String,
+    mode: {
+      type: String,
+      default: "modal"
+    },
   },
   components: {
     PageRoute,
@@ -106,7 +129,7 @@ export default {
       this.dialogMsg?.close?.();
       this.dialogMsg = null;
     },
-    loadStatus({ type }) {
+    loadStatus({type}) {
       if (this.windowType === "page") {
         if (type === "start") {
           window.NProgress.start();
@@ -121,12 +144,15 @@ export default {
         if (type === "start") {
           this.dialogMsg = window.message.info("加载页面中，请稍等...");
         } else if (type === "end") {
-          this.dialogShow = true;
-
+          setTimeout(() => {
+            this.dialogShow = true;
+          }, 300)
           //this.dialogAnimation();
           this.closeLoading();
         } else {
-          this.dialogShow = true;
+          setTimeout(() => {
+            this.dialogShow = true;
+          }, 300)
           //this.dialogAnimation();
           this.closeLoading();
           if (this.urls.length === 1) {
@@ -165,12 +191,26 @@ export default {
 .dialog-animation {
   transition: all 0.2s;
 }
+
 .dialog-animation.an-start {
   transition: all 0s;
   opacity: 0;
   transform: scale3d(0.4, 0.4, 1);
 }
+
 .page-dialog .arco-modal-body {
+  padding: 0;
+}
+
+.page-drawer {
+
+}
+
+.page-drawer .arco-drawer-header {
+  display: none;
+}
+
+.page-drawer .arco-drawer-body {
   padding: 0;
 }
 </style>

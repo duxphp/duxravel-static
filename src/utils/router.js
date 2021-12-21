@@ -138,8 +138,8 @@ router.back = (url) => {
   history.go(-num)
 }
 // 弹窗
-router.dialog = (url) => {
-  event.emit('router-dialog', { url })
+router.dialog = (url, mode) => {
+  event.emit('router-dialog', { url , mode})
 }
 // 普通跳转
 router.http = (url) => {
