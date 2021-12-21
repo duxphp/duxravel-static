@@ -1,6 +1,6 @@
 {
     "name": "duxphp/duxravel-static",
-    "type":"duxravel-app",
+    "type": "library",
     "description": "Duxravel 前端库",
     "authors": [
         {
