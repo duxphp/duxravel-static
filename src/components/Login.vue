@@ -146,7 +146,7 @@ export default {
         name: window.appConfig.login.name || '系统登录',
         desc: window.appConfig.login.desc || '',
         contact: window.appConfig.login.contact || '',
-        side: window.appConfig.login.side || [loginSode],
+        side: (window.appConfig.login.side && window.appConfig.login.side.length > 0) ? window.appConfig.login.side : [loginSode],
         foot: loginFoot
       },
       readonly: ref(true),
