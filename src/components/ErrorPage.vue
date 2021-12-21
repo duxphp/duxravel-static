@@ -6,8 +6,8 @@
     <div class="text-lg mt-5 mb-2">{{ code }} {{ title }}</div>
     <div class="text-gray-400">您可以尝试刷新该页面，或返回前一个操作页面</div>
     <div class="flex gap-4 mt-5">
-      <n-button type="primary" @click="back">返回页面</n-button>
-      <n-button type="default" @click="reload">尝试刷新</n-button>
+      <a-button type="primary" @click="back">返回页面</a-button>
+      <a-button type="outline" @click="reload">尝试刷新</a-button>
     </div>
   </div>
 </template>
