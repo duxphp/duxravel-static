@@ -3,14 +3,6 @@ import {getUrl, request, searchQuick} from '../../utils/request'
 import {getLocalUserInfo} from '../../utils/user'
 import {formatType} from '../../utils/component'
 
-const api = {
-  upload: 'upload',
-  list: 'fileManage?type=files',
-  del: 'fileManage?type=files-delete',
-  cateList: 'fileManage?type=folder',
-  cateAdd: 'fileManage?type=folder-create',
-  cateDel: 'fileManage?type=folder-delete'
-}
 
 export default defineComponent({
   props: {
@@ -24,10 +16,26 @@ export default defineComponent({
     },
     callback: Function,
     close: Function,
+    uploadUrl: {
+      type: String,
+      default: 'upload'
+    },
+    fileUrl: {
+      type: String,
+      default: 'fileManage'
+    }
 
   },
   setup(props) {
 
+    const api = ref({
+      upload: props.uploadUrl,
+      list: props.fileUrl + '?type=files',
+      del: props.fileUrl + '?type=files-delete',
+      cateList: props.fileUrl + '?type=folder',
+      cateAdd: props.fileUrl + '?type=folder-create',
+      cateDel: props.fileUrl + '?type=folder-delete'
+    })
 
     const listLoading = ref(true)
 
@@ -78,7 +86,7 @@ export default defineComponent({
         return
       }
       // 获取分类 和列表
-      request(api.cateList).then(res => {
+      request(api.value.cateList).then(res => {
         cate.value = res
         filter.value.id = res[0]?.dir_id || ''
         initStatus = true
@@ -89,7 +97,7 @@ export default defineComponent({
     const getList = () => {
       listLoading.value = true
       searchQuick({
-        url: getUrl(api.list),
+        url: api.value.list,
         data: filter.value
       }).then(res => {
         list.value = res.data
@@ -169,7 +177,7 @@ export default defineComponent({
       }
       cateAddStatus.value = true
       request({
-        url: getUrl(api.cateAdd),
+        url: api.value.cateAdd,
         data: {
           name: cateAddValue.value
         }
@@ -194,7 +202,7 @@ export default defineComponent({
         hideCancel: false,
         onOk: () => {
           request({
-            url: getUrl(api.cateDel),
+            url: api.value.cateDel,
             data: {
               id: item.dir_id
             }
@@ -251,16 +259,17 @@ export default defineComponent({
       cateAddStatus,
       cateAddValue,
       delCate,
+      api
     }
   },
   render() {
-    return <a-modal modalClass="file-manage page-dialog max-w-screen-md w-auto" visible={this.showModal}
+    return <a-modal modalClass="file-manage page-dialog max-w-screen-md w-full" visible={this.showModal}
                     closable={false} footer={false} onClose={this.closeModal} onCancel={this.closeModal}>
 
         <div class="arco-modal-header flex gap-2">
           <div class="flex-grow flex flex-row gap-2">
             {!!this.filter.id && <a-upload
-              action={getUrl(api.upload)}
+              action={getUrl(this.api.upload)}
               accept={this.accept}
               headers={{
                 'Accept': 'application/json',
@@ -298,9 +307,9 @@ export default defineComponent({
           </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row items-stretch  ">
+        <div class="flex flex-row items-stretch  ">
           <div
-            class="flex-none manage-sidebar w-40 border-r border-gray-300 dark:border-blackgray-2 h-96 lg:overflow-y-auto lg:block hidden">
+            class="flex-none manage-sidebar w-40 border-r border-gray-300 dark:border-blackgray-2 h-96 overflow-y-auto block">
             <ul>
               {
                 this.cate.map((item, index) => <li

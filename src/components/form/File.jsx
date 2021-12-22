@@ -9,6 +9,10 @@ export default defineComponent({
       type: String,
       default: 'upload'
     },
+    'fileUrl': {
+      type: String,
+      default: 'fileManage'
+    },
     'value': {
       type: [String, Number]
     },
@@ -77,6 +81,8 @@ export default defineComponent({
     fileManage() {
       window.fileManage({
         type: this.formatClone,
+        uploadUrl: this.upload,
+        fileUrl: this.fileUrl
       }).then(res => {
         this.$emit('update:value', res.url)
       })

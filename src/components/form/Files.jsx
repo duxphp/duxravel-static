@@ -9,6 +9,10 @@ export default defineComponent({
       type: String,
       default: 'upload'
     },
+    'fileUrl': {
+      type: String,
+      default: 'fileManage'
+    },
     'value': {
       type: Array
     },
@@ -68,7 +72,9 @@ export default defineComponent({
     fileManage() {
       window.fileManage({
         multiple: true,
-        type: this.formatClone
+        type: this.formatClone,
+        uploadUrl: this.upload,
+        fileUrl: this.fileUrl
       }).then(res => {
         res.map((item) => {
           this.list.push({
