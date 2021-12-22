@@ -24,7 +24,7 @@ export default defineComponent({
     },
     'size': {
       type: Number,
-      default: 32
+      default: 125
     },
     'type': {
       type: String,
@@ -127,8 +127,9 @@ export default defineComponent({
     } else {
       return <div
         class="relative bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 rounded bg-cover bg-center bg-no-repeat block flex items-end "
-        class={`h-${this.size} lg:w-${this.size} lg:h-${this.size}`}
         style={{
+          width: this.size + 'px',
+          height: this.size + 'px',
           backgroundSize: '90%',
           backgroundImage: `url(${this.value || '/service/image/placeholder/180/180/选择图片'})`
         }}
