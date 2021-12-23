@@ -12,17 +12,21 @@ export default defineComponent({
   data() {
     const list = this.value || []
     if (!list.length) {
-      this.onCreate ? list.push(this.onCreate(0)) : list.push({})
+      list.push(this.onAdd(0))
     }
     return {
-      list
+      list,
     }
   },
   watch: {},
-  created() {
-
-  },
   methods: {
+    onAdd(index) {
+      if (!this.onCreate) {
+        return ""
+      }else {
+        return this.onCreate(index)
+      }
+    },
     onOpen() {
       this.show = true
     },
@@ -31,24 +35,20 @@ export default defineComponent({
     return <div class="flex gap-2 flex-col  w-full">
       {
         this.list.length > 0 && this.list.map((value, index) => <div class="flex gap-2 items-center">
-          <div class="flex-grow">{this.$slots.default?.({
+          <div class="flex-grow"> {this.$slots.default?.({
             index: index,
             value: this.list[index]
-          })}</div>
+          }) || <a-input vModel={[this.list[index], 'model-value']} />}</div>
           <div class="flex-none flex items-center gap-2">
             <a-button type="secondary" shape="circle" disabled={this.max && this.list.length >= this.max} onClick={() => {
-              if (this.onCreate) {
-                this.list.splice(index + 1, 0, this.onCreate(index + 1))
+                this.list.splice(index + 1, 0, this.onAdd(index + 1))
                 this.$emit('update:value', this.list)
-              }
             }}>
               <icon-plus/>
             </a-button>
             {index > 0 && <a-button shape="circle" type="secondary" status="danger" disabled={this.min && this.list.length <= this.min} onClick={() => {
-              if (this.onCreate) {
                 this.list.splice(index, 1)
                 this.$emit('update:value', this.list)
-              }
             }}>
               <icon-delete/>
             </a-button>}
