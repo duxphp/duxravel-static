@@ -75,8 +75,10 @@
                             type="primary"
                             size="large"
                             :loading="data.status"
-                            long>登录
+                            long>
+                    {{data.register ? '注册登录' : '登录'}}
                   </a-button>
+                  <div v-if="data.register"  class="text-center text-gray-600 mt-2">首次登录将使用账号密码进行注册</div>
                 </div>
               </form>
             </div>
@@ -113,17 +115,26 @@ export default {
     })
   },
   setup() {
+
     const data = ref({
       logo: logo,
       post: {},
       show: !isLogin(),
+      register: false,
       status: false,
+    });
+
+    request({
+      url: "login/check",
+      method: "GET",
+    }).then((res) => {
+      data.value.register = !!res.register;
     });
 
     event.add("open-login", () => {
       if (!data.value.show) {
         data.value.show = true;
-        window.message.error("你已退出登录，请登录");
+        window.message.error("登录已失效，请进行登录");
       }
     })
 
@@ -185,7 +196,7 @@ export default {
         }
         data.value.status = true;
         request({
-          url: "login",
+          url: data.value.register ? "register" : "login",
           data: data.value.post,
           method: "POST",
         })

@@ -8,11 +8,11 @@ import { request } from './request'
 export const login = () => {
   event.emit('open-login')
   return new Promise((resolve, reject) => {
-    const calback = () => {
-      event.remove('login-success', calback)
+    const callback = () => {
+      event.remove('login-success', callback)
       resolve()
     }
-    event.add('login-success', calback)
+    event.add('login-success', callback)
   })
 }
 
