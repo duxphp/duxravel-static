@@ -17,8 +17,7 @@
         <div class="flex-none hidden md:flex items-center gap-4 text-right" v-if="nowDate">
           <div class="flex flex-col gap-1 flex-grow">
             <div>{{ nowDate }}</div>
-            <div v-if="weatherData">{{ weatherData.city }} {{ weatherData.weather }} {{ weatherData.temperature }}°</div>
-            <div v-else>获取天气中...</div>
+            <div v-if="weatherData.city">{{ weatherData.city }} {{ weatherData.weather }} {{ weatherData.temperature }}°</div>
           </div>
           <div class="flex-none text-4xl">
             {{ nowTime }}
@@ -177,7 +176,7 @@ export default {
         minute = minute < 10 ? "0" + minute : minute
         let second = date.getSeconds()
         second = second < 10 ? "0" + second : second
-        nowDate.value = `${year} 年 ${month} 月 ${day} 日    ${weekArr[week]}`
+        nowDate.value = `${year} 年 ${month} 月 ${day} 日 ${weekArr[week]}`
         nowTime.value = `${hour}:${minute}`
       },
       currentTime() {
