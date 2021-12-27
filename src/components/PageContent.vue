@@ -188,8 +188,10 @@ export default {
       }, 5);
     },
     dialogOpen() {
-      const myEvent = new Event('resize')
-      window.dispatchEvent(myEvent)
+      this.$nextTick(() => {
+        const myEvent = new Event('resize')
+        window.dispatchEvent(myEvent)
+      })
     }
   },
 };
