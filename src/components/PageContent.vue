@@ -14,6 +14,8 @@
       :closable="false"
       :mask="true"
       :footer="false"
+      :alignCenter="false"
+      :top="40"
   >
     <div ref="dialogAnimation" class="dialog-animation">
       <PageRoute
