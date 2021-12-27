@@ -16,6 +16,7 @@
       :footer="false"
       :alignCenter="false"
       :top="40"
+      :open="dialogOpen"
   >
     <div ref="dialogAnimation" class="dialog-animation">
       <PageRoute
@@ -33,6 +34,7 @@
       :mask="true"
       :footer="false"
       :width="350"
+      :open="dialogOpen"
       @cancel="() => {this.changeRouter('', 'back')}"
   >
     <div ref="dialogAnimation" class="dialog-animation">
@@ -185,6 +187,10 @@ export default {
         page.classList.remove("an-start");
       }, 5);
     },
+    dialogOpen() {
+      const myEvent = new Event('resize')
+      window.dispatchEvent(myEvent)
+    }
   },
 };
 </script>
