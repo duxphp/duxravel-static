@@ -1,13 +1,13 @@
 {
   "src/main.js": {
-    "file": "static/manage/main.75b801a7.js",
+    "file": "static/manage/main.bc7c516e.js",
     "src": "src/main.js",
     "isEntry": true,
     "imports": [
-      "_vendor.d9d0c602.js"
+      "_vendor.58dc9a81.js"
     ],
     "css": [
-      "static/manage/main.54edad18.css"
+      "static/manage/main.2ca9ae2c.css"
     ],
     "assets": [
       "static/manage/logo.d66db2fc.svg",
@@ -15,7 +15,7 @@
       "static/manage/login-side.19d425f0.png"
     ]
   },
-  "_vendor.d9d0c602.js": {
-    "file": "static/manage/vendor.d9d0c602.js"
+  "_vendor.58dc9a81.js": {
+    "file": "static/manage/vendor.58dc9a81.js"
   }
 }
