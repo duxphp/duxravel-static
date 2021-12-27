@@ -189,8 +189,9 @@ export default {
     },
     dialogOpen() {
       this.$nextTick(() => {
-        const myEvent = new Event('resize')
-        window.dispatchEvent(myEvent)
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'))
+        }, 200)
       })
     }
   },
