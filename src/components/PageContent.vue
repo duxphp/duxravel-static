@@ -188,11 +188,6 @@ export default {
       }, 5);
     },
     dialogOpen() {
-      this.$nextTick(() => {
-        setTimeout(() => {
-          window.dispatchEvent(new Event('resize'))
-        }, 200)
-      })
     }
   },
 };
