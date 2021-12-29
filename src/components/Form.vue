@@ -22,6 +22,10 @@ export default defineComponent({
         return ["POST", "GET", "post", "get"].includes(value);
       },
     },
+    back: {
+      type: Boolean,
+      default: true
+    },
     value: {
       type: Object,
       default: () => ({}),
@@ -37,6 +41,7 @@ export default defineComponent({
     const that = getCurrentInstance();
     const submitStatus = ref(false);
     const validatorStatus = ref(true)
+
     const submitSuccess = () => {
       validatorStatus.value = false
     }
@@ -58,7 +63,7 @@ export default defineComponent({
           ...(page ? {"x-dialog": "1"} : {}),
         },
       }).then(() => {
-        if (page) {
+        if (page && props.back) {
           page.changeRouter(1, "back");
         }
         submitStatus.value = false;
