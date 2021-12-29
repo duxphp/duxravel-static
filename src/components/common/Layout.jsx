@@ -15,6 +15,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    'back': {
+      type: Boolean,
+      default: true
+    },
     'submit': {
       type: Function,
     },
@@ -112,12 +116,12 @@ export default defineComponent({
             </a-breadcrumb>
           </div>
           {this.form && <div class="flex-none flex gap-2">
-            <route type="back">
+            {this.back && <route type="back">
               <a-button type="outline">
                 返回
               </a-button>
-            </route>
-            <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit}  loading={this.formLoading}>保存</a-button>
+            </route>}
+            <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit} loading={this.formLoading}>保存</a-button>
           </div>
           }
         </div>
