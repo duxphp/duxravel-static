@@ -37,6 +37,9 @@ import DataDialog from './components/common/Dialog'
 window.Vue = Vue
 window.NProgress = NProgress
 
+// 注册消息服务
+window.LaravelEcho = null
+
 // 实例注册到全局
 const app = window.vueApp = Vue.createApp(App)
 
@@ -87,15 +90,11 @@ app.component('app-color', DataColor)
 
 // 动态数据
 app.component('app-dynamic-data', DynamicData)
-
-
 app.component('app-layout', DataLayout)
 app.component('app-dialog', DataDialog)
 
-
 // 拖动排序
 app.component('draggable', draggable)
-
 
 app.mount('#duxravel-static')
 

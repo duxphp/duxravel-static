@@ -927,6 +927,11 @@ kolorist@^1.5.1:
   resolved "https://registry.yarnpkg.com/kolorist/-/kolorist-1.5.1.tgz#c3d66dc4fabde4f6b7faa6efda84c00491f9e52b"
   integrity sha512-lxpCM3HTvquGxKGzHeknB/sUjuVoUElLlfYnXZT73K8geR9jQbroGlSCFBax9/0mpGoD3kzcMLnOlGQPJJNyqQ==
 
+laravel-echo@^1.11.3:
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/laravel-echo/-/laravel-echo-1.11.3.tgz#f596f05cb1d83728c955ba762223e5e280a3ebd7"
+  integrity sha512-VNTnnoF8gK29ovxslnrFDt3xgrKiKKW1kTnKKO1A4kYVj4UCKmNO4x2ehRlfg2UTrG/oggwk95p+S9ftQYjXdw==
+
 lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
@@ -1019,6 +1024,13 @@ postcss@^8.1.10, postcss@^8.4.5:
     nanoid "^3.1.30"
     picocolors "^1.0.0"
     source-map-js "^1.0.1"
+
+pusher-js@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/pusher-js/-/pusher-js-7.0.3.tgz#f81c78cdf2ad32f546caa7532ec7f9081ef00b8d"
+  integrity sha512-HIfCvt00CAqgO4W0BrdpPsDcAwy51rB6DN0VMC+JeVRRbo8mn3XTeUeIFjmmlRLZLX8rPhUtLRo7vPag6b8GCw==
+  dependencies:
+    tweetnacl "^1.0.3"
 
 qs@^6.10.1:
   version "6.10.2"
@@ -1205,6 +1217,11 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+tweetnacl@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
+  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 typescript@^4.5.2:
   version "4.5.4"
