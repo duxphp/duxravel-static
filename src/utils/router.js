@@ -1,8 +1,9 @@
 import qs from 'qs'
 import md5 from 'md5'
 import { compile } from 'vue/dist/vue.cjs.js'
+import requestConfig from '../config/request'
 
-import { getUrl, request } from "./request";
+import { getUrl, request } from "./request"
 import event from './event'
 import { getXmlByTagName, getXmlByTagNames } from './xml'
 
@@ -139,7 +140,7 @@ router.back = (url) => {
 }
 // 弹窗
 router.dialog = (url, mode) => {
-  event.emit('router-dialog', { url , mode})
+  event.emit('router-dialog', { url, mode })
 }
 // 普通跳转
 router.http = (url) => {
@@ -181,6 +182,12 @@ router.ajax = (url, data) => {
     ajaxAction()
   }
 }
+
+/**
+ * 获取当前的模块
+ * @returns 模块
+ */
+export const moduleName = () => location.pathname.split('/')[1] || requestConfig.defaultModule
 
 /**
  * 页面资源管理

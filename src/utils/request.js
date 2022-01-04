@@ -2,7 +2,7 @@ import qs from 'qs'
 import config from '../config/request'
 import { deepCopy } from './object'
 import { requestEvent } from './event'
-import { router } from './router'
+import { moduleName, router } from './router'
 import { clearUserInfo, getLocalUserInfo, login, setLocalUserInfo } from './user'
 import axios from 'axios'
 
@@ -16,7 +16,7 @@ export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `${import.meta.env.DEV ? config.domain : ''}${type === 'relative' ? '/' + ((location.pathname.split('/')[1] || config.defaultModule) + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
+  return `${import.meta.env.DEV ? config.domain : ''}${type === 'relative' ? '/' + (moduleName() + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
 }
 
 /**

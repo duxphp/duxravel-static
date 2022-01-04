@@ -1,5 +1,7 @@
 import event from '../utils/event'
-import { request } from './request'
+import { moduleName } from './router'
+
+const userInfoKey = () => moduleName() + 'UserInfo'
 
 /**
  * 调用登录
@@ -21,7 +23,7 @@ export const login = () => {
  * @returns
  */
 export const getLocalUserInfo = () => {
-  const userInfo = localStorage.getItem('adminUserInfo')
+  const userInfo = localStorage.getItem(userInfoKey())
   if (userInfo) {
     try {
       return JSON.parse(userInfo)
@@ -38,14 +40,14 @@ export const getLocalUserInfo = () => {
  * @param {*} info
  */
 export const setLocalUserInfo = info => {
-  localStorage.setItem('adminUserInfo', JSON.stringify({ ...getLocalUserInfo(), ...info }))
+  localStorage.setItem(userInfoKey(), JSON.stringify({ ...getLocalUserInfo(), ...info }))
 }
 
 /**
  * 清除用户信息
  */
 export const clearUserInfo = () => {
-  localStorage.removeItem('adminUserInfo')
+  localStorage.removeItem(userInfoKey())
 }
 
 /**
