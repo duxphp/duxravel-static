@@ -36,18 +36,38 @@ export default defineComponent({
       darkMode: localStorage.getItem("darkMode") === "dark" ? "dark" : "light",
       navList: [],
       userInfo: getLocalUserInfo(),
+      notify: [],
+      notifyNum: 0,
       weather: {}
+    }
+  },
+  methods: {
+    getNotify() {
+      if (window.dataNotify) {
+        this.notify = window.dataNotify.list
+        this.notifyNum = window.dataNotify.num
+      }
+    },
+    readNotify() {
+      event.emit('app-notify-read')
+    },
+    delNotify() {
+      event.emit('app-notify-del')
     }
   },
   created() {
     weather((res) => {
       this.weather = res
     })
+    event.add('app-notify', () => {
+      this.getNotify()
+    })
   },
   mounted() {
     menuNavigation.on(data => {
       this.navList = data
     })
+    this.getNotify()
   },
   render() {
     const {navList} = this
@@ -62,6 +82,26 @@ export default defineComponent({
             {this.weather.city && <div>
               <a href="http://www.weather.com.cn/" target="_blank" class="dark:hover:bg-blackgray-2 hover:bg-gray-100 p-2 rounded">{this.weather.city} {this.weather.weather} {this.weather.temperature}°</a>
             </div>}
+            <div>
+              <a-popover title="消息通知" contentStyle={{width: '300px'}}>
+                {{
+                  default: () => <a-badge dot count={this.notifyNum} offset={[-4, 5]}><a-button  shape="round" type="text" style={{fontSize: '20px'}}>
+                    {{
+                      icon: () => <icon-notification />
+                    }}
+                  </a-button></a-badge>,
+                  content: () => this.notify.length ? <div>
+                    <a-list maxHeight="300">
+                      {this.notify.map((item) => <a-list-item><a-badge count={item.read ? 0 : 1} dot offset={[8, 0]}>{item.message}</a-badge></a-list-item>)}
+                    </a-list>
+                    <div class="mt-2 flex gap-2 justify-end">
+                      <a-link  onClick={this.readNotify}>一键已读</a-link>
+                      <a-link onClick={this.delNotify}>清空消息</a-link>
+                    </div>
+                  </div> : <a-empty description="暂无通知消息" />
+                }}
+              </a-popover>
+            </div>
             <div>
               <a-button type="text" shape="round" style={{fontSize: '20px'}} onClick={() => {
                 this.darkMode = this.darkMode === 'dark' ? 'light' : 'dark'

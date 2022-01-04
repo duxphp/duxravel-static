@@ -1,4 +1,4 @@
 export default {
-  domain: 'http://highway.test',
+  domain: 'http://duxravel.test',
   defaultModule: 'admin'
 }
