@@ -17,11 +17,11 @@
         : ''
     "
   >
-    <div class="max-w-7xl mx-auto px-4 md:h-screen md:flex md:flex-col">
+    <div class="max-w-7xl mx-auto px-4 h-screen flex flex-col">
       <div
         class="
           flex-none
-          md:flex
+          flex
           py-4
           text-gray-100
           dark:text-gray-200
@@ -33,10 +33,8 @@
             flex-grow flex
             gap-4
             items-center
-            justify-center
-            md:justify-start
-            my-4
-            md:my-0
+            justify-start
+            my-0
           "
         >
           <div class="">
@@ -50,7 +48,7 @@
           </div>
         </div>
         <div
-          class="flex-none hidden md:flex items-center gap-4 text-right"
+          class="flex-none flex items-center gap-4 text-right"
           v-if="nowDate"
         >
           <div class="flex flex-col gap-1 flex-grow">
@@ -66,20 +64,20 @@
         </div>
       </div>
 
-      <div class="flex-grow md:flex items-center justify-center">
+      <div class="flex-grow flex items-center justify-center">
         <div
           class="
             max-w-4xl
             w-full
             flex
-            md:flex-row
+            flex-row
             bg-white
             dark:bg-blackgray-5
             shadow
             rounded
           "
         >
-          <div class="md:w-1/2 bg-white hidden md:block rounded-l">
+          <div class="w-1/2 bg-white rounded-l">
             <a-carousel
               class="w-full h-full"
               :auto-play="true"
@@ -98,7 +96,7 @@
             </a-carousel>
           </div>
           <div
-            class="md:w-1/2 flex flex-col justify-center items-center p-4 pt-0"
+            class="w-1/2 flex flex-col justify-center items-center p-4 pt-0"
             style="
               height: 600px;
               background-repeat: repeat-x;
@@ -112,7 +110,7 @@
               </div>
 
               <form class="flex flex-col gap-6" @submit="login">
-                <component v-if="!!data.vueComp" :is="data.vueComp"></component>
+                <component v-if="!!data.vueComp" :is="data.vueComp" v-bind:data="data"></component>
                 <template v-else>
                   <input type="hidden" name="remember" value="true" />
                   <div>
@@ -246,9 +244,9 @@ export default {
     weather((res) => {
       weatherData.value = res;
     });
-  console.log(window.appConfig.login.side && window.appConfig.login.side.length > 0
+  window.appConfig.login.side && window.appConfig.login.side.length > 0
             ? window.appConfig.login.side
-            : [loginSode])
+            : [loginSode]
     return {
       data,
       nowDate,
