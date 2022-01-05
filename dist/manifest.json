@@ -1,13 +1,13 @@
 {
   "src/main.js": {
-    "file": "static/manage/main.8f43d8e9.js",
+    "file": "static/manage/main.246348b3.js",
     "src": "src/main.js",
     "isEntry": true,
     "imports": [
       "_vendor.7e612f76.js"
     ],
     "css": [
-      "static/manage/main.9759b8a1.css"
+      "static/manage/main.5558ffcc.css"
     ],
     "assets": [
       "static/manage/logo.d66db2fc.svg",
