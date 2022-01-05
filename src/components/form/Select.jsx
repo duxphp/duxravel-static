@@ -59,8 +59,10 @@ export default defineComponent({
             value: item.id,
             rowData: item
           }
-          data.render = () => {
-            return this.optionRender(data)
+          if (this.optionRender) {
+            data.render = () => {
+              return this.optionRender(data)
+            }
           }
           return data
         }) : []
