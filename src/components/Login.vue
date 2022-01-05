@@ -71,7 +71,7 @@
           class="
             max-w-4xl
             w-full
-            flex flex-col
+            flex
             md:flex-row
             bg-white
             dark:bg-blackgray-5
@@ -246,7 +246,9 @@ export default {
     weather((res) => {
       weatherData.value = res;
     });
-
+  console.log(window.appConfig.login.side && window.appConfig.login.side.length > 0
+            ? window.appConfig.login.side
+            : [loginSode])
     return {
       data,
       nowDate,
