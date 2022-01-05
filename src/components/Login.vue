@@ -207,24 +207,24 @@ export default {
       loading: true,
       vueComp: "",
     });
-    !isLogin() && message.loading('请稍后')
+    !isLogin() && message.loading("请稍后");
     request({
       url: "login/check",
       method: "GET",
     }).then((res) => {
       data.value.register = !!res.register;
+      data.value.loading = false;
+      message.clear();
       if (res.page) {
         getComp(res.page, "loginPage").then((res) => {
           data.value.vueComp = defineAsyncComponent({
             loader: () => Promise.resolve(res),
             suspensible: false,
           });
-          data.value.loading = false;
           setTimeout(() => {
             // 执行渲染成功回调
             res._didCallback();
           }, 100);
-          message.clear()
         });
       }
     });
