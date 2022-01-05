@@ -6,8 +6,8 @@
 <p align="center">适用于 duxravel 配套后台前端代码</p>
 
 <p align="center">
-<a href="https://doc.duxravel.com">中文文档</a> |
-<a href="https://support.qq.com/products/331847/">产品讨论</a>
+<a href="https://www.duxravel.com">中文文档</a> |
+<a href="https://www.github.com/duxphp/duxravel">配套后端</a>
 </p>
 
 <p align="center">
@@ -17,14 +17,17 @@
     <a href="https://packagist.org/packages/duxphp/duxravel-static">
         <img src="https://img.shields.io/packagist/dt/duxphp/duxravel-static.svg?style=flat-square">
     </a>
-    <a href="https://packagist.org/packages/duxphp/ravelcms">
-        <img src="https://img.shields.io/packagist/l/duxphp/ravelcms.svg?maxAge=2592000&&style=flat-square" alt="Packagist">
+    <a href="https://packagist.org/packages/duxphp/duxravel">
+        <img src="https://img.shields.io/packagist/l/duxphp/duxravel.svg?maxAge=2592000&&style=flat-square" alt="Packagist">
     </a>
-    <a href="https://github.com/TuSimple/naive-ui">
-        <img src="https://img.shields.io/badge/dependence-naive ui-red?style=flat-square">
+    <a href="https://github.com/arco-design/arco-design-vue">
+        <img src="https://img.shields.io/badge/dependence-arco design-red?style=flat-square">
     </a>
     <a href="https://github.com/vuejs/vue-next">
         <img src="https://img.shields.io/badge/dependence-vue3-blue?style=flat-square">
+    </a>
+    <a href="https://github.com/vitejs/vite">
+        <img src="https://img.shields.io/badge/dependence-vite-blue?style=flat-square">
     </a>
 </p>
 
