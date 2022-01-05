@@ -213,8 +213,6 @@ export default {
       method: "GET",
     }).then((res) => {
       data.value.register = !!res.register;
-      data.value.loading = false;
-      message.clear();
       if (res.page) {
         getComp(res.page, "loginPage").then((res) => {
           data.value.vueComp = defineAsyncComponent({
@@ -225,7 +223,12 @@ export default {
             // 执行渲染成功回调
             res._didCallback();
           }, 100);
+          data.value.loading = false;
+          message.clear();
         });
+      } else {
+        data.value.loading = false;
+        message.clear();
       }
     });
 
