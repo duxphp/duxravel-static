@@ -75,7 +75,8 @@ export default defineComponent({
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  z-10">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
           <div class="flex-grow">
-            {this.appInfo.name}
+            <div class="text-base">{this.appInfo.name}</div>
+            {this.userInfo.title && <div class="text-gray-400 text-xs">{this.userInfo.title}</div>}
           </div>
           <div class="flex-none flex items-center gap-2">
             {this.$slots.tools?.()}
@@ -119,7 +120,10 @@ export default defineComponent({
                   {
                     default: () => <div class="flex items-center gap-2 px-2 cursor-pointer">
                       <a-avatar size="28" src={this.userInfo.avatar}>{!this.userInfo.avatar && this.userInfo.avatar_text}</a-avatar>
-                      <div>{this.userInfo.rolename}</div>
+                      <div>
+                        <div>{this.userInfo.showname}</div>
+                        {this.userInfo.subname && <div class="text-gray-400">{this.userInfo.subname}</div>}
+                      </div>
                     </div>,
                     content: () => <div>
                       <a-doption onClick={() => {
