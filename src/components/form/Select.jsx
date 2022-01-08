@@ -78,7 +78,7 @@ export default defineComponent({
       {...vExec.call(this, this.nParams)}
       modelValue={this.modelValue}
       loading={this.loading}
-      onSearch={this.handleSearch}
+      onSearch={this.dataUrl && this.handleSearch}
       onChange={this.updateValue}
     >
     </a-select>
