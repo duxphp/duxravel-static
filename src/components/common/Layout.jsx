@@ -19,6 +19,10 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
+    'save': {
+      type: Boolean,
+      default: true
+    },
     'submit': {
       type: Function,
     },
@@ -165,7 +169,7 @@ export default defineComponent({
                 返回
               </a-button>
             </route>}
-            <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit} loading={this.formLoading}>保存</a-button>
+            {this.save && <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit} loading={this.formLoading}>保存</a-button>}
           </div>
           }
         </div>
