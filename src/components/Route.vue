@@ -8,6 +8,7 @@
 import {request} from "../utils/request";
 import {router} from "../utils/router";
 import {getPageContent} from "./table/DataTable";
+import event from "../utils/event";
 
 export default {
   name: "Route",
@@ -38,6 +39,9 @@ export default {
   },
   created() {
     this.className = this.class;
+    event.add("router-dialog-opened", function () {
+      this.after && this.after()
+    })
   },
   methods: {
     ajaxAction() {
@@ -72,6 +76,7 @@ export default {
         }
       } else if (this.type === "dialog") {
         // 弹出路由
+        this.before && this.before()
         router.dialog(this.href, this.mode);
       } else if (["replace", "back", "push"].includes(this.type)) {
         const page = getPageContent(this.$parent);
