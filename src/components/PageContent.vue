@@ -51,7 +51,6 @@
 <script>
 import PageRoute from "./PageRoute.vue";
 import {router} from "../utils/router";
-import event from "../utils/event";
 
 export default {
   name: "PageContent",
@@ -133,7 +132,6 @@ export default {
     closeLoading() {
       this.dialogMsg?.close?.();
       this.dialogMsg = null;
-      event.emit("router-dialog-opened");
     },
     loadStatus({type}) {
       if (this.windowType === "page") {
