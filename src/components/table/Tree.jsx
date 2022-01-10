@@ -53,7 +53,7 @@ export default defineComponent({
     },
     filter: {
       type: Object,
-      default: () => ({})
+      default: {}
     },
     refreshUrls: {
       type: Array,
@@ -71,6 +71,7 @@ export default defineComponent({
       type: [String, Number],
       default: null
     },
+    fieldNames: Object,
     requestEventName: {
       type: String,
       default: null
@@ -93,7 +94,7 @@ export default defineComponent({
       data: [],
       originData: [],
       options: {},
-      expandedKeys: [],
+      expandedKeys: []
     }
   },
   created() {
@@ -327,6 +328,7 @@ export default defineComponent({
             }}
             expandedKeys={this.expandedKeys}
             onExpand={res => this.expandedKeys = res}
+            fieldNames={this.fieldNames}
           >
             {
               {
