@@ -71,7 +71,14 @@ export default defineComponent({
       type: [String, Number],
       default: null
     },
-    fieldNames: Object,
+    fieldNames: {
+      type: Object,
+      default: {
+        key: 'key',
+        title: 'title',
+        children: 'children'
+      }
+    },
     requestEventName: {
       type: String,
       default: null
@@ -86,6 +93,7 @@ export default defineComponent({
     }
   },
   data() {
+
     return {
       optionEl: null,
       popupVisible: false,
@@ -127,21 +135,24 @@ export default defineComponent({
     },
     // 处理数据以适应tree组件
     renderData(data) {
-      function getNodeRoute(tree, index = 0) {
+      let getNodeRoute = (tree, index = 0) => {
         return tree.map(item => {
           let node = {}
-          node.title = item.title
-          node.key = item.key
+          node[this.fieldNames.title] = item[this.fieldNames.title]
+          node[this.fieldNames.key] = item[this.fieldNames.key]
           node.level = index
-          if (item.children && item.children.length) {
-            node.children = getNodeRoute(item.children, index + 1)
+
+          let children = item[this.fieldNames.children]
+          if (children && children.length) {
+            node[this.fieldNames.children] = getNodeRoute(children, index + 1)
           }
           node.rawData = item
           return node;
         })
       }
 
-      return getNodeRoute(data)
+      data = getNodeRoute(data)
+      return data
     },
     // 重新生成level
     resetLevel(data = this.data, level = 0) {
@@ -167,7 +178,7 @@ export default defineComponent({
         const result = [];
         data.forEach(item => {
           let status = false;
-          if (item.title.toString().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+          if (item[this.fieldNames.title].toString().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
             status = true
           }
           if (!status && item.rawData) {
@@ -180,12 +191,12 @@ export default defineComponent({
           }
           if (status) {
             result.push({...item});
-          } else if (item.children) {
-            const filterData = loop(item.children);
+          } else if (item[this.fieldNames.children]) {
+            const filterData = loop(item[this.fieldNames.children]);
             if (filterData.length) {
               result.push({
                 ...item,
-                children: filterData
+                [this.fieldNames.children]: filterData
               })
             }
           }
@@ -350,7 +361,7 @@ export default defineComponent({
                         default: () => {
                           return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
                             <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
-                            {this.$slots.label ? this.$slots.label(item) : item.title}
+                            {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
                           </div>
                         },
                         content: () => {
@@ -360,7 +371,7 @@ export default defineComponent({
                     </a-dropdown>
                     : <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center ">
                       <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
-                      {this.$slots.label ? this.$slots.label(item) : item.title}
+                      {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
                     </div>
                 }
               }
