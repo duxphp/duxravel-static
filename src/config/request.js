@@ -1,4 +1,4 @@
 export default {
-  domain: 'http://highway.test',
+  domain: 'http://0.0.0.0:8080',
   defaultModule: 'admin'
 }

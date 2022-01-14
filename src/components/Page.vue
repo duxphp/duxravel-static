@@ -303,7 +303,11 @@ export default {
           this.apps = res.apps;
           this.menuHover();
           // 跳转到第一个菜单
-          router.indexPage = this.menu[0].url;
+          if (this.menu[0].url) {
+            router.indexPage = this.menu[0].url;
+          }else {
+            router.indexPage = this.menu[0].menu[0].menu[0].url;
+          }
           if (!this.currentIndexs.length) {
             router.replace(router.indexPage);
           }
@@ -382,7 +386,7 @@ export default {
     },
     // 菜单点击
     target(e) {
-      router.push(e.url);
+      router.push(e.url || e.menu[0].menu[0].url);
     },
     // 菜单选中项
     menuHover(menu = this.menu, indexs = []) {
