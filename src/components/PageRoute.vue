@@ -1,21 +1,21 @@
 <template>
   <template v-if="!uninstall && !errorMessage && currentUrl">
     <component :is="vueComp" v-if="pageType === 'vue'"></component>
-    <Create v-if="pageType === 'node'" v-bind="createData"/>
+    <Create v-if="pageType === 'node'" v-bind="createData" />
   </template>
-  <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode"/>
+  <ErrorPage v-if="errorMessage" :title="errorMessage" :code="errorCode" />
 </template>
 
 <script>
-import {defineAsyncComponent} from "vue";
+import { defineAsyncComponent } from "vue";
 import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
-import {getComp, getPage, resource} from "../utils/router";
+import { getComp, getPage, resource } from "../utils/router";
 import event from "../utils/event";
-import {generateStyles} from "../utils/util";
+import { generateStyles } from "../utils/util";
 
 // 应用样式
-let appStyle
+let appStyle;
 
 export default {
   name: "PageRoute",
@@ -50,7 +50,7 @@ export default {
       // 页面错误消息
       errorMessage: "",
       // 应用样式
-      appStyle: null
+      appStyle: null,
     };
   },
   created() {
@@ -71,7 +71,7 @@ export default {
       const element = document.createElement("style");
       element.innerHTML = style;
       document.getElementsByTagName("html")[0].appendChild(element);
-      appStyle = element
+      appStyle = element;
     },
     // 卸载样式
     unloadStyle() {
@@ -80,8 +80,8 @@ export default {
     routeChange(data) {
       // 监听用于刷新页面
       if (
-          data.url === this.currentUrl &&
-          ["push", "replace"].includes(data.agree)
+        data.url === this.currentUrl &&
+        ["push", "replace"].includes(data.agree)
       ) {
         this.getPage(data.url);
       }
@@ -95,69 +95,72 @@ export default {
         this.pageStatus.abort();
       }
       setTimeout(() => {
-        this.pageStatus && this.$emit("load-status", {type: "start"});
+        this.pageStatus && this.$emit("load-status", { type: "start" });
       }, 100);
       this.pageStatus = getPage(url, this.windowType);
       this.pageStatus
-          .then(({type, data}) => {
-            this.errorMessage = "";
-            this.pageType = type;
-            this.pageStatus = null;
-            this.shadowRoot;
-            if (type === "vue") {
-              // 创建vue组件
-              return getComp(data, this.currentUrl).then((res) => {
-                this.vueComp = defineAsyncComponent({
-                  loader: () => Promise.resolve(res),
-                  suspensible: false,
-                });
-                setTimeout(() => {
-                  // 执行渲染成功回调
-                  res._didCallback();
-                }, 100);
+        .then(({ type, data }) => {
+          this.errorMessage = "";
+          this.pageType = type;
+          this.pageStatus = null;
+          this.shadowRoot;
+          if (type === "vue") {
+            // 创建vue组件
+            return getComp(data, this.currentUrl).then((res) => {
+              this.vueComp = defineAsyncComponent({
+                loader: () => Promise.resolve(res),
+                suspensible: false,
               });
-            } else if (type === "html") {
-              this.htmlComp = data;
-            } else {
-              this.uninstall = true;
-              // 创建json组件
-              this.createData = data;
-            }
-          })
-          .then(() => {
-            this.$nextTick(() => {
-              this.uninstall = false;
-            });
-            // 卸载数据
-            resource.uninstall(this.oldUrl)
-            this.oldUrl = url
-            this.$nextTick(() => {
               setTimeout(() => {
-                const style = generateStyles(
-                    document.querySelector("body").innerHTML
-                );
-
-                this.unloadStyle()
-                this.loadStyle(style)
-
-                const myEvent = new Event('resize')
-                window.dispatchEvent(myEvent)
-
-              }, 20);
-
-              this.$emit("load-status", {type: "end"});
+                // 执行渲染成功回调
+                res._didCallback();
+              }, 100);
             });
-          })
-          .catch((err) => {
-            resource.uninstall(this.oldUrl);
-            this.oldUrl = url;
-            if (err.code !== 1) {
-              this.errorCode = err.code;
-              this.errorMessage = err.data?.error?.message || err.message;
-              this.$emit("load-status", {type: "error"});
-              this.pageStatus = null;
+          } else if (type === "html") {
+            this.htmlComp = data;
+          } else {
+            this.uninstall = true;
+            // 创建json组件
+            this.createData = data;
+            if (data.static) {
+              resource.pageLoad(data.static, this.currentUrl);
+              delete data.static;
             }
+          }
+        })
+        .then(() => {
+          this.$nextTick(() => {
+            this.uninstall = false;
           });
+          // 卸载数据
+          resource.uninstall(this.oldUrl);
+          this.oldUrl = url;
+          this.$nextTick(() => {
+            setTimeout(() => {
+              const style = generateStyles(
+                document.querySelector("body").innerHTML
+              );
+
+              this.unloadStyle();
+              this.loadStyle(style);
+
+              const myEvent = new Event("resize");
+              window.dispatchEvent(myEvent);
+            }, 20);
+
+            this.$emit("load-status", { type: "end" });
+          });
+        })
+        .catch((err) => {
+          resource.uninstall(this.oldUrl);
+          this.oldUrl = url;
+          if (err.code !== 1) {
+            this.errorCode = err.code;
+            this.errorMessage = err.data?.error?.message || err.message;
+            this.$emit("load-status", { type: "error" });
+            this.pageStatus = null;
+          }
+        });
     },
   },
 };

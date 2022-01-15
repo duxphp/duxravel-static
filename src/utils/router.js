@@ -211,10 +211,35 @@ export const resource = {
    */
   pageLoad: {},
 
+  loadTypeString: {
+    css: data => getXmlByTagNames(data, 'link').filter(item => item.attr.href).map(item => item.attr.href),
+    style: data => getXmlByTagNames(data, 'style').map(item => item.child),
+    script: (data, asyncLoad) => getXmlByTagNames(data, 'script').filter(item => item.attr.src && (asyncLoad ? item.attr.async : !item.attr.async)).map(item => item.attr.src),
+    scriptString: () => ([])
+  },
+  getLoadType(data, type, asyncLoad) {
+    if (typeof data === 'string') {
+      return this.loadTypeString[type](data, asyncLoad)
+    } else if (typeof data === 'object') {
+      if (asyncLoad) {
+        return []
+      }
+      if (type === 'style' || type === 'scriptString') {
+        if (data[type]) {
+          return [data[type]]
+        }
+        return []
+      }
+      return data[type] || []
+    }
+    return []
+  },
+
   /**
    * 加载页面样式
-   * @param {string} data 当前页面模板
+   * @param {string} data 当前页面模板 或者资源列表
    * @param {string} page 当前页面url 用于做标识
+   * @param {boolean} asyncLoad 页面加载成功了，加载页面上定义的异步加载js文件
    */
   async pageLoad(data, page, asyncLoad) {
     const current = this.pageLoad[page] = {
@@ -224,11 +249,13 @@ export const resource = {
     // 资源加载列表
     const loadList = asyncLoad
       ? [
-        this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src && item.attr.async).map(item => item.attr.src))
+        this.loadScript(this.getLoadType(data, 'script', true)),
+        this.loadScriptString(this.getLoadType(data, 'scriptString', true))
       ] : [
-        this.loadCss(getXmlByTagNames(data, 'link').filter(item => item.attr.href).map(item => item.attr.href)),
-        this.loadStyle(getXmlByTagNames(data, 'style').map(item => item.child)),
-        this.loadScript(getXmlByTagNames(data, 'script').filter(item => item.attr.src && !item.attr.async).map(item => item.attr.src))
+        this.loadCss(this.getLoadType(data, 'css')),
+        this.loadStyle(this.getLoadType(data, 'style')),
+        this.loadScript(this.getLoadType(data, 'script')),
+        this.loadScriptString(this.getLoadType(data, 'scriptString'))
       ]
 
     const res = await Promise.all(loadList)
@@ -262,7 +289,10 @@ export const resource = {
     // 删除当前加载的页面
     delete this.pageLoad[page]
   },
-
+  loadScriptString(list) {
+    list.forEach(item => new Function(item))
+    return Promise.resolve([])
+  },
   // 异步加载多个js
   loadScript(list) {
     const arr = list.filter(src => !this.load[src])
