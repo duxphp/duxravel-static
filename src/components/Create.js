@@ -167,7 +167,7 @@ export const renderItem = function (data, arg, slotProps) {
 
 export const renderNodeList = function (node, arg) {
   if (!node || Object.keys(node).length === 0) {
-    return { default: () => [] }
+    return { }
   }
   const childNode = {}
 
@@ -188,6 +188,9 @@ export const renderNodeList = function (node, arg) {
     }
   })
   Object.keys(slotGroup).forEach(slotKey => {
+    if(!slotGroup[slotKey].length){
+      return
+    }
     childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item, arg, props))
   })
   return childNode
