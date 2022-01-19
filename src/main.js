@@ -32,6 +32,7 @@ import DataColor from './components/form/Color'
 import DynamicData from './components/form/DynamicData'
 import DataLayout from './components/common/Layout'
 import DataDialog from './components/common/Dialog'
+import './utils/window'
 
 // 注册到全局
 window.Vue = Vue
