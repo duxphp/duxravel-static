@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="data.show && !data.loading"
+    v-if="data.show"
     class="
       absolute
       inset-0
@@ -142,7 +142,7 @@
                       html-type="submit"
                       type="primary"
                       size="large"
-                      :loading="data.status"
+                      :loading="data.status || data.loading"
                       long
                     >
                       {{ data.register ? "注册登录" : "登录" }}

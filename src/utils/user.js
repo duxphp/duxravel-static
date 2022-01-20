@@ -51,6 +51,15 @@ export const clearUserInfo = () => {
 }
 
 /**
+ * 退出登录
+ */
+export const loginOut = () => {
+  clearUserInfo()
+  const modName = moduleName()
+  window.location.replace(modName ? `/${modName}` : '/')
+}
+
+/**
  * 管理员是否已经登录
  * @returns
  */

@@ -304,7 +304,7 @@ export default {
             router.indexPage = this.menu[0].menu[0].menu[0].url;
           }
           if (!this.currentIndexs.length) {
-            router.replace(router.indexPage);
+            // router.replace(router.indexPage);
           }
           // 通知加载
           this.$nextTick(() => {

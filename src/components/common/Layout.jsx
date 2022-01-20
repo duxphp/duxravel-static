@@ -1,10 +1,10 @@
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 import Route from '../Route.vue'
-import {router} from "../../utils/router";
-import {getUrl, request} from "../../utils/request";
-import {clearUserInfo, getLocalUserInfo} from "../../utils/user";
-import event, {menuNavigation} from '../../utils/event';
-import {weather} from "../../utils/util";
+import { moduleName, router } from "../../utils/router";
+import { getUrl, request } from "../../utils/request";
+import { loginOut, getLocalUserInfo } from "../../utils/user";
+import event, { menuNavigation } from '../../utils/event';
+import { weather } from "../../utils/util";
 
 export default defineComponent({
   props: {
@@ -74,7 +74,7 @@ export default defineComponent({
     this.getNotify()
   },
   render() {
-    const {navList} = this
+    const { navList } = this
     return <div class="flex flex-col lg:h-screen">
       <div class="flex-none px-4 py-2 border-b border-gray-300 dark:border-blackgray-5 bg-white dark:bg-blackgray-4 shadow-sm  z-10">
         {this.$slots.header?.() || <div class="flex flex-row gap-2 items-center">
@@ -88,9 +88,9 @@ export default defineComponent({
               <a href="http://www.weather.com.cn/" target="_blank" class="dark:hover:bg-blackgray-2 hover:bg-gray-100 p-2 rounded">{this.weather.city} {this.weather.weather} {this.weather.temperature}°</a>
             </div>}
             <div>
-              <a-popover title="消息通知" contentStyle={{width: '300px'}}>
+              <a-popover title="消息通知" contentStyle={{ width: '300px' }}>
                 {{
-                  default: () => <a-badge dot count={this.notifyNum} offset={[-4, 5]}><a-button  shape="round" type="text" style={{fontSize: '20px'}}>
+                  default: () => <a-badge dot count={this.notifyNum} offset={[-4, 5]}><a-button shape="round" type="text" style={{ fontSize: '20px' }}>
                     {{
                       icon: () => <icon-notification />
                     }}
@@ -100,7 +100,7 @@ export default defineComponent({
                       {this.notify.map((item) => <a-list-item><a-badge count={item.read ? 0 : 1} dot offset={[8, 0]}>{item.message}</a-badge></a-list-item>)}
                     </a-list>
                     <div class="mt-2 flex gap-2 justify-end">
-                      <a-link  onClick={this.readNotify}>一键已读</a-link>
+                      <a-link onClick={this.readNotify}>一键已读</a-link>
                       <a-link onClick={this.delNotify}>清空消息</a-link>
                     </div>
                   </div> : <a-empty description="暂无通知消息" />
@@ -108,12 +108,12 @@ export default defineComponent({
               </a-popover>
             </div>
             <div>
-              <a-button type="text" shape="round" style={{fontSize: '20px'}} onClick={() => {
+              <a-button type="text" shape="round" style={{ fontSize: '20px' }} onClick={() => {
                 this.darkMode = this.darkMode === 'dark' ? 'light' : 'dark'
                 event.emit('switch-dark', this.darkMode)
               }}>
                 {{
-                  icon: () => this.darkMode === 'light' ? <icon-sun-fill/> : <icon-moon-fill/>
+                  icon: () => this.darkMode === 'light' ? <icon-sun-fill /> : <icon-moon-fill />
                 }}
 
               </a-button>
@@ -135,14 +135,11 @@ export default defineComponent({
                       }}>返回首页
                       </a-doption>
                       <a-doption onClick={() => {
-                        router.push(getUrl("/userInfo/page"))
+                        router.push('/' + moduleName() + '/userInfo/page')
                       }}>修改资料
                       </a-doption>
                       <a-doption onClick={() => {
-                        clearUserInfo();
-                        window.location.replace(
-                          window.location.pathname.split("/")[0] || "/"
-                        )
+                        loginOut();
                       }}>退出登录
                       </a-doption>
                     </div>

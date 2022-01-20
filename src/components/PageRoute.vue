@@ -154,9 +154,9 @@ export default {
         .catch((err) => {
           resource.uninstall(this.oldUrl);
           this.oldUrl = url;
-          if (err.code !== 1) {
-            this.errorCode = err.code;
-            this.errorMessage = err.data?.error?.message || err.message;
+          if (err.status !== 1) {
+            this.errorCode = err.status;
+            this.errorMessage = err.data?.error?.message || err.message || '页面加载失败';
             this.$emit("load-status", { type: "error" });
             this.pageStatus = null;
           }
