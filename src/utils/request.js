@@ -64,9 +64,8 @@ export const request = window.ajax = async params => {
     }
   }
   if (method.toUpperCase() !== 'GET') {
-    init.data = data
-    //init.body = body || JSON.stringify(data)
-    //!body && headers.append('Content-Type', 'application/json')
+    init.data = qs.stringify(data)
+    headers['Content-Type'] = 'application/x-www-form-urlencoded'
   } else {
     const params = qs.stringify(data)
     if (params && ~url.indexOf('?')) {
@@ -74,7 +73,6 @@ export const request = window.ajax = async params => {
     } else if (params) {
       url += '?' + params
     }
-    headers['Content-Type'] = 'application/x-www-form-urlencoded'
   }
   init.url = getUrl(url, urlType)
 
