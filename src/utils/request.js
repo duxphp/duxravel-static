@@ -28,7 +28,21 @@ export const request = window.ajax = async params => {
       url: params
     }
   }
-  let { url, urlType, data = {}, method = 'GET', header = {}, onProgress, successMsg, errorMsg = true } = params
+  const source = axios.CancelToken.source()
+
+  const {
+    url,
+    urlType,
+    data = {},
+    method = 'GET',
+    header = {},
+    onProgress,
+    successMsg,
+    errorMsg = true,
+    onSource
+  } = params
+
+  onSource?.(source)
 
   // 请求头
   const headers = {
@@ -40,7 +54,8 @@ export const request = window.ajax = async params => {
   const init = {
     method,
     credentials: 'omit',
-    headers
+    headers,
+    cancelToken: source.token
   }
   if (onProgress) {
     init.onUploadProgress = (progressEvent) => {
@@ -163,6 +178,9 @@ const searchQuickMarks = {}
  * @returns
  */
 export const searchQuick = (params, mark = '') => {
+  if (typeof params === 'string') {
+    params = { url: params }
+  }
   const key = params.url + mark
   if (searchQuickMarks[key] === undefined) {
     searchQuickMarks[key] = {
@@ -178,14 +196,20 @@ export const searchQuick = (params, mark = '') => {
       item.prevReject({ message: '过快请求', code: 1 })
     }
     if (item.requestTask) {
-      item.requestTask.abort?.()
+      item.source?.cancel?.('请求被覆盖')
       item.requestTask = null
+      item.source = null
       item.prevReject({ message: '请求被覆盖', code: 2 })
     }
     item.prevReject = reject
     item.timer = setTimeout(() => {
       item.timer = null
-      item.requestTask = request(params).then(res => {
+      item.requestTask = request({
+        ...params,
+        onSource(res) {
+          item.source = res
+        }
+      }).then(res => {
         item.requestTask = null
         resolve(res)
       }).catch(err => {
