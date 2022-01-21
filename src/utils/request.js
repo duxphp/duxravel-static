@@ -65,7 +65,6 @@ export const request = window.ajax = async params => {
   }
   if (method.toUpperCase() !== 'GET') {
     init.data = qs.stringify(data)
-    headers['Content-Type'] = 'application/x-www-form-urlencoded'
   } else {
     const params = qs.stringify(data)
     if (params && ~url.indexOf('?')) {
