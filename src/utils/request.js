@@ -28,9 +28,8 @@ export const request = window.ajax = async params => {
       url: params
     }
   }
-  const source = axios.CancelToken.source()
 
-  const {
+  let {
     url,
     urlType,
     data = {},
@@ -42,8 +41,6 @@ export const request = window.ajax = async params => {
     onSource
   } = params
 
-  onSource?.(source)
-
   // 请求头
   const headers = {
     'Accept': 'application/json',
@@ -54,8 +51,13 @@ export const request = window.ajax = async params => {
   const init = {
     method,
     credentials: 'omit',
-    headers,
-    cancelToken: source.token
+    headers
+  }
+
+  if (onSource) {
+    const source = axios.CancelToken.source()
+    init.cancelToken = source.token
+    onSource?.(source)
   }
   if (onProgress) {
     init.onUploadProgress = (progressEvent) => {
@@ -72,7 +74,6 @@ export const request = window.ajax = async params => {
     } else if (params) {
       url += '?' + params
     }
-    headers['Content-Type'] = 'application/x-www-form-urlencoded'
   }
   init.url = getUrl(url, urlType)
 
@@ -207,12 +208,9 @@ export const searchQuick = (params, mark = '') => {
         onSource(res) {
           item.source = res
         }
-      }).then(res => {
+      }).then(resolve).catch(reject).finally(() => {
         item.requestTask = null
-        resolve(res)
-      }).catch(err => {
-        item.requestTask = null
-        reject(err)
+        item.source = null
       })
     }, 200)
   })
