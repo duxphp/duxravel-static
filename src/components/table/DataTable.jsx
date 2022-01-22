@@ -36,10 +36,11 @@ export default defineComponent({
     },
     filter: {
       type: Object,
-      default: () => (Object)
+      default: () => ({})
     },
     'n-params': {
       type: Object,
+      default: () => ({})
     },
     select: {
       type: Boolean,
