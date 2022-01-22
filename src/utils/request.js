@@ -72,6 +72,7 @@ export const request = window.ajax = async params => {
     } else if (params) {
       url += '?' + params
     }
+    headers['Content-Type'] = 'application/x-www-form-urlencoded'
   }
   init.url = getUrl(url, urlType)
 
