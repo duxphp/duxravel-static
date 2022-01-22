@@ -66,7 +66,7 @@ export const request = window.ajax = async params => {
     }
   }
   if (method.toUpperCase() !== 'GET') {
-    init.data = qs.stringify(data)
+    init.data = data
   } else {
     const params = qs.stringify(data)
     if (params && ~url.indexOf('?')) {
