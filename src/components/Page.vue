@@ -3,7 +3,7 @@
     <div
       class="
         text-white
-        w-17
+        w-16
         bg-gray-800
         dark:bg-blackgray-4
         px-1.5

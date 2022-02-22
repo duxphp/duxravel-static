@@ -1,5 +1,3 @@
-import {Processor} from "windicss/lib";
-import {HTMLParser} from "windicss/utils/parser";
 import {request} from "./request";
 
 
@@ -22,35 +20,6 @@ const asyncTimeOut = time => {
   return pro
 }
 
-/**
- * 生成style
- * @param html
- * @returns {string}
- */
-const generateStyles = html => {
-  // 获取 windi processor
-  const processor = new Processor();
-
-  // 解析所有的 classes 并将它们放到一行来简化操作
-  const htmlClasses = new HTMLParser(html)
-    .parseClasses()
-    .map((i) => i.result)
-    .join(" ");
-
-  // 基于我们传入的 html 生成预检样式
-  //const preflightSheet = processor.preflight(html);
-
-  // 将 html classes 处理为一个可解释的样式表
-  const interpretedSheet = processor.interpret(htmlClasses).styleSheet;
-
-  // 构建样式
-  const APPEND = false;
-  const MINIFY = false;
-  const styles = interpretedSheet.build(MINIFY);
-
-  return styles;
-}
-
 const weather = (callback) => {
   let res = localStorage.getItem('weather')
   res = res ? JSON.parse(res) : {}
@@ -68,7 +37,6 @@ const weather = (callback) => {
 }
 
 export {
-  generateStyles,
   asyncTimeOut,
   weather
 }

@@ -12,7 +12,6 @@ import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage, resource } from "../utils/router";
 import event from "../utils/event";
-import { generateStyles } from "../utils/util";
 
 // 应用样式
 let appStyle;
@@ -137,13 +136,6 @@ export default {
           this.oldUrl = url;
           this.$nextTick(() => {
             setTimeout(() => {
-              const style = generateStyles(
-                document.querySelector("body").innerHTML
-              );
-
-              this.unloadStyle();
-              this.loadStyle(style);
-
               const myEvent = new Event("resize");
               window.dispatchEvent(myEvent);
             }, 20);

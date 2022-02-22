@@ -4,7 +4,6 @@ import ArcoVue from '@arco-design/web-vue'
 import NProgress from 'nprogress'
 import CScrollbar from 'c-scrollbar'
 
-import 'virtual:windi.css'
 import '@arco-design/web-vue/dist/arco.css'
 import 'nprogress/nprogress.css'
 import './common.css'
@@ -32,7 +31,37 @@ import DataColor from './components/form/Color'
 import DynamicData from './components/form/DynamicData'
 import DataLayout from './components/common/Layout'
 import DataDialog from './components/common/Dialog'
+
 import './utils/window'
+
+import { setup } from  'twind/shim'
+import color from '../color'
+
+const colors = Object.fromEntries(Object.keys(color.light).map(key => {
+  // arco 颜色导入
+  return [key, Object.fromEntries(color.light[key].map((val, index) => {
+    return [index === 0 ? 50 : index * 100, val]
+  }))]
+}))
+
+setup({
+
+  darkMode: 'class', // use a different dark mode strategy (default: 'media')
+  theme: {
+    extend: {
+      colors: {
+        'blackgray': {
+          1: '#373739',
+          2: '#313132',
+          3: '#2a2a2b',
+          4: '#232324',
+          5: '#17171a',
+        },
+        ...colors,
+      }
+    },
+  },
+})
 
 // 注册到全局
 window.Vue = Vue
