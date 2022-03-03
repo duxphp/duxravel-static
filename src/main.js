@@ -34,19 +34,18 @@ import DataDialog from './components/common/Dialog'
 
 import './utils/window'
 
-import { setup } from  'twind/shim'
+import { setup  } from  'twind/shim'
+
 import color from '../color'
 
 const colors = Object.fromEntries(Object.keys(color.light).map(key => {
-  // arco 颜色导入
   return [key, Object.fromEntries(color.light[key].map((val, index) => {
     return [index === 0 ? 50 : index * 100, val]
   }))]
 }))
 
 setup({
-
-  darkMode: 'class', // use a different dark mode strategy (default: 'media')
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -62,6 +61,7 @@ setup({
     },
   },
 })
+
 
 // 注册到全局
 window.Vue = Vue

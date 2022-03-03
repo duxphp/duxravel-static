@@ -183,7 +183,7 @@ export default defineComponent({
 
     const loopData = (key, callback, list = data.value, parent = null) => {
       list.some((item, index, arr) => {
-        if (item[props.nParams['row-key']] === key) {
+        if (item[props.nParams['row-key']] == key) {
           item.__loading = false;
           callback(item, index, arr, parent);
           return true;

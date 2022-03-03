@@ -45,6 +45,7 @@ export default defineComponent({
       type: Array,
       default: () => []
     },
+    treeData: Array,
     url: {
       type: String
     },
@@ -54,10 +55,6 @@ export default defineComponent({
     filter: {
       type: Object,
       default: {}
-    },
-    refreshUrls: {
-      type: Array,
-      default: () => []
     },
     search: {
       type: Boolean,
@@ -93,7 +90,6 @@ export default defineComponent({
     }
   },
   data() {
-
     return {
       optionEl: null,
       popupVisible: false,
@@ -211,6 +207,17 @@ export default defineComponent({
     getList() {
       this.loading = true
       this.data = []
+
+      if (this.treeData) {
+        this.expandedKeys = treeExpanded.get(this.expandedKeysName())
+        this.data = this.originData = this.renderData(this.treeData)
+        this.loading = false
+        return
+      }
+
+      if (!this.url) {
+        return
+      }
       searchQuick({
         url: this.url,
         data: this.filter || {}
@@ -335,6 +342,7 @@ export default defineComponent({
             onDrop={this.handleDrop}
             selectedKeys={this.value ? [this.value] : null}
             onSelect={(value) => {
+              console.log(value)
               this.$emit('update:value', this.value === value[0] ? null : value[0])
             }}
             expandedKeys={this.expandedKeys}
@@ -359,7 +367,7 @@ export default defineComponent({
                     >
                       {{
                         default: () => {
-                          return <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center">
+                          return <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center">
                             <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
                             {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
                           </div>
@@ -369,7 +377,7 @@ export default defineComponent({
                         }
                       }}
                     </a-dropdown>
-                    : <div class="flex-grow whitespace-nowrap py-2 flex gap-2 items-center ">
+                    : <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center ">
                       <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
                       {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
                     </div>

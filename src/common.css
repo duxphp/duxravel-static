@@ -1,158 +1,165 @@
-/*! @import */
 body {
-    overflow: hidden;
+    overflow: hidden
 }
 
 button {
-    outline: none !important;
+    outline: none !important
 }
 
 .arco-btn:focus {
-  @apply outline-none;
+    outline: 2px solid transparent;
+    outline-offset: 2px
 }
 
 .arco-form-item-label {
-    position: relative;
+    position: relative
 }
 
-.arco-form-item-label .arco-form-item-label-required-symbol{
+.arco-form-item-label .arco-form-item-label-required-symbol {
     position: absolute;
     margin-left: -16px;
-    margin-top: 3px;
+    margin-top: 3px
 }
 
 .arco-modal-simple {
-    @apply p-4;
-    .arco-modal-header {
-        margin-bottom: 5px;
-
-    }
-    .arco-modal-title {
-        @apply justify-start;
-        .arco-modal-title-icon {
-
-        }
-        .arco-icon {
-        }
-    }
-    .arco-modal-body {
-        @apply ml-7 text-gray-600;
-    }
-    .arco-modal-footer {
-        @apply text-right mt-4;
-        .arco-btn {
-        }
-    }
+    padding: 1rem
 }
 
-.arco-form-item-label-required-symbol {
-    svg {
-        @apply inline mr-1;
-    }
+.arco-modal-simple .arco-modal-header {
+    margin-bottom: 5px
 }
 
-.app-tree {
-    .arco-tree-node-title-text {
-        @apply flex flex-grow items-center;
-    }
-    .arco-tree-node-title {
-        @apply py-0;
-    }
+.arco-modal-simple .arco-modal-title {
+    justify-content: flex-start
 }
 
-.file-manage {
-  .manage-sidebar {
-    .add {
-      display: none;
-    }
-    &:hover {
-      .add {
-        display: block;
-      }
-    }
-    .cate-item {
-      .del {
-        opacity: 0;
-        transition: opacity 0.2s;
-      }
-      &:hover {
-        .del {
-          opacity: 1;
-        }
-      }
-    }
-
-  }
+.arco-modal-simple .arco-modal-body {
+    margin-left: 1.75rem;
+    --tw-text-opacity: 1;
+    color: rgb(75 85 99 / var(--tw-text-opacity))
 }
 
+.arco-modal-simple .arco-modal-footer {
+    margin-top: 1rem;
+    text-align: right
+}
 
-.app-tab-average {
-    .arco-tabs-nav-tab {
-        @apply flex-grow w-full;
-    }
-    .arco-tabs-nav-tab-list {
-        @apply flex-grow flex;
-    }
-    .arco-tabs-tab {
-        @apply flex-1 flex justify-center;
-    }
+.arco-form-item-label-required-symbol svg {
+    margin-right: .25rem;
+    display: inline
+}
+
+.app-tree .arco-tree-node-title-text {
+    display: flex;
+    flex-grow: 1;
+    align-items: center
+}
+
+.app-tree .arco-tree-node-title {
+    padding-top: 0;
+    padding-bottom: 0
+}
+
+.file-manage .manage-sidebar .add {
+    display: none
+}
+
+.file-manage .manage-sidebar:hover .add {
+    display: block
+}
+
+.file-manage .manage-sidebar .cate-item .del {
+    opacity: 0;
+    transition: opacity .2s
+}
+
+.file-manage .manage-sidebar .cate-item:hover .del {
+    opacity: 1
+}
+
+.app-tab-average .arco-tabs-nav-tab {
+    width: 100%;
+    flex-grow: 1
+}
+
+.app-tab-average .arco-tabs-nav-tab-list {
+    display: flex;
+    flex-grow: 1
+}
+
+.app-tab-average .arco-tabs-tab {
+    display: flex;
+    flex: 1 1 0%;
+    justify-content: center
 }
 
 .app-collapse-full {
-    @apply flex flex-col;
-    .arco-collapse-item {
-        @apply flex-none flex flex-col;
-        .arco-collapse-item-header {
-            @apply flex-none;
-        }
-        .arco-collapse-item-content {
-            background-color: transparent;
-            @apply flex-grow h-10 overflow-y-auto overflow-x-hidden px-0;
-        }
-        .arco-collapse-item-content-box {
-            @apply h-full;
-        }
-    }
-    .arco-collapse-item-active {
-        @apply flex-grow h-10;
-    }
+    display: flex;
+    flex-direction: column
 }
 
-.app-list-small {
-    .arco-list-header {
-        font-size: 14px;
-        padding: 5px 10px;
-    }
-    .arco-list-content {
-        .arco-list-item {
-            padding: 5px 10px;
-        }
-    }
+.app-collapse-full .arco-collapse-item {
+    display: flex;
+    flex: none;
+    flex-direction: column
+}
+
+.app-collapse-full .arco-collapse-item .arco-collapse-item-header {
+    flex: none
+}
+
+.app-collapse-full .arco-collapse-item .arco-collapse-item-content {
+    background-color: transparent;
+    height: 2.5rem;
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-left: 0;
+    padding-right: 0
+}
+
+.app-collapse-full .arco-collapse-item .arco-collapse-item-content-box {
+    height: 100%
+}
+
+.app-collapse-full .arco-collapse-item-active {
+    height: 2.5rem;
+    flex-grow: 1
+}
+
+.app-list-small .arco-list-header {
+    font-size: 14px;
+    padding: 5px 10px
+}
+
+.app-list-small .arco-list-content .arco-list-item {
+    padding: 5px 10px
 }
 
 .overlay {
-    overflow:auto;
-    overflow: overlay;
+    overflow: auto;
+    overflow: overlay
 }
 
 .app-scrollbar:hover::-webkit-scrollbar-thumb {
-    @apply bg-opacity-30;
+    --tw-bg-opacity: .3
 }
 
 .app-scrollbar::-webkit-scrollbar {
     width: 5px;
-    height: 5px;
+    height: 5px
 }
 
 .app-scrollbar::-webkit-scrollbar-thumb {
-    @apply transition-all bg-black bg-opacity-0;
-    border-radius: 5px;
+    background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+    --tw-bg-opacity: 0;
+    -webkit-transition-property: all;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: .15s;
+    border-radius: 5px
 }
 
 .app-scrollbar::-webkit-scrollbar-track {
-    background: none;
+    background: none
 }
-
-
-
-
