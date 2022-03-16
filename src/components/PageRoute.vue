@@ -8,6 +8,7 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import Hammer from "hammerjs";
 import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage, resource } from "../utils/router";
@@ -142,13 +143,65 @@ export default {
 
             this.$emit("load-status", { type: "end" });
           });
+          const pageMove = () => {
+            const pos = {
+              start: { x: 0, y: 0 },
+              move: { x: 0, y: 0 },
+            };
+            const modal = document.querySelector(
+              ".arco-modal-wrapper .arco-modal"
+            );
+            const head = document.querySelector(
+              ".arco-modal-wrapper .arco-modal-header"
+            );
+            if (!head) {
+              return;
+            }
+            const mc = new Hammer.Manager(head);
+            mc.add(
+              new Hammer.Pan({ direction: Hammer.DIRECTION_ALL, threshold: 0 })
+            );
+            const current = { x: 0, y: 0 };
+            const func = (e) => {
+              switch (e.type) {
+                case "panstart":
+                  if (modal.style.transform) {
+                    const [x, y] = modal.style.transform
+                      .match(/\d{1,}px|-\d{1,}px/g)
+                      .map((item) => item.split("px")[0] | 0);
+                    current.x = x;
+                    current.y = y;
+                  }
+                  pos.start = e.center;
+                  pos.move = e.center;
+                  break;
+                case "pan":
+                  pos.move = e.center;
+                  break;
+                case "panend":
+                  pos.move = e.center;
+                  break;
+              }
+              modal.style.transform = `translate3d(${
+                current.x + pos.move.x - pos.start.x
+              }px, ${current.y + pos.move.y - pos.start.y}px, 0)`;
+            };
+            mc.on("pan panstart panend", func);
+            return () => {
+              mc.off("pan panstart panend", func);
+            };
+          };
+          setTimeout(() => {
+            pageMove();
+          }, 500);
         })
         .catch((err) => {
           resource.uninstall(this.oldUrl);
           this.oldUrl = url;
           if (err.status !== 1) {
             this.errorCode = err.status;
-            this.errorMessage = err.data?.error?.message || err.message || '页面加载失败';
+            this.errorMessage =
+              err.data?.error?.message || err.message || "页面加载失败";
             this.$emit("load-status", { type: "error" });
             this.pageStatus = null;
           }
