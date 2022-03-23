@@ -29,6 +29,7 @@ import DataEditor from './components/form/Editor'
 import DataChoice from './components/form/Choice'
 import DataColor from './components/form/Color'
 import DynamicData from './components/form/DynamicData'
+import DataMap from './components/form/Map'
 import DataLayout from './components/common/Layout'
 import DataDialog from './components/common/Dialog'
 
@@ -117,6 +118,8 @@ app.component('app-editor', DataEditor)
 app.component('app-choice', DataChoice)
 // 颜色选择器
 app.component('app-color', DataColor)
+// 地图选择器
+app.component('app-map', DataMap)
 
 // 动态数据
 app.component('app-dynamic-data', DynamicData)

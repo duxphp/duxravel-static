@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-row h-screen overflow-hidden">
+    
     <div
       class="
         text-white
@@ -184,6 +185,7 @@
 
     <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
     <div v-if="show" class="flex-grow dark:text-gray-200" id="page-animation">
+      <app-map />
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
   </div>
