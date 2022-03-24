@@ -31,9 +31,6 @@ export default defineComponent({
     setTimeout(() => {
       this.loadMap = false
       this.map = new BMapGL.Map(this.mapContainer)
-      this.map.addEventListener('click', e => {
-        this.map.panTo(e.latlng)
-      })
       const geoc = new BMapGL.Geocoder()
       const moveend = () => {
         const pt = this.map.getCenter()
@@ -48,23 +45,28 @@ export default defineComponent({
       }
       this.map.addEventListener('moveend', moveend)
       this.map.addEventListener('zoomend', moveend)
-
-      this.map.addControl(new BMapGL.CityListControl()); // 添加城市列表控件
+      this.map.addEventListener('click', e => {
+        this.map.panTo(e.latlng)
+      })
 
       const location = new BMapGL.LocationControl()
-      this.map.addControl(location); // 添加定位
       // 设置中心位置
       if (this.value?.lng && this.value?.lat) {
-        this.map.panTo(new BMapGL.Point(+this.value.lng, +this.value.lat))
+        this.map.centerAndZoom(new BMapGL.Point(+this.value.lng, +this.value.lat), 12)
       } else {
-        location.startLocation()
+        this.map.centerAndZoom(new BMapGL.Point(112.945039, 28.234063), 12)
+        setTimeout(() => {
+          location.startLocation()
+        }, 500)
       }
+      this.map.addControl(location); // 添加定位
+      this.map.addControl(new BMapGL.CityListControl()); // 添加城市列表控件
       this.map.enableInertialDragging() // 惯性推拽
       this.map.enableScrollWheelZoom() // 滚轮缩放
       this.map.enableContinuousZoom() // 平滑缩放
       this.map.enablePinchToZoom() // 双指缩放地图
       this.map.enableResizeOnCenter() // 开启图区resize中心点不变
-    }, 200)
+    }, 100)
   },
   methods: {
     search(e) {
