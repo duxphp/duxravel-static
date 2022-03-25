@@ -1,4 +1,4 @@
-import {request} from "./request";
+import { request } from "./request";
 
 
 /**
@@ -30,13 +30,30 @@ const weather = (callback) => {
       url: "map/weather",
       errorMsg: false,
     }).then(res => {
-      localStorage.setItem('weather', JSON.stringify({time: new Date().getTime(), data: res}))
+      localStorage.setItem('weather', JSON.stringify({ time: new Date().getTime(), data: res }))
       callback(res)
     })
   }
 }
 
+/**
+ * 获取当前元素相对于指定元素的相对位置
+ * @param {*} current 当前dom
+ * @param {*} stop 查找结束dom
+ * @param {*} data 数据 无需传入
+ * @returns
+ */
+const getOffset = (current, stop = document, data = { left: 0, top: 0 }) => {
+  if (!current || current === stop) {
+    return data
+  }
+  data.left += current.offsetLeft
+  data.top += current.offsetTop
+  return getOffset(current.offsetParent, stop, data)
+}
+
 export {
   asyncTimeOut,
-  weather
+  weather,
+  getOffset
 }

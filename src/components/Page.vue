@@ -1,6 +1,5 @@
 <template>
   <div class="flex flex-row h-screen overflow-hidden">
-    
     <div
       class="
         text-white
