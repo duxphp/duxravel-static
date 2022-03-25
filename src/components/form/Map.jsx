@@ -128,7 +128,7 @@ export default defineComponent({
       if (this.model === 'poi') {
         this.poiFixedCenter = true
         this.poiCenter = { lng: +this.value.lng, lng: +this.value.lat }
-        this.poiList = this.value.pios || (this.bdPoiSearch.searchNearby(this.poiKeyword, this.poiCenter, this.poiSearchReadus), [])
+        this.poiList = this.value?.pios || (this.bdPoiSearch.searchNearby(this.poiKeyword, this.poiCenter, this.poiSearchReadus), [])
       }
       // 跳转
       this.map.centerAndZoom(new BMapGL.Point(+this.value.lng, +this.value.lat), 16)
@@ -217,9 +217,11 @@ export default defineComponent({
         this.map.addOverlay(marker)
         marker.addEventListener('click', () => {
           this.poiListSelect = index
-          const arcoListContent = this.popListRef.$el.children[0].children[0]
-          const current = arcoListContent.children[index]
-          this.popListRef.$el.children[0].scrollTo(0, getOffset(current, arcoListContent).top)
+          if (this.popListRef) {
+            const arcoListContent = this.popListRef.$el.children[0].children[0]
+            const current = arcoListContent.children[index]
+            this.popListRef.$el.children[0].scrollTo(0, getOffset(current, arcoListContent).top)
+          }
         })
         return marker
       })
