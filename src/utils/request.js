@@ -1,7 +1,7 @@
 import qs from 'qs'
 import config from '../config/request'
 import { deepCopy } from './object'
-import { requestEvent } from './event'
+import event, { requestEvent } from './event'
 import { moduleName, router } from './router'
 import { clearUserInfo, getLocalUserInfo, login, setLocalUserInfo } from './user'
 import axios from 'axios'
@@ -91,9 +91,12 @@ export const request = window.ajax = async params => {
       setLocalUserInfo({ token })
     }
 
-    const xLocation = response.headers['x-location']
-    if (xLocation) {
-      router(xLocation)
+    if (response.headers['x-location']) {
+      router(response.headers['x-location'])
+    }
+
+    if (response.headers['x-menu-select']) {
+      event.emit('request-menu-select', response.headers['x-menu-select'])
     }
 
     result.data = response.data
@@ -116,12 +119,6 @@ export const request = window.ajax = async params => {
       await login()
       return request(params)
     }
-
-    // const xLocation = result.headers['x-location']
-    // if (xLocation) {
-    //   console.log('tiaozhuan', xLocation)
-    //   router(xLocation)
-    // }
 
     errorMsg && window.message.error(result?.data?.error?.message || result?.data?.message || error?.message || '业务繁忙，请稍后再试')
     throw result

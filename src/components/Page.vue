@@ -271,7 +271,6 @@ export default {
   created() {
     // 监听路由改变
     event.add("router-change", ({ url, pathChange, agree }) => {
-      console.log(pathChange, agree, url);
       if (pathChange || ["push", "replace", "popstate"].includes(agree)) {
         this.currentUrl = url;
         this.menuHover();
@@ -286,6 +285,11 @@ export default {
         url,
         mode,
       });
+    });
+
+    // 通过request返回值控制选中菜单
+    event.add("request-menu-select", (url) => {
+      this.menuHover(void 0, void 0, url);
     });
 
     // 重新加载组件
@@ -387,15 +391,15 @@ export default {
       router.push(e.url || e.menu[0].menu[0].url);
     },
     // 菜单选中项
-    menuHover(menu = this.menu, indexs = []) {
+    menuHover(menu = this.menu, indexs = [], url = this.currentUrl) {
       return menu.findIndex((item, index) => {
         if (item.menu && item.menu.length > 0) {
-          if (~this.menuHover(item.menu, [...indexs, index])) {
+          if (~this.menuHover(item.menu, [...indexs, index], url)) {
             return true;
           }
         } else if (
           item.url &&
-          this.currentUrl.split("?")[0].split("/").slice(0, 4).join("/") ===
+          url.split("?")[0].split("/").slice(0, 4).join("/") ===
             item.url.split("?")[0].split("/").slice(0, 4).join("/")
         ) {
           indexs.push(index);
