@@ -8,8 +8,11 @@ import event from './event'
 import { getXmlByTagName, getXmlByTagNames } from './xml'
 
 window.addEventListener('popstate', e => {
-  routerChange(e.state || {
-    url: location.href.substr(location.origin.length)
+  routerChange({
+    ...(e.state || {
+      url: location.href.substr(location.origin.length)
+    }),
+    agree: 'popstate'
   })
 })
 
@@ -188,6 +191,11 @@ router.ajax = (url, data) => {
  * @returns 模块
  */
 export const moduleName = () => location.pathname.split('/')[1] || requestConfig.defaultModule
+/**
+ * 获取当前的模块
+ * @returns 模块
+ */
+export const isModuleIndex = url => ["/", `/${moduleName()}`, `/${moduleName()}/`].includes(url)
 
 /**
  * 页面资源管理

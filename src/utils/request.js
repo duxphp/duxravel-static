@@ -116,6 +116,13 @@ export const request = window.ajax = async params => {
       await login()
       return request(params)
     }
+
+    // const xLocation = result.headers['x-location']
+    // if (xLocation) {
+    //   console.log('tiaozhuan', xLocation)
+    //   router(xLocation)
+    // }
+
     errorMsg && window.message.error(result?.data?.error?.message || result?.data?.message || error?.message || '业务繁忙，请稍后再试')
     throw result
   })

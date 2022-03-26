@@ -206,7 +206,7 @@ import AppMenu from "./AppMenu.vue";
 import FileManage from "./utils/FileManageExtend";
 import AppDialog from "./utils/DialogExtend";
 import AppDialogTable from "./utils/DialogTableExtend";
-import { router, resource } from "../utils/router";
+import { router, resource, isModuleIndex } from "../utils/router";
 import { request } from "../utils/request";
 import event, { menuNavigation } from "../utils/event";
 import { getLocalUserInfo, onUserLogin } from "../utils/user";
@@ -271,7 +271,8 @@ export default {
   created() {
     // 监听路由改变
     event.add("router-change", ({ url, pathChange, agree }) => {
-      if (pathChange || ["push", "replace"].includes(agree)) {
+      console.log(pathChange, agree, url);
+      if (pathChange || ["push", "replace", "popstate"].includes(agree)) {
         this.currentUrl = url;
         this.menuHover();
       }
@@ -303,7 +304,7 @@ export default {
           } else {
             router.indexPage = this.menu[0].menu[0].menu[0].url;
           }
-          if (!this.currentIndexs.length) {
+          if (!this.currentIndexs.length && isModuleIndex(this.currentUrl)) {
             router.replace(router.indexPage);
           }
           // 通知加载

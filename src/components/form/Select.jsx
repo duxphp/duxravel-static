@@ -1,6 +1,6 @@
-import {defineComponent} from 'vue'
-import {getUrl, request} from '../../utils/request'
-import {vExec} from '../Create'
+import { defineComponent } from 'vue'
+import { getUrl, request } from '../../utils/request'
+import { vExec } from '../Create'
 
 export default defineComponent({
   props: {
@@ -35,6 +35,7 @@ export default defineComponent({
     dataUrl() {
       this.modelValue = null
       this.$emit('update:value', null)
+      this.$emit('update:data', {})
       this.handleSearch()
     }
   },
@@ -42,6 +43,7 @@ export default defineComponent({
     updateValue(value) {
       this.modelValue = value
       this.$emit('update:value', value)
+      this.$emit('update:item', { ...this.nParams.options.find(item => item.value == value), render: void 0 })
     },
     handleSearch(query, value) {
       this.loading = true
