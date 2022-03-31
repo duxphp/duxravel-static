@@ -1,21 +1,21 @@
 {
   "src/main.js": {
-    "file": "static/manage/main.1de56a4a.js",
+    "file": "static/manage/main.5326f174.js",
     "src": "src/main.js",
     "isEntry": true,
     "imports": [
-      "_vendor.e94345b9.js"
+      "_vendor.7ab442ad.js"
     ],
     "css": [
       "static/manage/main.0057cc3d.css"
     ],
     "assets": [
-      "static/manage/logo.5d56d6f7.svg",
+      "static/manage/logo.d66db2fc.svg",
       "static/manage/login-foot.1c6cc2f5.png",
       "static/manage/login-side.19d425f0.png"
     ]
   },
-  "_vendor.e94345b9.js": {
-    "file": "static/manage/vendor.e94345b9.js"
+  "_vendor.7ab442ad.js": {
+    "file": "static/manage/vendor.7ab442ad.js"
   }
 }

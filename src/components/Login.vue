@@ -182,7 +182,7 @@ import event from "../utils/event";
 import { isLogin, setLocalUserInfo } from "../utils/user";
 import logo from "../assets/images/logo.svg";
 import loginFoot from "../assets/images/login-foot.png";
-import loginSode from "../assets/images/login-side.png";
+import loginSide from "../assets/images/login-side.png";
 import { weather } from "../utils/util";
 import { getComp } from "../utils/router";
 
@@ -246,7 +246,7 @@ export default {
     });
   window.appConfig.login.side && window.appConfig.login.side.length > 0
             ? window.appConfig.login.side
-            : [loginSode]
+            : [loginSide]
     return {
       data,
       nowDate,
@@ -261,8 +261,8 @@ export default {
         side:
           window.appConfig.login.side && window.appConfig.login.side.length > 0
             ? window.appConfig.login.side
-            : [loginSode],
-        foot: loginFoot,
+            : [loginSide],
+        foot: window.appConfig.login.foot  || loginFoot,
       },
       readonly: ref(true),
       weatherData,

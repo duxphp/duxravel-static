@@ -12,7 +12,6 @@ export default defineConfig({
     }
   },
   build: {
-
     assetsDir: 'static/manage',
     manifest: true,
     emptyOutDir: true,
