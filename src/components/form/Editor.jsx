@@ -6,7 +6,7 @@ import { getLocalUserInfo } from '../../utils/user'
 import Editor from '@tinymce/tinymce-vue'
 
 //引入node_modules里的tinymce相关文件文件
-import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入则不显示编辑器
+import tinymce from 'tinymce/tinymce' //static/tinymce默认hidden，不引入则不显示编辑器
 import 'tinymce/themes/silver'  //编辑器主题，不引入则报错
 import 'tinymce/icons/default'  //引入编辑器图标icon，不引入则不显示对应图标
 
@@ -82,11 +82,11 @@ export default defineComponent({
     data() {
         return {
             init: {
-                language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,  //引入语言包文件
+                language_url: `${this.baseUrl}/static/tinymce/langs/zh_CN.js`,  //引入语言包文件
                 language: 'zh_CN',  //语言类型
-                skin_url: `${this.baseUrl}/tinymce/skins/ui/` + (window.darkMode === 'dark' ? 'oxide-dark' : 'oxide'),
-                content_css: `${this.baseUrl}/tinymce/skins/content/${window.darkMode === 'dark' ? 'dark' : 'default'}/content.css`,
-                emoticons_database_url: `${this.baseUrl}/tinymce/emojis.min.js`,
+                skin_url: `${this.baseUrl}/static/tinymce/skins/ui/` + (window.darkMode === 'dark' ? 'oxide-dark' : 'oxide'),
+                content_css: `${this.baseUrl}/static/tinymce/skins/content/${window.darkMode === 'dark' ? 'dark' : 'default'}/content.css`,
+                emoticons_database_url: `${this.baseUrl}/static/tinymce/emojis.min.js`,
                 
                 plugins: this.plugins,
                 toolbar: this.toolbar,
@@ -205,7 +205,7 @@ export default defineComponent({
         tinymce.init({})
     },
     methods: {
-        // 添加相关的事件，可用的事件参照文档=> https://github.com/tinymce/tinymce-vue => All available events
+        // 添加相关的事件，可用的事件参照文档=> https://github.com/static/tinymce/tinymce-vue => All available events
         onClick(e) {
             this.$emit('onClick', e, tinymce)
         },
