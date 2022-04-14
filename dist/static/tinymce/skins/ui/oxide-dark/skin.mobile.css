@@ -598,7 +598,7 @@
   font-family: 'tinymce-mobile';
   font-style: normal;
   font-weight: normal;
-  src: url('public/static/tinymcetinymce/skins/ui/oxide-dark/fonts/tinymce-mobile.woff?8x92w3') format('woff');
+  src: url('public/static/tinymce/skins/ui/oxide-dark/fonts/tinymce-mobile.woff?8x92w3') format('woff');
 }
 @media (min-device-width: 700px) {
   .tinymce-mobile-outer-container,
