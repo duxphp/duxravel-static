@@ -5,6 +5,7 @@ import event, { requestEvent } from './event'
 import { moduleName, router } from './router'
 import { clearUserInfo, getLocalUserInfo, login, setLocalUserInfo } from './user'
 import axios from 'axios'
+import {newArray} from "@arco-design/web-vue/es/date-picker/utils";
 
 /**
  * 转换当前url为真实URL
@@ -16,7 +17,16 @@ export const getUrl = (url, type = 'relative') => {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  return `${import.meta.env.DEV ? config.domain : ''}${type === 'relative' ? '/' + (moduleName() + (!url.startsWith('/') ? '/' : '')) : ''}${url}`
+
+  let urlArr = []
+  urlArr.push(import.meta.env.DEV ? config.domain : '')
+
+  if (type === 'relative' && url.lastIndexOf("/" + moduleName(), 0) === -1) {
+      urlArr.push("/" + moduleName() + (!url.startsWith('/') ? '/' : ''))
+  }
+
+  urlArr.push(url)
+  return urlArr.join("")
 }
 
 /**
