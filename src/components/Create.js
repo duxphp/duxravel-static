@@ -22,15 +22,6 @@ export const vExec = function (data, arg, slotProps) {
   // 查找keys
   const itemKeys = Object.keys(item)
 
-  // 文本字符换替换
-  if (vStringReplace && typeof vStringReplace === 'string') {
-    itemKeys.forEach(key => {
-      if (typeof item[key] === 'string') {
-        item[key] = item[key].replace(vStringReplace, '')
-      }
-    })
-  }
-
   // 插槽变量计算
   const vSlotKey = itemKeys.find(key => key.startsWith('vSlot'))
   const slotArg = (() => {
@@ -106,6 +97,16 @@ export const vExec = function (data, arg, slotProps) {
       delete item[key]
     }
   })
+
+  // 文本字符换替换
+  if (vStringReplace && typeof vStringReplace === 'string') {
+    Object.keys(item).forEach(key => {
+      if (typeof item[key] === 'string') {
+        item[key] = item[key].replace(vStringReplace, '')
+      }
+    })
+  }
+
   if (nodeName && typeof nodeName === 'string') {
     // 创建组件
     return h(
@@ -129,6 +130,7 @@ export const vExec = function (data, arg, slotProps) {
  * @returns
  */
 export const renderItem = function (data, arg, slotProps) {
+
   if (typeof data === 'string' || typeof data === 'number') {
     data += ''
     const string = []
@@ -177,7 +179,7 @@ export const renderItem = function (data, arg, slotProps) {
 }
 
 export const renderNodeList = function (node, arg) {
-  if (!node || Object.keys(node).length === 0) {
+  if (typeof node === 'undefined' || (typeof node === 'object' && (!node || Object.keys(node).length === 0))) {
     return {}
   }
   const childNode = {}
@@ -187,7 +189,7 @@ export const renderNodeList = function (node, arg) {
   const nodes = node instanceof Array ? node : [node]
 
   nodes.forEach((item) => {
-    if (typeof item === 'string') {
+    if (typeof item === 'string' || typeof item === 'number') {
       slotGroup.default = slotGroup.default || []
       slotGroup.default.push(item)
     } else if (typeof item === 'object' && Object.keys(item).length && item !== null) {

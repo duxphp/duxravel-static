@@ -1,4 +1,4 @@
 export default {
-  domain: 'http://0.0.0.0:8080',
+  domain: 'http://192.168.1.166',
   defaultModule: 'admin'
 }
