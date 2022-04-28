@@ -16,10 +16,20 @@ const exec = function (script, params = {}) {
  * @param {*} slotProps 插槽参数
  */
 export const vExec = function (data, arg, slotProps) {
-  const { nodeName, child, ...item } = data
+  const { nodeName, child, vStringReplace, ...item } = data
+
 
   // 查找keys
   const itemKeys = Object.keys(item)
+
+  // 文本字符换替换
+  if (vStringReplace && typeof vStringReplace === 'string') {
+    itemKeys.forEach(key => {
+      if (typeof item[key] === 'string') {
+        item[key] = item[key].replace(vStringReplace, '')
+      }
+    })
+  }
 
   // 插槽变量计算
   const vSlotKey = itemKeys.find(key => key.startsWith('vSlot'))
@@ -119,7 +129,8 @@ export const vExec = function (data, arg, slotProps) {
  * @returns
  */
 export const renderItem = function (data, arg, slotProps) {
-  if (typeof data === 'string') {
+  if (typeof data === 'string' || typeof data === 'number') {
+    data += ''
     const string = []
     const split = data.split('{{')
     split[0] && string.push(split[0])
@@ -167,7 +178,7 @@ export const renderItem = function (data, arg, slotProps) {
 
 export const renderNodeList = function (node, arg) {
   if (!node || Object.keys(node).length === 0) {
-    return { }
+    return {}
   }
   const childNode = {}
 
@@ -188,7 +199,7 @@ export const renderNodeList = function (node, arg) {
     }
   })
   Object.keys(slotGroup).forEach(slotKey => {
-    if(!slotGroup[slotKey].length){
+    if (!slotGroup[slotKey].length) {
       return
     }
     childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item, arg, props))
