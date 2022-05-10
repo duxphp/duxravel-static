@@ -1,8 +1,8 @@
-import {defineComponent, ref, getCurrentInstance, watch} from 'vue'
-import {renderNodeList, vExec} from '../Create'
-import {getUrl, request, searchQuick} from '../../utils/request'
-import event, {requestEvent} from '../../utils/event'
-import {router, getParams} from '../../utils/router'
+import { defineComponent, ref, getCurrentInstance, watch } from 'vue'
+import { renderNodeList, vExec } from '../Create'
+import { getUrl, request, searchQuick } from '../../utils/request'
+import event, { requestEvent } from '../../utils/event'
+import { router, getParams } from '../../utils/router'
 
 // 获取最近的pageContent组件实例
 export const getPageContent = (parent) => {
@@ -142,11 +142,17 @@ export default defineComponent({
     const loading = ref(false)
 
     // 格式化数据
-    const formatData = (data) => {
+    const formatData = (data, replaceKeys = props.columns.filter(v => v.replace)) => {
       return data.map(item => {
         item.__loading = false
+        // 替换keys
+        if (replaceKeys.length) {
+          replaceKeys.forEach(v => {
+            item[v.dataIndex] = item[v.dataIndex].replace(v.replace, '')
+          })
+        }
         if (item.children) {
-          item.children = formatData(item.children);
+          item.children = formatData(item.children, replaceKeys);
         }
         return item
       })
@@ -203,6 +209,9 @@ export default defineComponent({
         res = [res]
       }
       res.forEach(action => {
+        if(action.data) {
+          action.data = formatData([action.data])[0]
+        }
         // 新增数据到顶级
         if (action.type === 'add' && !action.parentKey) {
           data.value[action.pos === 'end' ? 'push' : 'unshift'](action.data)
@@ -247,7 +256,7 @@ export default defineComponent({
       requestEvent.add(props.requestEventName, requestEventCallBack)
     }
 
-    const routerChange = ({params, agree}) => {
+    const routerChange = ({ params, agree }) => {
       agree === 'routerPush' && getList(params)
     }
 
@@ -313,7 +322,7 @@ export default defineComponent({
       sortDirections: ['ascend', 'descend'],
     }
 
-    const columns = props.columns.map(item => vExec.call({colSortable}, item, {editValue, editStatus}))
+    const columns = props.columns.map(item => vExec.call({ colSortable }, item, { editValue, editStatus }))
 
     return {
       sorter,

@@ -102,7 +102,13 @@ export const vExec = function (data, arg, slotProps) {
   if (vStringReplace && typeof vStringReplace === 'string') {
     Object.keys(item).forEach(key => {
       if (typeof item[key] === 'string') {
-        item[key] = item[key].replace(vStringReplace, '')
+        const val = item[key].replace(vStringReplace, '')
+        // 如果是vModel绑定的值让这个值触发更新
+        const updateKey = `onUpdate:${key}`
+        if (val !== item[key] && typeof item[updateKey] === 'function') {
+          item[updateKey](val)
+        }
+        item[key] = val
       }
     })
   }
