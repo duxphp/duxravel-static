@@ -209,7 +209,7 @@ export default defineComponent({
         res = [res]
       }
       res.forEach(action => {
-        if(action.data) {
+        if (action.data) {
           action.data = formatData([action.data])[0]
         }
         // 新增数据到顶级
@@ -257,7 +257,11 @@ export default defineComponent({
     }
 
     const routerChange = ({ params, agree }) => {
-      agree === 'routerPush' && getList(params)
+      // 参数变化重置为第一页
+      if (agree === 'routerPush') {
+        pagination.value.current = 1
+        getList(params)
+      }
     }
 
     // url自动跟随参数
@@ -275,6 +279,8 @@ export default defineComponent({
       router.routerPush(void 0, Object.fromEntries(Object.keys(props.filter).filter(key => props.filter[key] !== null).map(key => [key, props.filter[key]])))
     } else {
       watch(props.filter, params => {
+        // 跳转第一页
+        pagination.value.current = 1
         // 过滤空参数 并且跳转到这个代参数的路由地址
         getList(params)
       })

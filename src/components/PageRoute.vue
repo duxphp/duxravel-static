@@ -13,6 +13,7 @@ import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage, isModuleIndex, resource } from "../utils/router";
 import event from "../utils/event";
+import { getOffset } from "../utils/util";
 
 // 应用样式
 let appStyle;
@@ -143,6 +144,7 @@ export default {
 
             this.$emit("load-status", { type: "end" });
           });
+          // 窗口拖动
           const pageMove = () => {
             const pos = {
               start: { x: 0, y: 0 },
@@ -182,9 +184,13 @@ export default {
                   pos.move = e.center;
                   break;
               }
+              const { top } = getOffset(modal);
               modal.style.transform = `translate3d(${
                 current.x + pos.move.x - pos.start.x
-              }px, ${current.y + pos.move.y - pos.start.y}px, 0)`;
+              }px, ${Math.max(
+                current.y + pos.move.y - pos.start.y,
+                -top
+              )}px, 0)`;
             };
             mc.on("pan panstart panend", func);
             return () => {

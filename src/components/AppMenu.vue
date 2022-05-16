@@ -1,46 +1,48 @@
 <template>
-  <div class="menu-child-root hide lg:block border-r border-white dark:bg-blackgray-4 dark:border-blackgray-5"
-       :class="
-        menuData.menu
-        ? 'w-40 bg-white shadow z-20 '
-        : ''
-    ">
-    <c-scrollbar
-        trigger="hover"
-        direction="y"
-    >
+  <div
+    class="
+      menu-child-root
+      hide
+      lg:block
+      border-r border-white
+      dark:bg-blackgray-4 dark:border-blackgray-5
+    "
+    :class="menuData.menu ? 'w-40 bg-white shadow z-20 ' : ''"
+  >
+    <c-scrollbar trigger="hover" direction="y">
       <template v-if="menuData.menu">
         <div class="p-4 py-3 dark:text-gray-400">
           {{ menuData.name }}
         </div>
         <div
-            class="px-2"
-            v-for="(child, index1) in menuData.menu"
-            :key="child.name"
+          class="px-2"
+          v-for="(child, index1) in menuData.menu"
+          :key="child.name"
         >
-        <span class="text-xs text-gray-400 dark:text-gray-500 py-3 px-2 block">{{
-            child.name
-          }}</span>
+          <span
+            class="text-xs text-gray-400 dark:text-gray-500 py-3 px-2 block"
+            >{{ child.name }}</span
+          >
           <template v-if="child.menu">
             <div
-                class="
-              text-gray-800
-              dark:text-gray-400
-              hover:text-blue-600
-              dark:hover:text-gray-300
-              block
-              p-2.5
-              rounded
-              truncate
-              cursor-pointer
-            "
-                v-for="(child2, index2) in child.menu"
-                :key="child2.name"
-                :class="{
-              'bg-blue-50 text-blue-600 dark:bg-blackgray-1 dark:text-gray-400':
-                select[1] === index1 && select[2] === index2,
-            }"
-                @click="target(child2)"
+              class="
+                text-gray-800
+                dark:text-gray-400
+                hover:text-blue-600
+                dark:hover:text-gray-300
+                block
+                p-2.5
+                rounded
+                truncate
+                cursor-pointer
+              "
+              v-for="(child2, index2) in child.menu"
+              :key="child2.name"
+              :class="{
+                'bg-blue-50 text-blue-600 dark:bg-blackgray-1 dark:text-gray-400':
+                  select[1] === index1 && select[2] === index2,
+              }"
+              @click="target(child2)"
             >
               {{ child2.name }}
             </div>
@@ -52,7 +54,7 @@
 </template>
 
 <script>
-import {router} from "../utils/router";
+import { router } from "../utils/router";
 
 export default {
   name: "AppMenu",

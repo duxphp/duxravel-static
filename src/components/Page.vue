@@ -21,6 +21,7 @@
           justify-center
           mb-4
         "
+        @click="menuShow = !menuShow"
       >
         <div
           class="
@@ -182,7 +183,10 @@
       </div>
     </div>
 
-    <AppMenu :menu="menu[currentIndexs[0]]" :select="currentIndexs" />
+    <AppMenu
+      :menu="menuShow ? menu[currentIndexs[0]] : { name: '隐藏' }"
+      :select="currentIndexs"
+    />
     <div v-if="show" class="flex-grow dark:text-gray-200" id="page-animation">
       <PageContent :currentUrl="currentUrl" :windowType="'page'" />
     </div>
@@ -249,6 +253,8 @@ export default {
       userInfo: {},
       // 颜色模式
       darkMode: localStorage.getItem("darkMode") === "dark" ? "dark" : "light",
+      // 菜单显示开关
+      menuShow: true,
     };
   },
 
