@@ -199,6 +199,7 @@
     :mode="item.mode"
     @close-dialog="closeDialog(index)"
   />
+  <Download />
   <Login />
 </template>
 
@@ -207,6 +208,7 @@ import { Message, Modal, Notification } from "@arco-design/web-vue";
 import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
+import Download from "./Download.vue";
 import FileManage from "./utils/FileManageExtend";
 import AppDialog from "./utils/DialogExtend";
 import AppDialogTable from "./utils/DialogTableExtend";
@@ -232,6 +234,7 @@ export default {
     Login,
     PageContent,
     AppMenu,
+    Download
   },
   mounted() {},
   data() {

@@ -5,7 +5,6 @@ import event, { requestEvent } from './event'
 import { moduleName, router } from './router'
 import { clearUserInfo, getLocalUserInfo, login, setLocalUserInfo } from './user'
 import axios from 'axios'
-import {newArray} from "@arco-design/web-vue/es/date-picker/utils";
 
 /**
  * 转换当前url为真实URL
@@ -22,7 +21,7 @@ export const getUrl = (url, type = 'relative') => {
   urlArr.push(import.meta.env.DEV ? config.domain : '')
 
   if (type === 'relative' && url.lastIndexOf("/" + moduleName(), 0) === -1) {
-      urlArr.push("/" + moduleName() + (!url.startsWith('/') ? '/' : ''))
+    urlArr.push("/" + moduleName() + (!url.startsWith('/') ? '/' : ''))
   }
 
   urlArr.push(url)
@@ -254,4 +253,75 @@ export const selectQuery = window.selectQuery = function (query, url) {
   }).catch(() => {
     this.loading = false
   })
+}
+
+export const download = (url, type) => {
+  let downloadKey
+  const cb = key => {
+    event.remove('download-manage-add-callback', cb)
+    downloadKey = key
+  }
+  event.add('download-manage-add-callback', cb)
+  event.emit('download-manage-add')
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', getUrl(url, type))        // 也可以使用POST方式，根据接口
+  xhr.responseType = 'blob'  // 返回类型blob
+  const headers = {
+    Accept: 'application/json',
+    Authorization: getLocalUserInfo().token || ''
+  }
+  Object.keys(headers).forEach(key => {
+    xhr.setRequestHeader(key, headers[key])
+  })
+  // 默认文件名
+  let filename = url.split('?')[0].split('/')
+  filename = filename[filename.length - 1]
+  // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+  xhr.addEventListener('progress', e => {
+    event.emit('download-manage-update', {
+      key: downloadKey,
+      total: e.total,
+      loaded: e.loaded
+    })
+  })
+
+  xhr.addEventListener('readystatechange', () => {
+    if (XMLHttpRequest.HEADERS_RECEIVED === xhr.readyState) {
+      const disposition = xhr.getResponseHeader('content-disposition')
+      if (disposition) {
+        filename = decodeURIComponent(xhr.getResponseHeader('content-disposition').split('"')[1])
+      }
+      event.emit('download-manage-update', { key: downloadKey, filename })
+    }
+  })
+  xhr.onload = function (e) {
+    // 请求完成
+    if (this.status === 200) {
+      event.emit('download-manage-update', {
+        key: downloadKey,
+        result: true
+      })
+      // 返回200
+      const blob = this.response
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)    // 转换为base64，可以直接放入a表情href
+      reader.onload = function (e) {
+        // 转换完成，创建一个a标签用于下载
+        const a = document.createElement('a')
+        a.download = filename
+        a.href = e.target.result
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+      }
+    } else {
+      event.emit('download-manage-update', {
+        key: downloadKey,
+        error: true
+      })
+    }
+  };
+  // 发送ajax请求
+  xhr.send()
 }

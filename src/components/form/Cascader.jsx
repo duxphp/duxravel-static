@@ -1,6 +1,6 @@
-import {defineComponent, nextTick} from 'vue'
-import {getUrl, request, requestCache} from '../../utils/request'
-import {vExec} from '../Create'
+import { defineComponent } from 'vue'
+import { getUrl, request } from '../../utils/request'
+import { vExec } from '../Create'
 
 export default defineComponent({
   props: {
@@ -18,7 +18,7 @@ export default defineComponent({
   data() {
     return {
       loading: false,
-      search : false,
+      search: false,
       modelValue: null
     }
   },
@@ -47,7 +47,7 @@ export default defineComponent({
         url: getUrl(this.dataUrl),
         method: 'get',
       }).then(res => {
-        this.nParams.options = res  instanceof Array ? res : []
+        this.nParams.options = res instanceof Array ? res : []
         this.loading = false
       }).catch(() => {
         this.loading = false
@@ -92,13 +92,22 @@ export default defineComponent({
     },
   },
   render() {
-    return <a-spin loading={this.loading} class="black w-full"><a-cascader
-      {...vExec.call(this, this.nParams)}
-      modelValue={this.modelValue}
-      allowSearch={this.search}
-      allowClear={true}
-      onChange={this.updateValue}
-    />
-  </a-spin>
+    const nParams = vExec.call(this, this.nParams)
+    return <a-spin
+      loading={this.loading}
+      class='black w-full'
+    >
+      <a-cascader
+        {...nParams}
+        triggerProps={{
+          alignPoint: true,
+          ...nParams.triggerProps
+        }}
+        modelValue={this.modelValue}
+        allowSearch={this.search}
+        allowClear={true}
+        onChange={this.updateValue}
+      />
+    </a-spin>
   }
 })

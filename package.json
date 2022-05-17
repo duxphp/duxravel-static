@@ -8,11 +8,11 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@arco-design/web-vue": "^2.12.1",
-    "@tinymce/tinymce-vue": "^4.0.5",
-    "apexcharts": "^3.30.0",
+    "@arco-design/web-vue": "^2.27.0",
+    "@tinymce/tinymce-vue": "^5.0.0",
+    "apexcharts": "^3.35.2",
     "axios": "^0.24.0",
-    "c-scrollbar": "^1.0.1",
+    "c-scrollbar": "^1.0.2",
     "hammerjs": "^2.0.8",
     "laravel-echo": "^1.11.3",
     "md5": "^2.3.0",

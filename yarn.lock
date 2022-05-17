@@ -16,10 +16,10 @@
   dependencies:
     color "^3.1.3"
 
-"@arco-design/web-vue@^2.12.1":
-  version "2.14.1"
-  resolved "https://registry.npmjs.org/@arco-design/web-vue/-/web-vue-2.14.1.tgz"
-  integrity sha512-qtg7iUYrA/wvFrUdh5f+w/gdqbmaWIijsOCQPxygjEWD3l6A1+cNUkQy2o5gQjH1AXW4FqbhlUo1+LvSVhSiTQ==
+"@arco-design/web-vue@^2.27.0":
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/@arco-design/web-vue/-/web-vue-2.27.0.tgz#6524499c247c5a8e08b6dc82761b22141264ee1e"
+  integrity sha512-PUgAOHpJYKuA94RGSwbQ1ZAYzFjswp1ThlzC43DWpOADmoDu5mLHCIls31Z0GqZVHCfhsoTrgufmB1ybNJ3bpA==
   dependencies:
     "@arco-design/color" "^0.4.0"
     b-tween "^0.3.3"
@@ -322,12 +322,12 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@tinymce/tinymce-vue@^4.0.5":
-  version "4.0.5"
-  resolved "https://registry.npmjs.org/@tinymce/tinymce-vue/-/tinymce-vue-4.0.5.tgz"
-  integrity sha512-PutMhPVgR+NPeu20pvTmFBY+3zKwTJqK0JPDb6QuK8u1g6Av4RaiUVS58Rft6mhoxVE99tIofdr69wOH/X0swA==
+"@tinymce/tinymce-vue@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-vue/-/tinymce-vue-5.0.0.tgz#0cba42697f36fa425f231e181857149a0538bde9"
+  integrity sha512-1HRCNa2eGdztOKShYAiHIry50LTU6YJG//qSP9AJElrXhb3BIBN0Bef6E56nZObVgwCgSmI4cnX35VU9D49aow==
   dependencies:
-    tinymce "^5.5.0"
+    tinymce "^6.0.0 || ^5.5.1"
 
 "@types/throttle-debounce@^2.1.0":
   version "2.1.0"
@@ -490,10 +490,10 @@ ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-apexcharts@^3.30.0:
-  version "3.32.1"
-  resolved "https://registry.npmjs.org/apexcharts/-/apexcharts-3.32.1.tgz"
-  integrity sha512-8rcB7u616lXXANG49h9vwyX0gZh0DWi4D23VnE8IU5grjaxW69IiXYldn+jB9Av407w8RVZjUv1xUpk0JlxxMg==
+apexcharts@^3.35.2:
+  version "3.35.2"
+  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.35.2.tgz#90faafffa055ce502f73b11008ba77238e94228f"
+  integrity sha512-VOSb25mrcSv/JjaWKjnasL8277cqnA0Gp20uV1+rlgE4U6j44fdTYW850Powl+S8RkXd/lPwzBB2jvKkEOHl0Q==
   dependencies:
     svg.draggable.js "^2.2.2"
     svg.easing.js "^2.0.0"
@@ -539,9 +539,9 @@ browserslist@^4.17.5:
     node-releases "^2.0.1"
     picocolors "^1.0.0"
 
-c-scrollbar@^1.0.1:
+c-scrollbar@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/c-scrollbar/-/c-scrollbar-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/c-scrollbar/-/c-scrollbar-1.0.2.tgz#6b7e6ac7601b9397a0ffd44f3ac5aee19f7add63"
   integrity sha512-aqY6O8XzOQ+pSFgVTciqUt+kUt2usJxNwGbmH7WhdgH6gQVjgkyunPqjrhNdBta41UvU5y84x45KHUugb9uAxQ==
   dependencies:
     vue "^3.0.0"
@@ -1267,10 +1267,15 @@ svg.select.js@^3.0.1:
   dependencies:
     svg.js "^2.6.5"
 
-tinymce@^5.10.2, tinymce@^5.5.0:
+tinymce@^5.10.2:
   version "5.10.2"
   resolved "https://registry.npmjs.org/tinymce/-/tinymce-5.10.2.tgz"
   integrity sha512-5QhnZ6c8F28fYucLLc00MM37fZoAZ4g7QCYzwIl38i5TwJR5xGqzOv6YMideyLM4tytCzLCRwJoQen2LI66p5A==
+
+"tinymce@^6.0.0 || ^5.5.1":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.0.2.tgz#7813ce952a9b5b42901ed5a91e915d0d8eb8eb29"
+  integrity sha512-i4OEzcTF6mGxZ+scumOoWiaI9HYn6uya980hJ+9jwnhgLbhBb+73ar2t9Ewfkns3DTl2Ez3r1pQs2tpT+ka29Q==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"
