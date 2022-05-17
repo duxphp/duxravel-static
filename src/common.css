@@ -49,6 +49,12 @@ button {
     display: inline;
 }
 
+.arco-avatar-circle .arco-avatar-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .app-tree .arco-tree-node-title-text {
     display: flex;
     flex-grow: 1;
