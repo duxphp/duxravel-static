@@ -20,11 +20,11 @@ export default defineComponent({
     if (this.dataUrl) {
       await this.handleSearch('', this.value)
     }
-    if (this.optionRender) {
-      this.nParams.formatLabel = (item) => {
-        return item && (this.optionRender(item) || item.label)
-      }
-    }
+    // if (this.optionRender) {
+    //   this.nParams.formatLabel = (item) => {
+    //     return item && (this.optionRender(item) || item.label)
+    //   }
+    // }
     this.nParams.options.map(item => {
       item.label = item.label.toString()
       return item

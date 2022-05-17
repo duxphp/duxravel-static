@@ -1,10 +1,10 @@
 {
   "src/main.js": {
-    "file": "static/manage/main.f2973a8d.js",
+    "file": "static/manage/main.3f25d99f.js",
     "src": "src/main.js",
     "isEntry": true,
     "imports": [
-      "_vendor.f96d5fbe.js"
+      "_vendor.04bde9d4.js"
     ],
     "css": [
       "static/manage/main.d6d49213.css"
@@ -15,7 +15,7 @@
       "static/manage/login-side.19d425f0.png"
     ]
   },
-  "_vendor.f96d5fbe.js": {
-    "file": "static/manage/vendor.f96d5fbe.js"
+  "_vendor.04bde9d4.js": {
+    "file": "static/manage/vendor.04bde9d4.js"
   }
 }
