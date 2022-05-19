@@ -29,8 +29,7 @@ export const getUrl = (url, type = 'relative') => {
 }
 
 export const getDomain = () => {
-  let url =  import.meta.env.DEV ? config.domain : window.location.host
-  return url.replace("http://", "").replace("https://", "")
+  return import.meta.env.DEV ? config.domain : window.location.host
 }
 
 /**
