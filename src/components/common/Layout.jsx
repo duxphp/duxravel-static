@@ -26,6 +26,10 @@ export default defineComponent({
     'submit': {
       type: Function,
     },
+    'submit-text': {
+      type: String,
+      default: '保存'
+    },
     'formLoading': {
       type: Boolean,
       default: false
@@ -166,7 +170,7 @@ export default defineComponent({
                 返回
               </a-button>
             </route>}
-            {this.save && <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit} loading={this.formLoading}>保存</a-button>}
+            {this.save && <a-button type="primary" html-type={this.submit ? 'button' : 'submit'} onClick={this.submit} loading={this.formLoading}>{this.submitText}</a-button>}
           </div>
           }
         </div>

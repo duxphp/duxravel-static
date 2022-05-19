@@ -68,9 +68,6 @@ setup({
 window.Vue = Vue
 window.NProgress = NProgress
 
-// 注册消息服务
-window.LaravelEcho = null
-
 // 实例注册到全局
 const app = window.vueApp = Vue.createApp(App)
 

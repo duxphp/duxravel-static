@@ -10,7 +10,6 @@
 import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn';
 import Page from "./components/Page.vue";
 import event from './utils/event';
-import LaravelEcho from './utils/laravelEcho'
 
 export default {
   name: "App",
@@ -116,7 +115,7 @@ export default {
     const config = window.appConfig
     // websocket 服务
     if (config.pusher && config.pusher.status) {
-      window.LaravelEcho = LaravelEcho(config.pusher)
+      
     }
 
   },
