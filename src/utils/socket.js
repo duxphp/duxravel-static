@@ -6,12 +6,17 @@ class WS {
   constructor() {
     onUserLogin(status => {
       if (status) {
-        this.init()
+        this.create()
       } else {
         this.unInit()
       }
     })
   }
+
+  // 重试锁定
+  lockReconnect = false
+  // 链接任务
+  timeOut = null
 
   // ws实例
   ws = null
@@ -21,16 +26,37 @@ class WS {
   // 监听某种类型的回调函数
   callbackTypes = {}
 
+  create() {
+    try {
+      const wsConfig = import.meta.env.DEV ? config : {
+        wsProtocol: appConfig?.socket?.protocol,
+        wsApi: appConfig?.socket?.api
+      }
+      if (!wsConfig.wsProtocol) {
+        return
+      }
+      const ws = this.ws = new WebSocket(`${wsConfig.wsProtocol}${getDomain()}${wsConfig.wsApi}`)
+      this.init();
+    } catch(e) {
+        this.reconnect()
+    }
+  }
+
+  reconnect() {
+    if(this.lockReconnect) {
+      return;
+    }
+    this.lockReconnect = true;
+    this.timeOut && clearTimeout(this.timeOut)
+      this.timeOut = setTimeout(() => {
+      this.unInit()
+      this.create()
+      this.lockReconnect = false
+    }, 4000)
+  }
+
   init() {
-    const wsConfig = import.meta.env.DEV ? config : {
-      wsProtocol: appConfig?.socket?.protocol,
-      wsApi: appConfig?.socket?.api
-    }
-    if (!wsConfig.wsProtocol) {
-      return
-    }
-    const ws = this.ws = new WebSocket(`${wsConfig.wsProtocol}${getDomain()}${wsConfig.wsApi}`)
-    ws.addEventListener('message', e => {
+    this.ws.addEventListener('message', e => {
       try {
         const data = JSON.parse(e.data)
         this.callbacks.forEach(v => v(data))
@@ -41,18 +67,20 @@ class WS {
         console.log('程序处理错误或者不是JSON消息', error)
       }
     })
-    ws.addEventListener('open', () => {
+    this.ws.addEventListener('open', () => {
       const { token = '' } = getLocalUserInfo()
       this.send({
         type: 'login',
         data: token.replace('Bearer ', '')
       })
     })
-    ws.addEventListener('close', () => {
+    this.ws.addEventListener('close', () => {
       console.log('链接关闭')
+        this.reconnect()
     })
-    ws.addEventListener('error', err => {
+    this.ws.addEventListener('error', err => {
       console.log('链接错误', err)
+      this.reconnect()
     })
   }
 
@@ -65,8 +93,8 @@ class WS {
 
   /**
    * 返回某个type的数据监听和数据发送
-   * @param {*} type 
-   * @returns 
+   * @param {*} type
+   * @returns
    */
   type(type) {
     const callbacks = []
@@ -115,7 +143,7 @@ class WS {
 
   /**
    * 发送数据
-   * @param {*} data 
+   * @param {*} data
    */
   send(data) {
     this.ws.send?.(JSON.stringify(data))
@@ -123,8 +151,8 @@ class WS {
 
   /**
    * 监听数据
-   * @param {*} callback 
-   * @returns 
+   * @param {*} callback
+   * @returns
    */
   on(callback) {
     this.callbacks.push(callback)
