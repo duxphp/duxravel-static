@@ -38,7 +38,7 @@ class WS {
           this.callbackTypes[data.type].forEach(v => v(data))
         }
       } catch (error) {
-        console.log('收到不支持的消息', error)
+        console.log('程序处理错误或者不是JSON消息', error)
       }
     })
     ws.addEventListener('open', () => {
@@ -69,7 +69,9 @@ class WS {
    * @returns 
    */
   type(type) {
+    const callbacks = []
     return {
+      // 发送消息
       send: (data, message = '') => {
         this.send({
           type,
@@ -77,13 +79,16 @@ class WS {
           data
         })
       },
+      // 发送消息文本
       sendMessage: (message = '') => {
         this.send({
           type,
           message
         })
       },
+      // 监听消息
       on: callback => {
+        callbacks.push(callback)
         this.callbackTypes[type] = this.callbackTypes[type] || []
         this.callbackTypes[type].push(callback)
         return {
@@ -95,6 +100,15 @@ class WS {
             }
           }
         }
+      },
+      // 销毁所有的监听
+      destroy() {
+        callbacks.forEach(item => {
+          const index = this.callbackTypes[type].findIndex(v => item === v)
+          if (~index) {
+            this.callbackTypes[type].splice(index, 1)
+          }
+        })
       }
     }
   }
