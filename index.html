@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html lang="zh-CN" hidden>
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>DuxRavel</title>
-    <script>
-      window.appConfig = {
-        name: 'DuxRavel',
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>DuxRavel</title>
+  <script>
+    window.appConfig = {
+      name: 'DuxRavel',
+      logo: '',
+      login: {
         logo: '',
-        login: {
-          logo: '',
-          title: '',
-          desc: '',
-        }
+        title: '',
+        desc: '',
+      },
+      socket: {
+        protocol: '',
+        api: ''
       }
-      // 屏蔽warn
-      console.warn = () => { }
-    </script>
-  </head>
-  <body>
-    <div class=""  id="duxravel-static"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    }
+    // 屏蔽warn
+    console.warn = () => { }
+  </script>
+</head>
+
+<body>
+  <div class="" id="duxravel-static"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>

@@ -56,6 +56,7 @@ export const clearUserInfo = () => {
 export const loginOut = () => {
   clearUserInfo()
   const modName = moduleName()
+  onUserLoginFunc.forEach(func => func(false))
   window.location.replace(modName ? `/${modName}` : '/')
 }
 
