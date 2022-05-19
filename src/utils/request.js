@@ -29,7 +29,7 @@ export const getUrl = (url, type = 'relative') => {
 }
 
 export const getDomain = () => {
-  return import.meta.env.DEV ? config.domain : window.location.host
+  return import.meta.env.DEV ? config.domain : window.location.origin
 }
 
 /**

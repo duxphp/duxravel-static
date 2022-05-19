@@ -67,6 +67,7 @@ class WS {
         this.emitReconnect()
       })
     } catch (error) {
+      console.log('链接初始化错误', error)
       this.reconnect()
       this.emitReconnect()
     }
@@ -83,7 +84,7 @@ class WS {
     console.log('链接断开 将在稍后重试')
     this.reconnectTimer && clearTimeout(this.reconnectTimer)
     this.reconnectTimer = setTimeout(() => {
-      if (this.ws && (this.ws.readyState === WebSocket.CLOSING || this.ws.readyState === WebSocket.CLOSED)) {
+      if (this.ws?.readyState === WebSocket.CLOSING || this.ws?.readyState === WebSocket.CLOSED) {
         console.log('正在重连')
         this.init()
       } else {
@@ -165,7 +166,7 @@ class WS {
    * @param {*} data
    */
   send(data) {
-    this.ws.readyState === WebSocket.OPEN && this.ws.send(JSON.stringify(data))
+    this.ws?.readyState === WebSocket.OPEN && this.ws.send(JSON.stringify(data))
   }
 
   /**
