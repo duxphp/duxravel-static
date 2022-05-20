@@ -9,6 +9,7 @@ import 'nprogress/nprogress.css'
 import './common.css'
 
 import draggable from 'vuedraggable'
+import JsonViewer from 'vue-json-viewer'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import VueApexCharts from 'vue3-apexcharts'
 import './utils/global'
@@ -125,6 +126,10 @@ app.component('app-dialog', DataDialog)
 
 // 拖动排序
 app.component('draggable', draggable)
+
+// json 查看器
+app.component('json-viewer', JsonViewer)
+
 
 app.mount('#duxravel-static')
 

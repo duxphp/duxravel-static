@@ -22,6 +22,7 @@
     "twind": "^0.16.16",
     "vite-plugin-windicss": "^1.5.1",
     "vue": "^3.2.23",
+    "vue-json-viewer": "3",
     "vue3-apexcharts": "^1.4.1",
     "vuedraggable": "^4.0.3"
   },
