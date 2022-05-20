@@ -6,6 +6,7 @@ import * as router from './router'
 import * as global from './global'
 import * as request from './request'
 import socket from './socket'
+import qs from 'qs'
 
 window.dux = {
   object,
@@ -15,5 +16,6 @@ window.dux = {
   router,
   global,
   request,
-  socket
+  socket,
+  qs
 }
