@@ -57,6 +57,10 @@ export default defineComponent({
     requestEventName: {
       type: String,
       default: null
+    },
+    nowrap: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
@@ -367,7 +371,11 @@ export default defineComponent({
           this.checkedRowKeys = value
         }}
       >
-
+        {{
+          tbody: () => {
+            return <tbody style={this.nowrap ? { whiteSpace: 'nowrap' } : {}} />
+          }
+        }}
       </a-table>
       <div class="absolute bottom-0 z-10 ">
         {this.$slots.footer?.(this.childData)}
