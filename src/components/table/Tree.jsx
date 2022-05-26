@@ -115,12 +115,12 @@ export default defineComponent({
     // 通过key递归查找节点
     loopData(key, callback, data = this.data, parent = null) {
       data.some((item, index, arr) => {
-        if (item.key === key) {
+        if (item[this.fieldNames.key] === key) {
           callback(item, index, arr, parent);
           return true;
         }
-        if (item.children) {
-          return this.loopData(key, callback, item.children, item);
+        if (item[this.fieldNames.children]) {
+          return this.loopData(key, callback, item[this.fieldNames.children], item);
         }
         return false;
       });
@@ -258,6 +258,8 @@ export default defineComponent({
                 item.children = []
               }
               item.children[action.pos !== 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
+
+
               if (!this.expandedKeys.includes(action.parentKey)) {
                 this.expandedKeys.push(action.parentKey)
               }
@@ -342,7 +344,6 @@ export default defineComponent({
             onDrop={this.handleDrop}
             selectedKeys={this.value ? [this.value] : null}
             onSelect={(value) => {
-              console.log(value)
               this.$emit('update:value', this.value === value[0] ? null : value[0])
             }}
             expandedKeys={this.expandedKeys}
