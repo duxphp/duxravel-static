@@ -1,7 +1,7 @@
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 import qs from 'qs'
-import {request, searchQuick} from '../../utils/request'
-import {requestEvent} from '../../utils/event'
+import { request, searchQuick } from '../../utils/request'
+import { requestEvent } from '../../utils/event'
 
 /**
  * 将展开的级别keys保存在本地
@@ -186,7 +186,7 @@ export default defineComponent({
             }
           }
           if (status) {
-            result.push({...item});
+            result.push({ ...item });
           } else if (item[this.fieldNames.children]) {
             const filterData = loop(item[this.fieldNames.children]);
             if (filterData.length) {
@@ -270,9 +270,9 @@ export default defineComponent({
 
       this.resetLevel()
     },
-    handleDrop({dragNode, dropNode, dropPosition}) {
+    handleDrop({ dragNode, dropNode, dropPosition }) {
 
-      console.log(this.data, dropNode, dragNode)
+      console.log(this.data)
       const sort = {
         id: dragNode.key,
         parent: null,
@@ -284,19 +284,37 @@ export default defineComponent({
         arr.splice(index, 1);
       });
 
+      // 返回的数据不符合映射，重新组合
+      const newData = {
+        [this.fieldNames.title]: dragNode[this.fieldNames.title],
+        [this.fieldNames.key]: dragNode[this.fieldNames.key],
+        [this.fieldNames.children]: dragNode[this.fieldNames.children],
+        rawData: dragNode.rawData
+      }
+      if(dragNode[this.fieldNames.title] === undefined) {
+        newData[this.fieldNames.title] = dragNode.title
+      }
+      if(dragNode[this.fieldNames.key] === undefined) {
+        newData[this.fieldNames.key] = dragNode.key
+      }
+      if(dragNode[this.fieldNames.children] === undefined) {
+        newData[this.fieldNames.children] = dragNode.children
+      }
+
+
       if (dropPosition === 0) {
         this.loopData(dropNode.key, (item) => {
           item.children = item.children || [];
-          item.children.push(dragNode);
+          item.children.push(newData);
           // 父级
           sort.parent = item[this.fieldNames.key]
           // 改变等级
-          dragNode.level = item.level + 1
+          newData.level = item.level + 1
         })
       } else {
         this.loopData(dropNode.key, (_, index, arr, parent) => {
           const nodeIndex = dropPosition < 0 ? index : index + 1
-          arr.splice(nodeIndex, 0, dragNode)
+          arr.splice(nodeIndex, 0, newData)
           // 上一个
           sort.before = arr[nodeIndex - 1]?.[this.fieldNames.key] || null
           // 下一个
@@ -304,7 +322,7 @@ export default defineComponent({
           // 父级
           sort.parent = parent ? parent[this.fieldNames.key] : null
           // 改变等级
-          dragNode.level = parent ? parent.level + 1 : 0
+          newData.level = parent ? parent.level + 1 : 0
         })
       }
 
@@ -370,7 +388,7 @@ export default defineComponent({
                       {{
                         default: () => {
                           return <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center">
-                            <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
+                            <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
                             {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
                           </div>
                         },
@@ -380,7 +398,7 @@ export default defineComponent({
                       }}
                     </a-dropdown>
                     : <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center ">
-                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]}/>
+                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
                       {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
                     </div>
                 }
@@ -389,7 +407,7 @@ export default defineComponent({
             }
           </a-tree>
         </a-spin>
-      </div> : <a-empty/>
+      </div> : <a-empty />
       }
     </div>
   }
