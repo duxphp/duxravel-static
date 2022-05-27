@@ -154,8 +154,8 @@ export default defineComponent({
     resetLevel(data = this.data, level = 0) {
       data.forEach(item => {
         item.level = level
-        if (item.children && item.children.length) {
-          this.resetLevel(item.children, level + 1)
+        if (item[this.fieldNames.children] && item[this.fieldNames.children].length) {
+          this.resetLevel(item[this.fieldNames.children], level + 1)
         }
       })
     },
@@ -248,16 +248,16 @@ export default defineComponent({
           (item, index, arr) => {
             if (action.type === 'edit') {
               arr[index] = this.renderData([action.data])[0]
-              if (!arr[index].children?.length && item.children) {
-                arr[index].children = item.children
+              if (!arr[index][this.fieldNames.children]?.length && item[this.fieldNames.children]) {
+                arr[index][this.fieldNames.children] = item[this.fieldNames.children]
               }
             } else if (action.type === 'del') {
               arr.splice(index, 1)
             } else if (action.type === 'add') {
-              if (!item.children) {
-                item.children = []
+              if (!item[this.fieldNames.children]) {
+                item[this.fieldNames.children] = []
               }
-              item.children[action.pos !== 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
+              item[this.fieldNames.children][action.pos !== 'end' ? 'push' : 'unshift'](this.renderData([action.data])[0])
 
 
               if (!this.expandedKeys.includes(action.parentKey)) {
@@ -272,6 +272,7 @@ export default defineComponent({
     },
     handleDrop({dragNode, dropNode, dropPosition}) {
 
+      console.log(this.data, dropNode, dragNode)
       const sort = {
         id: dragNode.key,
         parent: null,
@@ -288,20 +289,20 @@ export default defineComponent({
           item.children = item.children || [];
           item.children.push(dragNode);
           // 父级
-          sort.parent = item.key
+          sort.parent = item[this.fieldNames.key]
           // 改变等级
           dragNode.level = item.level + 1
         })
       } else {
         this.loopData(dropNode.key, (_, index, arr, parent) => {
           const nodeIndex = dropPosition < 0 ? index : index + 1
-          arr.splice(nodeIndex, 0, dragNode);
+          arr.splice(nodeIndex, 0, dragNode)
           // 上一个
-          sort.before = arr[nodeIndex - 1]?.key || null
+          sort.before = arr[nodeIndex - 1]?.[this.fieldNames.key] || null
           // 下一个
-          sort.after = arr[nodeIndex + 1]?.key || null
+          sort.after = arr[nodeIndex + 1]?.[this.fieldNames.key] || null
           // 父级
-          sort.parent = parent ? parent.key : null
+          sort.parent = parent ? parent[this.fieldNames.key] : null
           // 改变等级
           dragNode.level = parent ? parent.level + 1 : 0
         })
