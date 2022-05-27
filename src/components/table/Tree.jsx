@@ -288,7 +288,7 @@ export default defineComponent({
           item.children = item.children || [];
           item.children.push(dragNode);
           // 父级
-          sort.parent = item[this.fieldNames.key]
+          sort.parent = item.key
           // 改变等级
           dragNode.level = item.level + 1
         })
@@ -297,11 +297,11 @@ export default defineComponent({
           const nodeIndex = dropPosition < 0 ? index : index + 1
           arr.splice(nodeIndex, 0, dragNode);
           // 上一个
-          sort.before = arr[nodeIndex - 1]?.[this.fieldNames.key] || null
+          sort.before = arr[nodeIndex - 1]?.key || null
           // 下一个
-          sort.after = arr[nodeIndex + 1]?.[this.fieldNames.key] || null
+          sort.after = arr[nodeIndex + 1]?.key || null
           // 父级
-          sort.parent = parent ? parent[this.fieldNames.key] : null
+          sort.parent = parent ? parent.key : null
           // 改变等级
           dragNode.level = parent ? parent.level + 1 : 0
         })
