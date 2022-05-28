@@ -15,7 +15,6 @@
       :mask="true"
       :footer="false"
       :alignCenter="false"
-      :top="40"
       :open="dialogOpen"
   >
     <div ref="dialogAnimation" class="dialog-animation">
@@ -29,7 +28,7 @@
 
   <a-drawer
       v-else
-      :visible="dialogShow"
+      v-model:visible="dialogShow"
       class="page-drawer"
       :mask="true"
       :footer="false"
@@ -137,9 +136,6 @@ export default {
       if (this.windowType === "page") {
         if (type === "start") {
           window.NProgress.start();
-        } else if (type === "end") {
-          this.pageAnimation();
-          window.NProgress.done();
         } else {
           this.pageAnimation();
           window.NProgress.done();
@@ -150,15 +146,14 @@ export default {
         } else if (type === "end") {
           setTimeout(() => {
             this.dialogShow = true;
-          }, 300)
-          //this.dialogAnimation();
-          this.closeLoading();
+            this.closeLoading();
+          }, 500)
+
         } else {
           setTimeout(() => {
             this.dialogShow = true;
-          }, 300)
-          //this.dialogAnimation();
-          this.closeLoading();
+            this.closeLoading();
+          }, 500)
           if (this.urls.length === 1) {
             this.closeWindow();
           }

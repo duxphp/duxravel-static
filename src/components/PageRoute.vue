@@ -95,10 +95,8 @@ export default {
         // 取消请求
         this.pageStatus.abort();
       }
-      setTimeout(() => {
-        this.pageStatus && this.$emit("load-status", { type: "start" });
-      }, 100);
       this.pageStatus = getPage(url, this.windowType);
+      this.$emit("load-status", { type: "start" });
       this.pageStatus
         .then(({ type, data }) => {
           this.errorMessage = "";
