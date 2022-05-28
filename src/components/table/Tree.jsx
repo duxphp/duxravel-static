@@ -271,8 +271,6 @@ export default defineComponent({
       this.resetLevel()
     },
     handleDrop({ dragNode, dropNode, dropPosition }) {
-
-      console.log(this.data)
       const sort = {
         id: dragNode.key,
         parent: null,
