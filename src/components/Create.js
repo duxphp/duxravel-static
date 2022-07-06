@@ -58,10 +58,10 @@ export const vExec = function (data, arg, slotProps) {
       const name = `on${key.substr(4, 1).toUpperCase()}${key.substr(5)}`
       const script = item[key]
       delete item[key]
-      item[name] = $event => {
+      item[name] = ($event, ...arg) => {
         const res = exec.call(this, script, { ...newArg, $event })
         if (typeof res === 'function') {
-          res.call(this, $event)
+          res.call(this, $event, ...arg)
         }
       };
     } else if (key.startsWith('vBind')) {
