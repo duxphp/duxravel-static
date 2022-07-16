@@ -362,7 +362,7 @@ export default defineComponent({
       <a-table
         loading={this.loading}
         {...vExec.call(this, this.nParams)}
-        pagination={this.defaultData ? undefined : this.pagination}
+        pagination={this.defaultData ? false : this.pagination}
         data={this.defaultData || this.data}
         columns={this.columnsRender}
         rowSelection={this.select ? {
