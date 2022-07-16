@@ -26,6 +26,7 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    defaultData: Object,
     editUrl: {
       type: String,
       default: ''
@@ -164,6 +165,9 @@ export default defineComponent({
 
     // 获取列表
     const getList = (params = {}) => {
+      if (props.defaultData) {
+        return
+      }
       loading.value = true
       searchQuick({
         url: getUrl(props.url),
@@ -358,8 +362,8 @@ export default defineComponent({
       <a-table
         loading={this.loading}
         {...vExec.call(this, this.nParams)}
-        pagination={this.pagination}
-        data={this.data}
+        pagination={this.defaultData ? undefined : this.pagination}
+        data={this.defaultData || this.data}
         columns={this.columnsRender}
         rowSelection={this.select ? {
           type: 'checkbox',
