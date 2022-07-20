@@ -1,7 +1,7 @@
-import {defineComponent} from 'vue'
-import {getUrl} from '../../utils/request'
-import {formatType} from '../../utils/component'
-import {getLocalUserInfo} from "../../utils/user";
+import { defineComponent } from 'vue'
+import { getUrl } from '../../utils/request'
+import { formatType } from '../../utils/component'
+import { getLocalUserInfo } from "../../utils/user";
 
 export default defineComponent({
   props: {
@@ -73,6 +73,7 @@ export default defineComponent({
       } else if (e.status === 'done') {
         this.progress.status = false
         this.$emit('update:value', e.response.data[0].url)
+        this.$emit('upload', e.response.data[0])
 
       } else if (e.status === 'error') {
         window.message.error(e.response.message || '上传失败')
@@ -85,6 +86,7 @@ export default defineComponent({
         fileUrl: this.fileUrl
       }).then(res => {
         this.$emit('update:value', res.url)
+        this.$emit('upload', res)
       })
     }
   },
@@ -140,32 +142,32 @@ export default defineComponent({
           backgroundImage: `url(${this.value || '/service/image/placeholder/180/180/选择图片'})`
         }}
       >
-        <a-image-preview src={this.value || '/service/image/placeholder/180/180/选择图片'} vModel={[this.visible, 'visible']}/>
+        <a-image-preview src={this.value || '/service/image/placeholder/180/180/选择图片'} vModel={[this.visible, 'visible']} />
         {!this.mini ?
           <div class="flex gap-2 h-7 w-full items-center bg-white bg-opacity-60 dark:bg-blackgray-5 dark:bg-opacity-80">
             <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
-                 onClick={() => {
-                   this.visible = true
-                 }}>
-              <icon-eye/>
+              onClick={() => {
+                this.visible = true
+              }}>
+              <icon-eye />
             </div>
             {this.type !== 'manage' ? <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
-                <a-upload
-                  action={getUrl(this.upload)}
-                  accept={this.accept}
-                  headers={this.headers}
-                  onChange={this.fileChange}
-                  showFileList={false}
-                >
+              <a-upload
+                action={getUrl(this.upload)}
+                accept={this.accept}
+                headers={this.headers}
+                onChange={this.fileChange}
+                showFileList={false}
+              >
+                {
                   {
-                    {
-                      'upload-button': () => <icon-upload/>
-                    }
+                    'upload-button': () => <icon-upload />
                   }
-                </a-upload>
-              </div>
+                }
+              </a-upload>
+            </div>
               : <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer" onClick={this.fileManage}>
-                <icon-upload/>
+                <icon-upload />
               </div>}
             {this.link && <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
               <icon-share-alt type="primary" ghost size="small" onClick={() => {
@@ -178,10 +180,11 @@ export default defineComponent({
                 vModel={[this.prompt, 'visible']}
                 onOk={() => {
                   this.$emit('update:value', this.modalValue)
+                  this.$emit('upload', { url: this.modalValue })
                 }}
               >
                 <div>
-                  <a-input vModel={[this.modalValue, 'model-value']} modelValue={this.value}/>
+                  <a-input vModel={[this.modalValue, 'model-value']} modelValue={this.value} />
                 </div>
               </a-modal>
 
@@ -197,7 +200,7 @@ export default defineComponent({
             >
               {
                 {
-                  'upload-button': () => <icon-upload/>
+                  'upload-button': () => <icon-upload />
                 }
               }
             </a-upload>

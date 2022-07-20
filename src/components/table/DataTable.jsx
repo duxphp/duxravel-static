@@ -64,12 +64,35 @@ export default defineComponent({
       default: false
     }
   },
+  watch: {
+    defaultData(val) {
+      console.log('数据更新', val)
+      this.data = this.formatData(val)
+    }
+  },
   setup(props) {
+
+    // 格式化数据
+    const formatData = (data, replaceKeys = props.columns.filter(v => v.replace)) => {
+      return data.map(item => {
+        item.__loading = false
+        // 替换keys
+        if (replaceKeys.length) {
+          replaceKeys.forEach(v => {
+            item[v.dataIndex] = item[v.dataIndex].replace(v.replace, '')
+          })
+        }
+        if (item.children) {
+          item.children = formatData(item.children, replaceKeys);
+        }
+        return item
+      })
+    }
 
     // 选中的列
     const checkedRowKeys = ref([])
     // 列表数据
-    const data = ref([])
+    const data = ref(formatData(props.defaultData || []))
     // 排序字段
     const sort = ref({})
 
@@ -145,23 +168,6 @@ export default defineComponent({
 
     // loading显示
     const loading = ref(false)
-
-    // 格式化数据
-    const formatData = (data, replaceKeys = props.columns.filter(v => v.replace)) => {
-      return data.map(item => {
-        item.__loading = false
-        // 替换keys
-        if (replaceKeys.length) {
-          replaceKeys.forEach(v => {
-            item[v.dataIndex] = item[v.dataIndex].replace(v.replace, '')
-          })
-        }
-        if (item.children) {
-          item.children = formatData(item.children, replaceKeys);
-        }
-        return item
-      })
-    }
 
     // 获取列表
     const getList = (params = {}) => {
@@ -339,6 +345,7 @@ export default defineComponent({
     const columns = props.columns.map(item => vExec.call({ colSortable }, item, { editValue, editStatus }))
 
     return {
+      formatData,
       sorter,
       pagination,
       childData,
@@ -363,7 +370,7 @@ export default defineComponent({
         loading={this.loading}
         {...vExec.call(this, this.nParams)}
         pagination={this.defaultData ? false : this.pagination}
-        data={this.defaultData || this.data}
+        data={this.data}
         columns={this.columnsRender}
         rowSelection={this.select ? {
           type: 'checkbox',
