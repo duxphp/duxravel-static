@@ -1,4 +1,24 @@
-import { h, defineComponent, resolveDynamicComponent, toRefs, provide, toRef, isRef, reactive } from 'vue'
+import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, toRef } from 'vue'
+
+const getKeys = window.createGetKeys = key => key
+  .replace(/\"/g, "'")
+  .split("'].")
+  .map(item => item.split("['").map((v, i) => i ? v : v.split('.')).flat())
+  .flat()
+  .map(item => item.replace("']", ''))
+
+window.createKeyToRef = (keys, data) => {
+  let key = keys.shift()
+  while (key) {
+    if (!isRef(data[key]) && !isReactive(data[key])) {
+      data = toRef(data, key)
+    } else {
+      data = data[key]
+    }
+    key = keys.shift()
+  }
+  return data
+}
 
 export const createPropsProvideKey = 'createPropsProvideKey'
 
@@ -16,22 +36,21 @@ const exec = function (script, params = {}) {
  * @param {*} slotProps 插槽参数
  */
 export const vExec = function (data, arg, slotProps) {
-  const { nodeName, child, vStringReplace, ...item } = data
-
+  const { nodeName, child, vStringReplace } = data
 
   // 查找keys
-  const itemKeys = Object.keys(item)
+  const itemKeys = Object.keys(data)
 
   // 插槽变量计算
   const vSlotKey = itemKeys.find(key => key.startsWith('vSlot'))
   const slotArg = (() => {
-    if (!vSlotKey || !item[vSlotKey] || typeof item[vSlotKey] !== 'string' || !slotProps) {
+    if (!vSlotKey || !data[vSlotKey] || typeof data[vSlotKey] !== 'string' || !slotProps) {
       return {}
     }
     // 计算变量名
-    const keys = item[vSlotKey].replace(/[ {}]{1,}/g, '').split(',').map(v => v.split('=')[0].split(':')).map(v => v[1] || v[0]).toString()
+    const keys = data[vSlotKey].replace(/[ {}]{1,}/g, '').split(',').map(v => v.split('=')[0].split(':')).map(v => v[1] || v[0]).toString()
     const script = `
-    const ${item[vSlotKey]} = props;
+    const ${data[vSlotKey]} = props;
     return { ${keys} }
     `
     return (new Function('props', script))(slotProps);
@@ -40,25 +59,25 @@ export const vExec = function (data, arg, slotProps) {
   let newArg = { ...arg, ...slotArg }
 
   // 绑定数据
-  if (item.vData) {
-    const dataType = typeof item.vData
-    if (!['string', 'object'].includes(dataType) || !item.vData) {
-      console.error('vData:无效的类型', item.vData)
+  if (data.vData) {
+    const dataType = typeof data.vData
+    if (!['string', 'object'].includes(dataType) || !data.vData) {
+      console.error('vData:无效的类型', data.vData)
     } else {
       // 绑定数据
-      const obj = reactive(dataType === 'string' ? exec.call(this, item.vData, newArg) : item.vData)
+      const obj = reactive(dataType === 'string' ? exec.call(this, data.vData, newArg) : data.vData)
       newArg = { ...newArg, ...obj }
     }
-    delete item.vData
+    delete data.vData
   }
   // 指令处理
   itemKeys.forEach(key => {
     if (key.startsWith('vOn')) {
       // 事件绑定处理
       const name = `on${key.substr(4, 1).toUpperCase()}${key.substr(5)}`
-      const script = item[key]
-      delete item[key]
-      item[name] = ($event, ...arg) => {
+      const script = data[key]
+      delete data[key]
+      data[name] = ($event, ...arg) => {
         const res = exec.call(this, script, { ...newArg, $event })
         if (typeof res === 'function') {
           res.call(this, $event, ...arg)
@@ -66,49 +85,51 @@ export const vExec = function (data, arg, slotProps) {
       };
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
-      item[key.substr(6)] = exec.call(this, item[key], newArg)
-      delete item[key]
+      console.log(data[key])
+      data[key.substr(6)] = exec.call(this, data[key], newArg)
+      delete data[key]
     } else if (key.startsWith('vModel')) {
       // Model绑定处理
-      const bindKey = item[key]
-      delete item[key]
+      const bindKey = data[key]
+      delete data[key]
       const name = key.substr(7) || 'modelValue'
-      item[name] = exec.call(this, bindKey, newArg)
-      item[`onUpdate:${name}`] = _value => exec.call(this, `${bindKey} = _value`, { ...newArg, _value })
+      const keys = getKeys(bindKey)
+      data[name] = exec.call(this, `createKeyToRef(${JSON.stringify(keys.slice(1))}, ${keys[0]})`, newArg)
+      data[`onUpdate:${name}`] = _value => exec.call(this, `${bindKey} = _value`, { ...newArg, _value })
     } else if (key.startsWith('render') || key.startsWith('vRender')) {
 
       if (key.startsWith('vRender')) {
-        item[key.substr(8)] = item[key]
-        delete item[key]
+        data[key.substr(8)] = data[key]
+        delete data[key]
         key = key.substr(8)
       }
       // render节点转换
-      const node = item[key]
-      delete item[key]
-      const data = key.split(':')
+      const node = data[key]
+      delete data[key]
+      const _data = key.split(':')
       // 节点需要的字段
-      const paramsKeys = data[1] ? data[1].replace(/ /g, '').split(',') : []
+      const paramsKeys = _data[1] ? _data[1].replace(/ /g, '').split(',') : []
       // 节点转换
-      item[data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default()
+      data[_data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default()
 
-    } else if (key.startsWith('vChild') && typeof item[key] === 'object') {
+    } else if (key.startsWith('vChild') && typeof data[key] === 'object') {
       // 处理子集数据转换
-      item[key.split(':')[1]] = vExec(item[key], newArg)
-      delete item[key]
+      data[key.split(':')[1]] = vExec(data[key], newArg)
+      delete data[key]
     }
   })
 
   // 文本字符换替换
   if (vStringReplace && typeof vStringReplace === 'string') {
-    Object.keys(item).forEach(key => {
-      if (typeof item[key] === 'string') {
-        const val = item[key].replace(vStringReplace, '')
+    Object.keys(data).forEach(key => {
+      if (typeof data[key] === 'string') {
+        const val = data[key].replace(vStringReplace, '')
         // 如果是vModel绑定的值让这个值触发更新
         const updateKey = `onUpdate:${key}`
-        if (val !== item[key] && typeof item[updateKey] === 'function') {
-          item[updateKey](val)
+        if (val !== data[key] && typeof data[updateKey] === 'function') {
+          data[updateKey](val)
         }
-        item[key] = val
+        data[key] = val
       }
     })
   }
@@ -117,13 +138,13 @@ export const vExec = function (data, arg, slotProps) {
     // 创建组件
     return h(
       resolveDynamicComponent(nodeName),
-      item,
+      data,
       renderNodeList.call(this, child, newArg)
     )
 
   } else {
     // 返回处理后的json
-    return item
+    return data
   }
 }
 
@@ -150,7 +171,7 @@ export const renderItem = function (data, arg, slotProps) {
     return string.join('')
   } else if (typeof data === 'object' && data !== null) {
 
-    const { vIf, vFor, ...item } = data
+    const { vIf, vFor } = data
 
     // 条件处理
     if (vIf) {
@@ -174,12 +195,12 @@ export const renderItem = function (data, arg, slotProps) {
           if (data[0][1]) {
             newAgr[data[0][1]] = key
           }
-          node.push(vExec.call(this, item, newAgr, slotProps))
+          node.push(vExec.call(this, data, newAgr, slotProps))
         }
       }
       return node
     } else {
-      return vExec.call(this, item, arg, slotProps)
+      return vExec.call(this, data, arg, slotProps)
     }
   }
 }

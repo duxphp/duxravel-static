@@ -66,8 +66,8 @@ export default defineComponent({
   },
   watch: {
     defaultData(val) {
-      console.log('数据更新', val)
-      this.data = this.formatData(val)
+      // console.log('数据更新', val)
+      val instanceof Array && (this.data = this.formatData(val))
     }
   },
   setup(props) {
@@ -293,6 +293,7 @@ export default defineComponent({
       router.routerPush(void 0, Object.fromEntries(Object.keys(props.filter).filter(key => props.filter[key] !== null).map(key => [key, props.filter[key]])))
     } else {
       watch(props.filter, params => {
+        console.log('发生更改', params)
         // 跳转第一页
         pagination.value.current = 1
         // 过滤空参数 并且跳转到这个代参数的路由地址

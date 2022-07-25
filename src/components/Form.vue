@@ -1,12 +1,21 @@
 <template>
-  <a-form ref="formRef" @submit="submit" @submit-failed="submitError" :model="value" @submit-success="submitSuccess" :rules="rules" :layout="layout" label-align="left">
+  <a-form
+    ref="formRef"
+    @submit="submit"
+    @submit-failed="submitError"
+    :model="value"
+    @submit-success="submitSuccess"
+    :rules="rules"
+    :layout="layout"
+    label-align="left"
+  >
     <slot :value="value" :submitStatus="submitStatus"></slot>
   </a-form>
 </template>
 <script>
-import {defineComponent, ref, nextTick, getCurrentInstance} from "vue";
-import {getUrl, request} from "../utils/request";
-import {getPageContent} from "./table/DataTable";
+import { defineComponent, ref, nextTick, getCurrentInstance, watch } from "vue";
+import { getUrl, request } from "../utils/request";
+import { getPageContent } from "./table/DataTable";
 
 export default defineComponent({
   components: {},
@@ -24,7 +33,7 @@ export default defineComponent({
     },
     back: {
       type: Boolean,
-      default: true
+      default: true,
     },
     value: {
       type: Object,
@@ -32,22 +41,22 @@ export default defineComponent({
     },
     layout: {
       type: String,
-      default: 'horizontal'
-    }
+      default: "horizontal",
+    },
   },
   setup(props, context) {
     const formRef = ref(null);
     const rules = ref({});
     const that = getCurrentInstance();
     const submitStatus = ref(false);
-    const validatorStatus = ref(true)
+    const validatorStatus = ref(true);
 
     const submitSuccess = () => {
-      validatorStatus.value = false
-    }
+      validatorStatus.value = false;
+    };
     const submitError = () => {
-      validatorStatus.value = true
-    }
+      validatorStatus.value = true;
+    };
     const submit = (data, e) => {
       if (submitStatus.value || validatorStatus.value) {
         return false;
@@ -60,29 +69,31 @@ export default defineComponent({
         data: props.value,
         successMsg: true,
         header: {
-          ...(page ? {"x-dialog": "1"} : {}),
+          ...(page ? { "x-dialog": "1" } : {}),
         },
-      }).then(() => {
-        if (page && props.back) {
-          page.changeRouter(1, "back");
-        }
-        submitStatus.value = false;
-      }).catch((err) => {
-        submitStatus.value = false;
-        if (err.status === 422) {
-          const data = err.data.error
-          const fields = {};
-          for (const key in data) {
-            if (Object.hasOwnProperty.call(data, key)) {
-              fields[key] = {
-                status: 'error',
-                message: data[key][0]
-              };
-            }
+      })
+        .then(() => {
+          if (page && props.back) {
+            page.changeRouter(1, "back");
           }
-          formRef.value.setFields(fields)
-        }
-      });
+          submitStatus.value = false;
+        })
+        .catch((err) => {
+          submitStatus.value = false;
+          if (err.status === 422) {
+            const data = err.data.error;
+            const fields = {};
+            for (const key in data) {
+              if (Object.hasOwnProperty.call(data, key)) {
+                fields[key] = {
+                  status: "error",
+                  message: data[key][0],
+                };
+              }
+            }
+            formRef.value.setFields(fields);
+          }
+        });
     };
     return {
       formRef,
