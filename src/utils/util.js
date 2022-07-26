@@ -54,16 +54,14 @@ const getOffset = (current, stop = document, data = { left: 0, top: 0 }) => {
 }
 
 const watchAssignObject = (...arg) => {
-  return { ...arg[0], ...arg[1] }
   const data = ref({})
 
   arg.forEach(item => {
-    // watch(item, val => {
-    //   console.log('改变', val)
-    //   Object.keys(val).forEach(key => {
-    //     data.value[key] = val[key]
-    //   })
-    // })
+    watch(item, val => {
+      Object.keys(val).forEach(key => {
+        data.value[key] = val[key]
+      })
+    })
     Object.keys(item).forEach(key => {
       data.value[key] = item[key]
     })

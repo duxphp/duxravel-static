@@ -1,4 +1,5 @@
-import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, toRef } from 'vue'
+import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, isProxy, toRef } from 'vue'
+
 
 const getKeys = window.createGetKeys = key => key
   .replace(/\"/g, "'")
@@ -10,7 +11,7 @@ const getKeys = window.createGetKeys = key => key
 window.createKeyToRef = (keys, data) => {
   let key = keys.shift()
   while (key) {
-    if (!isRef(data[key]) && !isReactive(data[key])) {
+    if (!isRef(data[key]) && !isReactive(data[key]) && !isProxy(data[key])) {
       data = toRef(data, key)
     } else {
       data = data[key]
@@ -20,13 +21,40 @@ window.createKeyToRef = (keys, data) => {
   return data
 }
 
+const commandReg = /^v[A-Z]/
+/**
+ * 判断是不是一个指令
+ * @param {*} key 
+ * @returns 
+ */
+const isCommandKey = key => commandReg.test(key) || key.startsWith('render')
+
+/**
+ * 获取脚本的执行值，这个是将是动态更新的
+ * @param {*} string 
+ * @returns 
+ */
+const getbindScript = string => {
+  return `(()=>{
+const res = ${string || 'null'};
+if(Vue.isRef(res)||Vue.isReactive(res)||Vue.isProxy(res))return res;
+const _v=Vue.ref(${string});
+${string ? `Vue.watch(${string},val=>_v.value=val);` : ''}
+return _v;
+})()`
+}
+
 export const createPropsProvideKey = 'createPropsProvideKey'
 
 // 执行字符串函数
 const exec = function (script, params = {}) {
-  const data = { ...this, ...params }
-  const keys = Object.keys(data)
-  return (new Function(...keys, 'return ' + script))(...keys.map(key => data[key]))
+  try {
+    const data = { ...this, ...params }
+    const keys = Object.keys(data)
+    return (new Function(...keys, 'return ' + script)).apply(null, keys.map(key => data[key]))
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 /**
@@ -72,6 +100,9 @@ export const vExec = function (data, arg, slotProps) {
   }
   // 指令处理
   itemKeys.forEach(key => {
+    if (!isCommandKey(key)) {
+      return
+    }
     if (key.startsWith('vOn')) {
       // 事件绑定处理
       const name = `on${key.substr(4, 1).toUpperCase()}${key.substr(5)}`
@@ -82,12 +113,14 @@ export const vExec = function (data, arg, slotProps) {
         if (typeof res === 'function') {
           res.call(this, $event, ...arg)
         }
-      };
+      }
+    } else if (key.startsWith('vBindOnly')) {
+      // 只绑定一次，页面刷新时可能不会重新渲染
+      data[key.substr(10)] = exec.call(this, getbindScript(data[key]), newArg)
+      delete data[key]
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
-      console.log(data[key])
       data[key.substr(6)] = exec.call(this, data[key], newArg)
-      delete data[key]
     } else if (key.startsWith('vModel')) {
       // Model绑定处理
       const bindKey = data[key]
@@ -141,7 +174,6 @@ export const vExec = function (data, arg, slotProps) {
       data,
       renderNodeList.call(this, child, newArg)
     )
-
   } else {
     // 返回处理后的json
     return data
@@ -182,18 +214,18 @@ export const renderItem = function (data, arg, slotProps) {
     }
     // 循环处理
     if (vFor) {
-      const data = vFor.split(' in ')
-      data[0] = data[0].replace(/[ ()]/g, '').split(',')
-      const value = exec.call(this, data[1], arg)
+      const _data = vFor.split(' in ')
+      _data[0] = _data[0].replace(/[ ()]/g, '').split(',')
+      const value = exec.call(this, _data[1], arg)
       if (typeof value !== 'object') {
         return
       }
       const node = []
       for (const key in value) {
         if (Object.hasOwnProperty.call(value, key)) {
-          const newAgr = { ...arg, [data[0][0]]: value[key] }
-          if (data[0][1]) {
-            newAgr[data[0][1]] = key
+          const newAgr = { ...arg, [_data[0][0]]: value[key] }
+          if (_data[0][1]) {
+            newAgr[_data[0][1]] = key
           }
           node.push(vExec.call(this, data, newAgr, slotProps))
         }
