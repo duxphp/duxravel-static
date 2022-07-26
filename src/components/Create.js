@@ -126,6 +126,7 @@ export const vExec = function (data, arg, slotProps) {
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
       // console.log(key, data[key])
+      console.error('1')
       const _value = data[key.substr(6)] = exec.call(this, data[key], newArg)
       if(typeof _value === 'function') {
         delete data[key]
@@ -140,7 +141,6 @@ export const vExec = function (data, arg, slotProps) {
       data[name] = exec.call(this, `createKeyToRef(${JSON.stringify(keys.slice(1))}, ${keys[0]})`, newArg)
       data[`onUpdate:${name}`] = _value => exec.call(this, `${bindKey} = _value`, { ...newArg, _value })
     } else if (key.startsWith('render') || key.startsWith('vRender')) {
-
       if (key.startsWith('vRender')) {
         data[key.substr(8)] = data[key]
         delete data[key]

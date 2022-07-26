@@ -1,8 +1,8 @@
 import { defineComponent, ref, getCurrentInstance, watch } from 'vue'
-import { renderNodeList, vExec } from '../Create'
+import { vExec } from '../Create'
 import { getUrl, request, searchQuick } from '../../utils/request'
 import event, { requestEvent } from '../../utils/event'
-import { router, getParams } from '../../utils/router'
+import { router } from '../../utils/router'
 
 // 获取最近的pageContent组件实例
 export const getPageContent = (parent) => {
