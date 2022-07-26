@@ -114,13 +114,23 @@ export const vExec = function (data, arg, slotProps) {
           res.call(this, $event, ...arg)
         }
       }
+    } else if (key.startsWith('vBindName')) {
+      // 只绑定一次，用于取值绑定，如 'vBindName:test': 'test.a.b'
+      const keys = getKeys(data[key])
+      data[key.substr(10)] = exec.call(this, `createKeyToRef(${JSON.stringify(keys.slice(1))}, ${keys[0]})`, newArg)
+      delete data[key]
     } else if (key.startsWith('vBindOnly')) {
       // 只绑定一次，页面刷新时可能不会重新渲染
       data[key.substr(10)] = exec.call(this, getbindScript(data[key]), newArg)
       delete data[key]
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
-      data[key.substr(6)] = exec.call(this, data[key], newArg)
+      // console.log(key, data[key])
+      const _value = data[key.substr(6)] = exec.call(this, data[key], newArg)
+      if(typeof _value === 'function') {
+        delete data[key]
+      }
+      // delete data[key]
     } else if (key.startsWith('vModel')) {
       // Model绑定处理
       const bindKey = data[key]
@@ -143,7 +153,7 @@ export const vExec = function (data, arg, slotProps) {
       // 节点需要的字段
       const paramsKeys = _data[1] ? _data[1].replace(/ /g, '').split(',') : []
       // 节点转换
-      data[_data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default()
+      data[_data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
 
     } else if (key.startsWith('vChild') && typeof data[key] === 'object') {
       // 处理子集数据转换
