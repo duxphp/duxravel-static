@@ -1,4 +1,4 @@
-import { defineComponent, ref, getCurrentInstance, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { vExec } from '../Create'
 import { getUrl, request, searchQuick } from '../../utils/request'
 import event, { requestEvent } from '../../utils/event'

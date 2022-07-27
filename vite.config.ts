@@ -6,6 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 export default defineConfig({
   plugins: [vue(), vueJsx()],
   resolve: {
+    dedupe: ['vue'],
     alias: {
       '@': '/src',
       '@components': '/src/components'
@@ -42,5 +43,6 @@ export default defineConfig({
 
     //   }
     // }
+    port: 3000
   }
 })

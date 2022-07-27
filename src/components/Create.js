@@ -1,4 +1,5 @@
 import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, isProxy, toRef } from 'vue'
+import { deepCopy } from '../utils/object'
 
 
 const getKeys = window.createGetKeys = key => key
@@ -28,21 +29,6 @@ const commandReg = /^v[A-Z]/
  * @returns 
  */
 const isCommandKey = key => commandReg.test(key) || key.startsWith('render')
-
-/**
- * 获取脚本的执行值，这个是将是动态更新的
- * @param {*} string 
- * @returns 
- */
-const getbindScript = string => {
-  return `(()=>{
-const res = ${string || 'null'};
-if(Vue.isRef(res)||Vue.isReactive(res)||Vue.isProxy(res))return res;
-const _v=Vue.ref(${string});
-${string ? `Vue.watch(${string},val=>_v.value=val);` : ''}
-return _v;
-})()`
-}
 
 export const createPropsProvideKey = 'createPropsProvideKey'
 
@@ -114,24 +100,10 @@ export const vExec = function (data, arg, slotProps) {
           res.call(this, $event, ...arg)
         }
       }
-    } else if (key.startsWith('vBindName')) {
-      // 只绑定一次，用于取值绑定，如 'vBindName:test': 'test.a.b'
-      const keys = getKeys(data[key])
-      data[key.substr(10)] = exec.call(this, `createKeyToRef(${JSON.stringify(keys.slice(1))}, ${keys[0]})`, newArg)
-      delete data[key]
-    } else if (key.startsWith('vBindOnly')) {
-      // 只绑定一次，页面刷新时可能不会重新渲染
-      data[key.substr(10)] = exec.call(this, getbindScript(data[key]), newArg)
-      delete data[key]
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
-      // console.log(key, data[key])
-      console.error('1')
-      const _value = data[key.substr(6)] = exec.call(this, data[key], newArg)
-      if(typeof _value === 'function') {
-        delete data[key]
-      }
-      // delete data[key]
+      data[key.substr(6)] = exec.call(this, data[key], newArg)
+      delete data[key]
     } else if (key.startsWith('vModel')) {
       // Model绑定处理
       const bindKey = data[key]
@@ -140,21 +112,21 @@ export const vExec = function (data, arg, slotProps) {
       const keys = getKeys(bindKey)
       data[name] = exec.call(this, `createKeyToRef(${JSON.stringify(keys.slice(1))}, ${keys[0]})`, newArg)
       data[`onUpdate:${name}`] = _value => exec.call(this, `${bindKey} = _value`, { ...newArg, _value })
-    } else if (key.startsWith('render') || key.startsWith('vRender')) {
+    } else if (key.startsWith('render') || key.startsWith('vRender') && typeof data[key] !== 'function') {
+      const _value = data[key]
       if (key.startsWith('vRender')) {
-        data[key.substr(8)] = data[key]
         delete data[key]
         key = key.substr(8)
       }
       // render节点转换
-      const node = data[key]
       delete data[key]
       const _data = key.split(':')
       // 节点需要的字段
       const paramsKeys = _data[1] ? _data[1].replace(/ /g, '').split(',') : []
       // 节点转换
-      data[_data[0]] = (...reder) => renderNodeList.call(this, node, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
-
+      data[_data[0]] = (...reder) => {
+        return renderNodeList.call(this, deepCopy(_value), { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
+      }
     } else if (key.startsWith('vChild') && typeof data[key] === 'object') {
       // 处理子集数据转换
       data[key.split(':')[1]] = vExec(data[key], newArg)
