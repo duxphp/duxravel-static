@@ -11,7 +11,7 @@ import { defineAsyncComponent } from "vue";
 import Hammer from "hammerjs";
 import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
-import { getComp, getPage, isModuleIndex, resource } from "../utils/router";
+import { getComp, getPage, resource } from "../utils/router";
 import event from "../utils/event";
 import { getOffset } from "../utils/util";
 
