@@ -1,6 +1,15 @@
 import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, isProxy, toRef } from 'vue'
 import { deepCopy } from '../utils/object'
 
+/**
+ * 过滤不需要渲染到组件的参数
+ * @param {*} data 
+ * @returns 
+ */
+const getComponentProps = data => {
+  const { nodeName, child, vStringReplace, vIf, vFor, ..._data } = data
+  return _data
+}
 
 const getKeys = window.createGetKeys = key => key
   .replace(/\"/g, "'")
@@ -153,7 +162,7 @@ export const vExec = function (data, arg, slotProps) {
     // 创建组件
     return h(
       resolveDynamicComponent(nodeName),
-      data,
+      getComponentProps(data),
       renderNodeList.call(this, child, newArg)
     )
   } else {
