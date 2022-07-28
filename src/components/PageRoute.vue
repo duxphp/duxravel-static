@@ -29,6 +29,10 @@ export default {
       type: String,
       default: "page",
     },
+    dialogStatus: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     Create,
@@ -60,10 +64,15 @@ export default {
   },
   beforeUnmount() {
     event.remove("router-change", this.routeChange);
+    // 卸载资源
+    resource.uninstall(this.currentUrl);
   },
   watch: {
     currentUrl(url) {
       this.getPage(url);
+    },
+    dialogStatus(val) {
+      resource.uninstall(this.currentUrl);
     },
   },
   methods: {

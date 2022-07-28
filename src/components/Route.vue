@@ -1,5 +1,5 @@
 <template>
-  <a @click="jump" class="cursor-pointer" :class="className" :style="style">
+  <a @click="jump" class="cursor-pointer" :class="className" :style="style" href="#">
     <slot :jump="jump"></slot>
   </a>
 </template>

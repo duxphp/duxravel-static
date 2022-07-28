@@ -1,55 +1,60 @@
 <template>
   <template v-if="windowType === 'page'">
     <PageRoute
-        :windowType="windowType"
-        :currentUrl="url"
-        @load-status="loadStatus"
+      :windowType="windowType"
+      :currentUrl="url"
+      @load-status="loadStatus"
     />
   </template>
 
   <a-modal
-      v-else-if="mode === 'modal'"
-      :visible="dialogShow"
-      modalClass="page-dialog max-w-2xl w-full"
-      :closable="false"
-      :mask="true"
-      :footer="false"
-      :alignCenter="false"
-      :open="dialogOpen"
+    v-else-if="mode === 'modal'"
+    v-model:visible="dialogShow"
+    modalClass="page-dialog max-w-2xl w-full"
+    :closable="false"
+    :mask="true"
+    :footer="false"
+    :alignCenter="false"
+    @before-close="dialogClose"
   >
     <div ref="dialogAnimation" class="dialog-animation">
       <PageRoute
-          :windowType="windowType"
-          :currentUrl="url"
-          @load-status="loadStatus"
+        :windowType="windowType"
+        :currentUrl="url"
+        @load-status="loadStatus"
+        :dialog-status="dialogStatus"
       />
     </div>
   </a-modal>
 
   <a-drawer
-      v-else
-      v-model:visible="dialogShow"
-      class="page-drawer"
-      :mask="true"
-      :footer="false"
-      :width="350"
-      :open="dialogOpen"
-      @cancel="() => {this.changeRouter('', 'back')}"
+    v-else
+    v-model:visible="dialogShow"
+    class="page-drawer"
+    :mask="true"
+    :footer="false"
+    :width="350"
+    @before-close="dialogClose"
+    @cancel="
+      () => {
+        this.changeRouter('', 'back');
+      }
+    "
   >
     <div ref="dialogAnimation" class="dialog-animation">
       <PageRoute
-          :windowType="windowType"
-          :currentUrl="url"
-          @load-status="loadStatus"
+        :windowType="windowType"
+        :currentUrl="url"
+        @load-status="loadStatus"
+        :dialog-status="dialogStatus"
       />
     </div>
   </a-drawer>
-
 </template>
 
 <script>
 import PageRoute from "./PageRoute.vue";
-import {router} from "../utils/router";
+import { router } from "../utils/router";
 
 export default {
   name: "PageContent",
@@ -61,7 +66,7 @@ export default {
     windowType: String,
     mode: {
       type: String,
-      default: "modal"
+      default: "modal",
     },
   },
   components: {
@@ -75,6 +80,7 @@ export default {
       // 弹出加载消息
       dialogMsg: null,
       dialogShow: false,
+      dialogStatus: true,
     };
   },
   watch: {
@@ -132,7 +138,7 @@ export default {
       this.dialogMsg?.close?.();
       this.dialogMsg = null;
     },
-    loadStatus({type}) {
+    loadStatus({ type }) {
       if (this.windowType === "page") {
         if (type === "start") {
           window.NProgress.start();
@@ -147,13 +153,12 @@ export default {
           setTimeout(() => {
             this.dialogShow = true;
             this.closeLoading();
-          }, 500)
-
+          }, 500);
         } else {
           setTimeout(() => {
             this.dialogShow = true;
             this.closeLoading();
-          }, 500)
+          }, 500);
           if (this.urls.length === 1) {
             this.closeWindow();
           }
@@ -182,9 +187,9 @@ export default {
         page.classList.remove("an-start");
       }, 5);
     },
-    dialogOpen() {
-      
-    }
+    dialogClose() {
+      this.dialogStatus = false;
+    },
   },
 };
 </script>
@@ -205,7 +210,6 @@ export default {
 }
 
 .page-drawer {
-
 }
 
 .page-drawer .arco-drawer-header {
