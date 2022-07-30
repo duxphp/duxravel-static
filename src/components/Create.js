@@ -2,6 +2,14 @@ import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive,
 import { deepCopy } from '../utils/object'
 
 /**
+ * 判断是不是引用类型 用于优化绑定
+ * @param {*} data 
+ */
+const isQuote = data => {
+  return typeof data === 'function' || isRef(data) || isRef(data) || isReactive(data) || isProxy(data)
+}
+
+/**
  * 过滤不需要渲染到组件的参数
  * @param {*} data 
  * @returns 
@@ -113,7 +121,7 @@ export const vExec = function (data, arg, slotProps) {
       // 数据绑定处理
       const _key = key.substr(6)
       data[_key] = exec.call(this, data[key], newArg)
-      if (typeof data[_key] === 'function' || typeof data[_key] === 'object') {
+      if (isQuote(data[_key])) {
         delete data[key]
       }
     } else if (key.startsWith('vModel')) {
