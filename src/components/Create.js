@@ -116,7 +116,6 @@ export const vExec = function (data, arg, slotProps) {
       if (typeof data[_key] === 'function' || typeof data[_key] === 'object') {
         delete data[key]
       }
-      console.log(key)
     } else if (key.startsWith('vModel')) {
       // Model绑定处理
       const bindKey = data[key]
