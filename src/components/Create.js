@@ -111,7 +111,11 @@ export const vExec = function (data, arg, slotProps) {
       }
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
-      data[key.substr(6)] = exec.call(this, data[key], newArg)
+      const _key = key.substr(6)
+      data[_key] = exec.call(this, data[key], newArg)
+      if (typeof data[_key] === 'function' || typeof data[_key] === 'object') {
+        delete data[key]
+      }
       console.log(key)
     } else if (key.startsWith('vModel')) {
       // Model绑定处理
