@@ -112,7 +112,6 @@ export const vExec = function (data, arg, slotProps) {
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
       data[key.substr(6)] = exec.call(this, data[key], newArg)
-      delete data[key]
     } else if (key.startsWith('vModel')) {
       // Model绑定处理
       const bindKey = data[key]
@@ -121,21 +120,19 @@ export const vExec = function (data, arg, slotProps) {
       const keys = getKeys(bindKey)
       data[name] = exec.call(this, `createKeyToRef(${JSON.stringify(keys.slice(1))}, ${keys[0]})`, newArg)
       data[`onUpdate:${name}`] = _value => exec.call(this, `${bindKey} = _value`, { ...newArg, _value })
-    } else if (key.startsWith('render') || key.startsWith('vRender') && typeof data[key] !== 'function') {
+    } else if (key.startsWith('render') || key.startsWith('vRender') && typeof data[key] === 'object') {
       const _value = data[key]
       if (key.startsWith('vRender')) {
         delete data[key]
         key = key.substr(8)
       }
-      // render节点转换
       delete data[key]
+      // render节点转换
       const _data = key.split(':')
       // 节点需要的字段
       const paramsKeys = _data[1] ? _data[1].replace(/ /g, '').split(',') : []
       // 节点转换
-      data[_data[0]] = (...reder) => {
-        return renderNodeList.call(this, deepCopy(_value), { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
-      }
+      data[_data[0]] = (...reder) => renderNodeList.call(this, deepCopy(_value), { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
     } else if (key.startsWith('vChild') && typeof data[key] === 'object') {
       // 处理子集数据转换
       data[key.split(':')[1]] = vExec(data[key], newArg)
