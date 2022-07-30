@@ -19,33 +19,17 @@ const getComponentProps = data => {
   return _data
 }
 
-const getKeys = window.createGetKeys = key => key
-  .replace(/\"/g, "'")
-  .split("'].")
-  .map(item => item.split("['").map((v, i) => i ? v : v.split('.')).flat())
-  .flat()
-  .map(item => item.replace("']", ''))
-
-window.createKeyToRef = (keys, data) => {
-  let key = keys.shift()
-  while (key) {
-    if (!isRef(data[key]) && !isReactive(data[key]) && !isProxy(data[key])) {
-      data = toRef(data, key)
-    } else {
-      data = data[key]
-    }
-    key = keys.shift()
-  }
-  return data
-}
-
 const commandReg = /^v[A-Z]/
+const spaceReg = / /g
+const vForRef = /[ ()]/g
 /**
  * 判断是不是一个指令
  * @param {*} key 
  * @returns 
  */
 const isCommandKey = key => commandReg.test(key) || key.startsWith('render')
+
+const vDataTypes = ['string', 'object']
 
 export const createPropsProvideKey = 'createPropsProvideKey'
 
@@ -68,6 +52,15 @@ const exec = function (script, params = {}) {
  */
 export const vExec = function (data, arg, slotProps) {
   const { nodeName, child, vStringReplace } = data
+
+  // 将vModel转换为vBind和vOn
+  Object.keys(data).filter(key => key.startsWith('vModel')).forEach(key => {
+    const _value = data[key]
+    delete data[key]
+    const _key = key.substr(7) || 'modelValue'
+    data['vBind:' + _key] = _value
+    data['vOn:update:' + _key] = `__value => ${_value} = __value;`
+  })
 
   // 查找keys
   const itemKeys = Object.keys(data)
@@ -92,7 +85,7 @@ export const vExec = function (data, arg, slotProps) {
   // 绑定数据
   if (data.vData) {
     const dataType = typeof data.vData
-    if (!['string', 'object'].includes(dataType) || !data.vData) {
+    if (!vDataTypes.includes(dataType) || !data.vData) {
       console.error('vData:无效的类型', data.vData)
     } else {
       // 绑定数据
@@ -108,10 +101,10 @@ export const vExec = function (data, arg, slotProps) {
     }
     if (key.startsWith('vOn')) {
       // 事件绑定处理
-      const name = `on${key.substr(4, 1).toUpperCase()}${key.substr(5)}`
+      const _key = `on${key.substr(4, 1).toUpperCase()}${key.substr(5)}`
       const script = data[key]
       delete data[key]
-      data[name] = ($event, ...arg) => {
+      data[_key] = ($event, ...arg) => {
         const res = exec.call(this, script, { ...newArg, $event })
         if (typeof res === 'function') {
           res.call(this, $event, ...arg)
@@ -124,14 +117,6 @@ export const vExec = function (data, arg, slotProps) {
       if (isQuote(data[_key])) {
         delete data[key]
       }
-    } else if (key.startsWith('vModel')) {
-      // Model绑定处理
-      const bindKey = data[key]
-      delete data[key]
-      const name = key.substr(7) || 'modelValue'
-      const keys = getKeys(bindKey)
-      data[name] = exec.call(this, `createKeyToRef(${JSON.stringify(keys.slice(1))}, ${keys[0]})`, newArg)
-      data[`onUpdate:${name}`] = _value => exec.call(this, `${bindKey} = _value`, { ...newArg, _value })
     } else if (key.startsWith('render') || key.startsWith('vRender') && typeof data[key] === 'object') {
       const _value = data[key]
       if (key.startsWith('vRender')) {
@@ -142,7 +127,7 @@ export const vExec = function (data, arg, slotProps) {
       // render节点转换
       const _data = key.split(':')
       // 节点需要的字段
-      const paramsKeys = _data[1] ? _data[1].replace(/ /g, '').split(',') : []
+      const paramsKeys = _data[1] ? _data[1].replace(spaceReg, '').split(',') : []
       // 节点转换
       data[_data[0]] = (...reder) => renderNodeList.call(this, deepCopy(_value), { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
     } else if (key.startsWith('vChild') && typeof data[key] === 'object') {
@@ -215,7 +200,7 @@ export const renderItem = function (data, arg, slotProps) {
     // 循环处理
     if (vFor) {
       const _data = vFor.split(' in ')
-      _data[0] = _data[0].replace(/[ ()]/g, '').split(',')
+      _data[0] = _data[0].replace(vForRef, '').split(',')
       const value = exec.call(this, _data[1], arg)
       if (typeof value !== 'object') {
         return
@@ -227,7 +212,7 @@ export const renderItem = function (data, arg, slotProps) {
           if (_data[0][1]) {
             newAgr[_data[0][1]] = key
           }
-          node.push(vExec.call(this, data, newAgr, slotProps))
+          node.push(vExec.call(this, deepCopy(data), newAgr, slotProps))
         }
       }
       return node
@@ -263,11 +248,10 @@ export const renderNodeList = function (node, arg) {
     if (!slotGroup[slotKey].length) {
       return
     }
-    childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item, arg, props))
+    childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item.vDeep ? deepCopy(item.vDeepCopy) : item, arg, props))
   })
   return childNode
 }
-
 
 const CompCreate = defineComponent({
   props: {
