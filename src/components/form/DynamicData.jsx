@@ -29,12 +29,11 @@ export default defineComponent({
     }
   },
   render() {
-    console.log(this.renderRow({}, 0))
     return <div class="flex gap-2 flex-col  w-full">
       {
         this.list.length > 0 && this.list.map((value, index) => <div class="flex gap-2 items-center">
           <div class="flex-grow">
-            {/* {this.renderRow?.(value, index) || <a-input vModel={[this.list[index], 'model-value']} />} */}
+            {this.renderRow?.(value, index) || <a-input vModel={[this.list[index], 'model-value']} />}
           </div>
           <div class="flex-none flex items-center gap-2">
             <a-button type="secondary" shape="circle" disabled={this.max && this.list.length >= this.max} onClick={() => {

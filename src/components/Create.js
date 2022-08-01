@@ -117,13 +117,14 @@ export const vExec = function (data, arg, slotProps) {
       if (isQuote(data[_key])) {
         delete data[key]
       }
-    } else if (key.startsWith('render') || key.startsWith('vRender') && typeof data[key] === 'object') {
+    } else if ((key.startsWith('render') || key.startsWith('vRender')) && typeof data[key] === 'object') {
       const _value = data[key]
       if (key.startsWith('vRender')) {
         delete data[key]
         key = key.substr(8)
+      } else {
+        delete data[key]
       }
-      delete data[key]
       // render节点转换
       const _data = key.split(':')
       // 节点需要的字段
@@ -248,7 +249,7 @@ export const renderNodeList = function (node, arg) {
     if (!slotGroup[slotKey].length) {
       return
     }
-    childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item.vDeep ? deepCopy(item.vDeepCopy) : item, arg, props))
+    childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item.vDeepCopy ? deepCopy(item) : item, arg, props))
   })
   return childNode
 }
