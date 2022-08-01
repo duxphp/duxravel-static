@@ -15,13 +15,14 @@
     :mask="true"
     :footer="false"
     :alignCenter="false"
-    :unmount-on-close="unmountOnClose"
+    @before-close="dialogClose"
   >
     <div ref="dialogAnimation" class="dialog-animation">
       <PageRoute
         :windowType="windowType"
         :currentUrl="url"
         @load-status="loadStatus"
+        :dialog-status="dialogStatus"
       />
     </div>
   </a-modal>
@@ -33,7 +34,7 @@
     :mask="true"
     :footer="false"
     :width="350"
-    :unmount-on-close="unmountOnClose"
+    @before-close="dialogClose"
     @cancel="
       () => {
         this.changeRouter('', 'back');
@@ -45,6 +46,7 @@
         :windowType="windowType"
         :currentUrl="url"
         @load-status="loadStatus"
+        :dialog-status="dialogStatus"
       />
     </div>
   </a-drawer>
@@ -78,7 +80,7 @@ export default {
       // 弹出加载消息
       dialogMsg: null,
       dialogShow: false,
-      unmountOnClose: false,
+      dialogStatus: true,
     };
   },
   watch: {
@@ -150,13 +152,11 @@ export default {
         } else if (type === "end") {
           setTimeout(() => {
             this.dialogShow = true;
-            this.unmountOnClose = true;
             this.closeLoading();
           }, 500);
         } else {
           setTimeout(() => {
             this.dialogShow = true;
-            this.unmountOnClose = true;
             this.closeLoading();
           }, 500);
           if (this.urls.length === 1) {
@@ -186,6 +186,9 @@ export default {
       setTimeout(() => {
         page.classList.remove("an-start");
       }, 5);
+    },
+    dialogClose() {
+      this.dialogStatus = false;
     },
   },
 };
