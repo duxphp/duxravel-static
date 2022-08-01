@@ -1,4 +1,4 @@
-import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, isProxy, toRef } from 'vue'
+import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, isProxy, toRef, ref } from 'vue'
 import { deepCopy } from '../utils/object'
 
 /**
@@ -283,13 +283,15 @@ const CompCreate = defineComponent({
       res.data = props.data
     }
     res.keys = Object.keys(res)
+    // 将节点复制一份，防止重复使用这些节点的时候数据错乱
+    res.nodeList = ref(deepCopy(props.node))
     return res
   },
 
   render() {
     return renderNodeList.call(
       Object.fromEntries(this.keys.map(key => [key, this[key]])),
-      this.node
+      this.nodeList
     ).default?.()
   }
 })
