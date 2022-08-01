@@ -6,7 +6,7 @@ import { deepCopy } from '../utils/object'
  * @param {*} data 
  */
 const isQuote = data => {
-  return typeof data === 'function' || isRef(data) || isRef(data) || isReactive(data) || isProxy(data)
+  return typeof data === 'function' || isRef(data) || isReactive(data) || isProxy(data)
 }
 
 /**
@@ -58,7 +58,7 @@ export const vExec = function (data, arg, slotProps) {
     const _value = data[key]
     delete data[key]
     const _key = key.substr(7) || 'modelValue'
-    data['vBind:' + _key] = _value
+    data['vBindModel:' + _key] = _value
     data['vOn:update:' + _key] = `__value => ${_value} = __value;`
   })
 
@@ -112,9 +112,9 @@ export const vExec = function (data, arg, slotProps) {
       }
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
-      const _key = key.substr(6)
+      const [_type, _key] = key.split(':')
       data[_key] = exec.call(this, data[key], newArg)
-      if (isQuote(data[_key])) {
+      if (_type === 'vBind' && isQuote(data[_key])) {
         delete data[key]
       }
     } else if ((key.startsWith('render') || key.startsWith('vRender')) && typeof data[key] === 'object') {
