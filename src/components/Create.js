@@ -92,7 +92,6 @@ export const vExec = function (data, arg, slotProps) {
       const obj = reactive(dataType === 'string' ? exec.call(this, data.vData, newArg) : data.vData)
       newArg = { ...newArg, ...obj }
     }
-    delete data.vData
   }
   // 指令处理
   itemKeys.forEach(key => {
