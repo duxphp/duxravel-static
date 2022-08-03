@@ -15,7 +15,12 @@ const isQuote = data => {
  * @returns 
  */
 const getComponentProps = data => {
-  const { nodeName, child, vStringReplace, vIf, vFor, ..._data } = data
+  const { nodeName, child, vStringReplace, vIf, vFor, vData, ..._data } = data
+  Object.keys(_data).forEach(key => {
+    if (commandReg.test(key)) {
+      delete _data[key]
+    }
+  })
   return _data
 }
 
