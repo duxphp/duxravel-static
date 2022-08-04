@@ -54,7 +54,7 @@ export default defineComponent({
     },
     filter: {
       type: Object,
-      default: {}
+      default: () => ({})
     },
     search: {
       type: Boolean,
@@ -218,6 +218,7 @@ export default defineComponent({
       if (!this.url) {
         return
       }
+
       searchQuick({
         url: this.url,
         data: this.filter || {}
@@ -289,13 +290,13 @@ export default defineComponent({
         [this.fieldNames.children]: dragNode[this.fieldNames.children],
         rawData: dragNode.rawData
       }
-      if(dragNode[this.fieldNames.title] === undefined) {
+      if (dragNode[this.fieldNames.title] === undefined) {
         newData[this.fieldNames.title] = dragNode.title
       }
-      if(dragNode[this.fieldNames.key] === undefined) {
+      if (dragNode[this.fieldNames.key] === undefined) {
         newData[this.fieldNames.key] = dragNode.key
       }
-      if(dragNode[this.fieldNames.children] === undefined) {
+      if (dragNode[this.fieldNames.children] === undefined) {
         newData[this.fieldNames.children] = dragNode.children
       }
 

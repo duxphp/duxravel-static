@@ -1,21 +1,12 @@
-import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive, isRef, isReactive, isProxy, toRef, ref } from 'vue'
-import { deepCopy } from '../utils/object'
-
-/**
- * 判断是不是引用类型 用于优化绑定
- * @param {*} data 
- */
-const isQuote = data => {
-  return typeof data === 'function' || isRef(data) || isReactive(data) || isProxy(data)
-}
+import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive } from 'vue'
 
 /**
  * 过滤不需要渲染到组件的参数
  * @param {*} data 
  * @returns 
  */
-const getComponentProps = data => {
-  const { nodeName, child, vStringReplace, vIf, vFor, vData, ..._data } = data
+const filterComponentProps = data => {
+  const { nodeName, child, ..._data } = data
   Object.keys(_data).forEach(key => {
     if (commandReg.test(key)) {
       delete _data[key]
@@ -63,7 +54,7 @@ export const vExec = function (data, arg, slotProps) {
     const _value = data[key]
     delete data[key]
     const _key = key.substr(7) || 'modelValue'
-    data['vBindModel:' + _key] = _value
+    data['vBind:' + _key] = _value
     data['vOn:update:' + _key] = `__value => ${_value} = __value;`
   })
 
@@ -98,6 +89,11 @@ export const vExec = function (data, arg, slotProps) {
       newArg = { ...newArg, ...obj }
     }
   }
+  /**
+   * 将命令创建的数据存储到一个新对象里
+   */
+  const execData = {}
+
   // 指令处理
   itemKeys.forEach(key => {
     if (!isCommandKey(key)) {
@@ -107,8 +103,7 @@ export const vExec = function (data, arg, slotProps) {
       // 事件绑定处理
       const _key = `on${key.substr(4, 1).toUpperCase()}${key.substr(5)}`
       const script = data[key]
-      delete data[key]
-      data[_key] = ($event, ...arg) => {
+      execData[_key] = ($event, ...arg) => {
         const res = exec.call(this, script, { ...newArg, $event })
         if (typeof res === 'function') {
           res.call(this, $event, ...arg)
@@ -118,42 +113,38 @@ export const vExec = function (data, arg, slotProps) {
       // 数据绑定处理
       const [_type, _key] = key.split(':')
       const _result = exec.call(this, data[key], newArg)
-      if (_type === 'vBind' && isQuote(_result)) {
-        delete data[key]
-      }
-      data[_key] = _result
+      execData[_key] = _result
     } else if ((key.startsWith('render') || key.startsWith('vRender')) && typeof data[key] === 'object') {
       const _value = data[key]
       if (key.startsWith('vRender')) {
-        delete data[key]
         key = key.substr(8)
-      } else {
-        delete data[key]
       }
       // render节点转换
       const _data = key.split(':')
       // 节点需要的字段
       const paramsKeys = _data[1] ? _data[1].replace(spaceReg, '').split(',') : []
       // 节点转换
-      data[_data[0]] = (...reder) => renderNodeList.call(this, deepCopy(_value), { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
+      execData[_data[0]] = (...reder) => renderNodeList.call(this, _value, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
     } else if (key.startsWith('vChild') && typeof data[key] === 'object') {
       // 处理子集数据转换
-      data[key.split(':')[1]] = vExec(data[key], newArg)
-      delete data[key]
+      execData[key.split(':')[1]] = vExec(data[key], newArg)
     }
   })
 
+  // 组合最终返回的得到的props
+  const props = Object.assign(execData, filterComponentProps(data))
+
   // 文本字符换替换
   if (vStringReplace && typeof vStringReplace === 'string') {
-    Object.keys(data).forEach(key => {
-      if (typeof data[key] === 'string') {
-        const val = data[key].replace(vStringReplace, '')
+    Object.keys(props).forEach(key => {
+      if (typeof props[key] === 'string') {
+        const val = props[key].replace(vStringReplace, '')
         // 如果是vModel绑定的值让这个值触发更新
         const updateKey = `onUpdate:${key}`
-        if (val !== data[key] && typeof data[updateKey] === 'function') {
-          data[updateKey](val)
+        if (val !== props[key] && typeof props[updateKey] === 'function') {
+          props[updateKey](val)
         }
-        data[key] = val
+        props[key] = val
       }
     })
   }
@@ -162,12 +153,12 @@ export const vExec = function (data, arg, slotProps) {
     // 创建组件
     return h(
       resolveDynamicComponent(nodeName),
-      getComponentProps(data),
+      props,
       renderNodeList.call(this, child, newArg)
     )
   } else {
     // 返回处理后的json
-    return data
+    return props
   }
 }
 
@@ -218,7 +209,7 @@ export const renderItem = function (data, arg, slotProps) {
           if (_data[0][1]) {
             newAgr[_data[0][1]] = key
           }
-          node.push(vExec.call(this, deepCopy(data), newAgr, slotProps))
+          node.push(vExec.call(this, data, newAgr, slotProps))
         }
       }
       return node
@@ -254,7 +245,7 @@ export const renderNodeList = function (node, arg) {
     if (!slotGroup[slotKey].length) {
       return
     }
-    childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item.vDeepCopy ? deepCopy(item) : item, arg, props))
+    childNode[slotKey] = props => slotGroup[slotKey].map((item) => renderItem.call(this, item, arg, props))
   })
   return childNode
 }
@@ -288,15 +279,13 @@ const CompCreate = defineComponent({
       res.data = props.data
     }
     res.keys = Object.keys(res)
-    // 将节点复制一份，防止重复使用这些节点的时候数据错乱
-    res.nodeList = ref(deepCopy(props.node))
     return res
   },
 
   render() {
     return renderNodeList.call(
       Object.fromEntries(this.keys.map(key => [key, this[key]])),
-      this.nodeList
+      this.node
     ).default?.()
   }
 })
