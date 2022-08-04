@@ -8,7 +8,7 @@ import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive 
 const filterComponentProps = data => {
   const { nodeName, child, ..._data } = data
   Object.keys(_data).forEach(key => {
-    if (commandReg.test(key)) {
+    if (isCommandKey(key)) {
       delete _data[key]
     }
   })
