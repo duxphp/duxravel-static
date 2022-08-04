@@ -117,10 +117,11 @@ export const vExec = function (data, arg, slotProps) {
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
       const [_type, _key] = key.split(':')
-      data[_key] = exec.call(this, data[key], newArg)
-      if (_type === 'vBind' && isQuote(data[_key])) {
+      const _result = exec.call(this, data[key], newArg)
+      if (_type === 'vBind' && isQuote(_result)) {
         delete data[key]
       }
+      data[_key] = _result
     } else if ((key.startsWith('render') || key.startsWith('vRender')) && typeof data[key] === 'object') {
       const _value = data[key]
       if (key.startsWith('vRender')) {
