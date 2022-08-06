@@ -5,6 +5,7 @@ import * as string from './string'
 import * as router from './router'
 import * as global from './global'
 import * as request from './request'
+import * as ui from './ui'
 import socket from './socket'
 import qs from 'qs'
 
@@ -17,5 +18,6 @@ window.dux = {
   global,
   request,
   socket,
+  ui,
   qs
 }

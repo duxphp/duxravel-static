@@ -33,10 +33,11 @@ import DynamicData from './components/form/DynamicData'
 import DataMap from './components/form/Map'
 import DataLayout from './components/common/Layout'
 import DataDialog from './components/common/Dialog'
+import ImagePreview from './components/common/ImagePreview'
 
 import './utils/window'
 
-import { setup  } from  'twind/shim'
+import { setup } from 'twind/shim'
 
 import color from '../color'
 
@@ -123,6 +124,7 @@ app.component('app-map', DataMap)
 app.component('app-dynamic-data', DynamicData)
 app.component('app-layout', DataLayout)
 app.component('app-dialog', DataDialog)
+app.component('app-image-preview', ImagePreview)
 
 // 拖动排序
 app.component('draggable', draggable)

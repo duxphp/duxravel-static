@@ -200,6 +200,7 @@
     @close-dialog="closeDialog(index)"
   />
   <Download />
+  <ImagePreview />
   <Login />
 </template>
 
@@ -209,6 +210,7 @@ import Login from "./Login.vue";
 import PageContent from "./PageContent.vue";
 import AppMenu from "./AppMenu.vue";
 import Download from "./Download.vue";
+import { ImagePreview } from "./common/ImagePreview.jsx";
 import FileManage from "./utils/FileManageExtend";
 import AppDialog from "./utils/DialogExtend";
 import AppDialogTable from "./utils/DialogTableExtend";
@@ -234,7 +236,8 @@ export default {
     Login,
     PageContent,
     AppMenu,
-    Download
+    Download,
+    ImagePreview,
   },
   mounted() {},
   data() {
