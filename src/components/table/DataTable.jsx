@@ -368,19 +368,19 @@ export default defineComponent({
     return <div class="relative">
       <a-table
         loading={this.loading}
-        {...vExec.call(this, this.nParams)}
-        pagination={this.defaultData ? false : this.pagination}
-        data={this.data}
-        columns={this.columnsRender}
         rowSelection={this.select ? {
           type: 'checkbox',
           selectedRowKeys: this.checkedRowKeys,
           showCheckedAll: true
         } : false}
-        onSorterChange={this.sorter}
         onSelectionChange={value => {
           this.checkedRowKeys = value
         }}
+        pagination={this.defaultData ? false : this.pagination}
+        data={this.data}
+        columns={this.columnsRender}
+        onSorterChange={this.sorter}
+        {...vExec.call(this, this.nParams)}
       >
         {{
           tbody: () => {
