@@ -39,7 +39,7 @@ export default defineComponent({
       type: Object,
       default: () => ({})
     },
-    'n-params': {
+    nParams: {
       type: Object,
       default: () => ({})
     },

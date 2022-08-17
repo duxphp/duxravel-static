@@ -1,5 +1,6 @@
 import { defineComponent } from 'vue'
 import qs from 'qs'
+import { vExec } from '../Create'
 import { request, searchQuick } from '../../utils/request'
 import { requestEvent } from '../../utils/event'
 
@@ -79,7 +80,11 @@ export default defineComponent({
     requestEventName: {
       type: String,
       default: null
-    }
+    },
+    nParams: {
+      type: Object,
+      default: () => ({})
+    },
   },
   watch: {
     filter(val, oldVal) {
@@ -367,6 +372,7 @@ export default defineComponent({
             expandedKeys={this.expandedKeys}
             onExpand={res => this.expandedKeys = res}
             fieldNames={this.fieldNames}
+            {...vExec.call(this, this.nParams)}
           >
             {
               {
