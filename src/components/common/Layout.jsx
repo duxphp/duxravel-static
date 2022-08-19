@@ -136,10 +136,10 @@ export default defineComponent({
                     content: () => <div>
                       <a-doption onClick={() => {
                         window.open("/")
-                      }}>返回首页
+                      }}>前台首页
                       </a-doption>
                       <a-doption onClick={() => {
-                        router.push('/' + moduleName() + '/system/user/page/' + this.userInfo.user_id)
+                        router.dialog('/' + moduleName() + '/system/user/page/' + this.userInfo.user_id)
                       }}>修改资料
                       </a-doption>
                       <a-doption onClick={() => {
