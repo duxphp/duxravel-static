@@ -139,7 +139,7 @@ export default defineComponent({
                       }}>返回首页
                       </a-doption>
                       <a-doption onClick={() => {
-                        router.push('/' + moduleName() + '/userInfo/page')
+                        router.push('/' + moduleName() + '/system/user/page/' + this.userInfo.user_id)
                       }}>修改资料
                       </a-doption>
                       <a-doption onClick={() => {
