@@ -4,18 +4,6 @@ import { getUrl, request, searchQuick } from '../../utils/request'
 import event, { requestEvent } from '../../utils/event'
 import { router } from '../../utils/router'
 
-// 获取最近的pageContent组件实例
-export const getPageContent = (parent) => {
-  const parentName = parent?.$options?.name;
-  if (parentName === "PageContent") {
-    return parent;
-  } else if (!parent.$parent) {
-    return;
-  }
-  return getPageContent(parent.$parent);
-}
-
-
 export default defineComponent({
   props: {
     url: {

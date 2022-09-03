@@ -187,6 +187,37 @@ router.ajax = (url, data) => {
 }
 
 /**
+ * 在当前所在的环境里面操作路由，比如在弹窗里面需要关闭路由 
+ * router.currentAction('back', 1, this)
+ * @param {*} type 类型 "replace", "back", "push"
+ * @param {*} url 跳转的路由 如果是back传数字
+ * @param {*} that 当前组件导入this
+ * @returns 
+ */
+router.currentAction = (type, url, that) => {
+  if (!["replace", "back", "push"].includes(type)) {
+    return message.error('路由类型错误')
+  }
+  const page = getPageContent(that?.$parent);
+  if (page) {
+    page.changeRouter(url, type);
+  } else {
+    router[type](url);
+  }
+}
+
+// 获取最近的pageContent组件实例
+export const getPageContent = (parent) => {
+  const parentName = parent?.$options?.name;
+  if (parentName === "PageContent") {
+    return parent;
+  } else if (!parent.$parent) {
+    return;
+  }
+  return getPageContent(parent.$parent);
+}
+
+/**
  * 获取当前的模块
  * @returns 模块
  */
