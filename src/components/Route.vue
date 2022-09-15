@@ -33,6 +33,9 @@ export default {
       type: String,
       default: "GET",
     },
+    data: {
+      type: Object,
+    },
     mode: {
       type: String,
       default: "modal",
@@ -50,6 +53,7 @@ export default {
       request({
         url: this.href,
         method: this.method,
+        data: this.data,
         successMsg: true,
         urlType: "absolute",
       })

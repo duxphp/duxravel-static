@@ -118,10 +118,10 @@ export const request = window.ajax = async params => {
     }
 
     if (isJson) {
-      successMsg && window.message.success(result.data.message)
+      successMsg && result.data.message && window.message.success(result.data.message)
       return result.data.data
     } else {
-      successMsg && window.message.success(result.message)
+      successMsg && result.message && window.message.success(result.message)
       return result.data
     }
   }).catch(async (error) => {
