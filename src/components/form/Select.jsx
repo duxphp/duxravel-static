@@ -13,7 +13,8 @@ export default defineComponent({
     return {
       keyword: '',
       loading: false,
-      modelValue: null
+      modelValue: null,
+      options: []
     }
   },
   async created() {
@@ -25,7 +26,7 @@ export default defineComponent({
     //     return item && (this.optionRender(item) || item.label)
     //   }
     // }
-    this.nParams.options.map(item => {
+    this.options.map(item => {
       item.label = item.label.toString()
       return item
     })
@@ -43,7 +44,7 @@ export default defineComponent({
     updateValue(value) {
       this.modelValue = value
       this.$emit('update:value', value)
-      this.$emit('update:item', { ...this.nParams.options.find(item => item.value == value), render: void 0 })
+      this.$emit('update:item', { ...this.options.find(item => item.value == value), render: void 0 })
     },
     handleSearch(query, value) {
       this.loading = true
@@ -55,7 +56,7 @@ export default defineComponent({
           id: value
         }
       }).then(res => {
-        this.nParams.options = res.data instanceof Array ? res.data.map((item) => {
+        this.options = res.data instanceof Array ? res.data.map((item) => {
           const data = {
             label: item.name.toString(),
             value: item.id,
@@ -77,6 +78,7 @@ export default defineComponent({
   },
   render() {
     return <a-select
+      options={this.options}
       {...vExec.call(this, this.nParams)}
       modelValue={this.modelValue}
       loading={this.loading}
