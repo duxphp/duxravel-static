@@ -37,13 +37,6 @@ export default defineComponent({
       this.$emit('update:value', null)
       this.$emit('update:data', {})
       this.handleSearch()
-    },
-    async value() {
-      // 值发生改变了重新去获取显示的文本
-      if (this.dataUrl) {
-        await this.handleSearch('', this.value)
-        this.modelValue = this.value
-      }
     }
   },
   methods: {
