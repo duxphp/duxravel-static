@@ -16,7 +16,7 @@
     "src": "src/main.js",
     "isEntry": true,
     "css": [
-      "static/manage/main.6526c448.css"
+      "static/manage/main.fe381788.css"
     ],
     "assets": [
       "static/manage/logo.d66db2fc.svg",
@@ -25,7 +25,7 @@
     ]
   },
   "src/main.css": {
-    "file": "static/manage/main.6526c448.css",
+    "file": "static/manage/main.fe381788.css",
     "src": "src/main.css"
   }
 }

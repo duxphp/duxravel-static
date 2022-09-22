@@ -173,3 +173,35 @@ button {
 .arco-list-wrapper .arco-list-content {
     position: relative;
 }
+
+/**
+ * 自定义卡片
+ */
+.custom-radio-card {
+    padding: 10px 16px;
+    border: 1px solid var(--color-border-2);
+    border-radius: 4px;
+    width: 250px;
+    box-sizing: border-box;
+}
+
+.custom-radio-card-title {
+    color: var(--color-text-1);
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.custom-radio-card:hover,
+.custom-radio-card-checked{
+    border-color: rgb(var(--primary-6));
+}
+
+.custom-radio-card-checked {
+    background-color: var(--color-primary-light-1);
+}
+
+.custom-radio-card:hover .custom-radio-card-title,
+.custom-radio-card-checked .custom-radio-card-title {
+    color: rgb(var(--primary-6));
+}
