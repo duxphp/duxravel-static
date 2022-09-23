@@ -330,7 +330,7 @@ export default defineComponent({
       sortDirections: ['ascend', 'descend'],
     }
 
-    const columns = props.columns.map(item => vExec.call({ colSortable }, item, { editValue, editStatus }))
+    const columns = props.columns.map(item => vExec.call({ colSortable, filter: props.filter }, item, { editValue, editStatus }))
 
     return {
       formatData,
