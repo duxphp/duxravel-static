@@ -50,6 +50,10 @@ export default defineComponent({
     nowrap: {
       type: Boolean,
       default: false
+    },
+    columnsData: {
+      type: Object,
+      default: () => ({})
     }
   },
   watch: {
@@ -330,7 +334,7 @@ export default defineComponent({
       sortDirections: ['ascend', 'descend'],
     }
 
-    const columns = props.columns.map(item => vExec.call({ colSortable, filter: props.filter }, item, { editValue, editStatus }))
+    const columns = props.columns.map(item => vExec.call({ colSortable, columnsData: props.columnsData }, item, { editValue, editStatus }))
 
     return {
       formatData,
