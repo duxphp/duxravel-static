@@ -92,7 +92,7 @@ export default defineComponent({
     },
   },
   render() {
-    const nParams = vExec.call(this, this.nParams)
+    const nParams = this.nParams
     return <a-spin
       loading={this.loading}
       class='black w-full'

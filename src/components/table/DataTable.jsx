@@ -284,10 +284,8 @@ export default defineComponent({
     }
 
     if (props.requestEventName) {
-      event.add('table-action-' + this.requestEventName, tableAction)
+      event.add('table-action-' + props.requestEventName, tableAction)
     }
-
-
 
     const routerChange = ({ params, agree }) => {
       // 参数变化重置为第一页
@@ -401,7 +399,7 @@ export default defineComponent({
         data={this.data}
         columns={this.columnsRender}
         onSorterChange={this.sorter}
-        {...vExec.call(this, this.nParams)}
+        {...this.nParams}
       >
         {{
           tbody: () => {

@@ -1,6 +1,5 @@
 import { defineComponent } from 'vue'
 import { getUrl, request } from '../../utils/request'
-import { vExec } from '../Create'
 
 export default defineComponent({
   props: {
@@ -79,7 +78,7 @@ export default defineComponent({
   render() {
     return <a-select
       options={this.options}
-      {...vExec.call(this, this.nParams)}
+      {...this.nParams}
       modelValue={this.modelValue}
       loading={this.loading}
       onSearch={this.dataUrl && this.handleSearch}

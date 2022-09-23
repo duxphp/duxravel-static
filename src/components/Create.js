@@ -76,7 +76,7 @@ export const vExec = function (data, arg, slotProps) {
     return (new Function('props', script))(slotProps);
   })();
   // 组合参数
-  let newArg = { ...arg, ...slotArg }
+  let newArg = { ...this, ...arg, ...slotArg }
 
   // 绑定数据
   if (data.vData) {
@@ -89,6 +89,7 @@ export const vExec = function (data, arg, slotProps) {
       newArg = { ...newArg, ...obj }
     }
   }
+
   /**
    * 将命令创建的数据存储到一个新对象里
    */
@@ -127,6 +128,7 @@ export const vExec = function (data, arg, slotProps) {
       execData[_data[0]] = (...reder) => renderNodeList.call(this, _value, { ...newArg, ...Object.fromEntries(paramsKeys.map((key, index) => [key, reder[index]])) }).default?.()
     } else if (key.startsWith('vChild') && typeof data[key] === 'object') {
       // 处理子集数据转换
+
       execData[key.split(':')[1]] = vExec(data[key], newArg)
     }
   })
