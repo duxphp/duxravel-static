@@ -1,15 +1,15 @@
 <template>
   <a-config-provider :locale="zhCN">
     <div id="app" class="bg-gray-100 dark:bg-blackgray-1">
-    <Page :show="show"/>
+      <Page :show="show" />
     </div>
   </a-config-provider>
 </template>
 
 <script>
-import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn';
+import zhCN from "@arco-design/web-vue/es/locale/lang/zh-cn";
 import Page from "./components/Page.vue";
-import event from './utils/event';
+import { event } from "./utils/event";
 
 export default {
   name: "App",
@@ -93,56 +93,53 @@ export default {
         ],
         fontFamily: "inherit",
         defaultLocale: "zh-CN",
-        background: 'transparent',
-        foreColor: '#373d3f'
+        background: "transparent",
+        foreColor: "#373d3f",
       },
       tooltip: {
-        theme: 'light',
+        theme: "light",
       },
       theme: {
-          mode: 'light', 
-          palette: 'palette1',
-          
-      }
-    }
+        mode: "light",
+        palette: "palette1",
+      },
+    };
 
-    event.add('switch-dark', (type) => {
-      this.switchDark(type)
-    })
+    event.add("switch-dark", (type) => {
+      this.switchDark(type);
+    });
 
-    this.switchDark(localStorage.getItem("darkMode") === "dark" ? "dark" : "light")
+    this.switchDark(
+      localStorage.getItem("darkMode") === "dark" ? "dark" : "light"
+    );
 
-    const config = window.appConfig
+    const config = window.appConfig;
     // websocket 服务
     if (config.pusher && config.pusher.status) {
-      
     }
-
   },
   methods: {
     switchDark(type) {
-      localStorage.setItem("darkMode", type)
-      this.show = false
-      window.darkMode = type
-      window.Apex.tooltip.theme = type
-      window.Apex.theme.mode = type
-      window.Apex.chart.foreColor = type === 'dark' ? '#f6f7f8' : '#373d3f'
+      localStorage.setItem("darkMode", type);
+      this.show = false;
+      window.darkMode = type;
+      window.Apex.tooltip.theme = type;
+      window.Apex.theme.mode = type;
+      window.Apex.chart.foreColor = type === "dark" ? "#f6f7f8" : "#373d3f";
 
       //console.log(window.Apex.theme.mode, type)
-      if (type === 'dark') {
-        document.body.classList.add('dark');
-        document.body.setAttribute('arco-theme', 'dark')
+      if (type === "dark") {
+        document.body.classList.add("dark");
+        document.body.setAttribute("arco-theme", "dark");
       } else {
-        document.body.classList.remove('dark');
-        document.body.removeAttribute('arco-theme')
+        document.body.classList.remove("dark");
+        document.body.removeAttribute("arco-theme");
       }
 
-
       this.$nextTick(() => {
-          this.show = true
-      })
-
-    }
+        this.show = true;
+      });
+    },
   },
 };
 </script>

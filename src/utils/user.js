@@ -1,4 +1,4 @@
-import event from '../utils/event'
+import { event } from '../utils/event'
 import { moduleName } from './router'
 
 const userInfoKey = () => moduleName() + 'UserInfo'

@@ -216,7 +216,7 @@ import AppDialog from "./utils/DialogExtend";
 import AppDialogTable from "./utils/DialogTableExtend";
 import { router, resource, isModuleIndex } from "../utils/router";
 import { request } from "../utils/request";
-import event, { menuNavigation } from "../utils/event";
+import { event, menuNavigation } from "../utils/event";
 import { getLocalUserInfo, onUserLogin } from "../utils/user";
 import logo from "../assets/images/logo.svg";
 

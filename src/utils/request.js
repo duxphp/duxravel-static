@@ -1,7 +1,7 @@
 import qs from 'qs'
 import config from '../config/request'
 import { deepCopy } from './object'
-import event, { requestEvent } from './event'
+import { event, requestEvent } from './event'
 import { moduleName, router } from './router'
 import { clearUserInfo, getLocalUserInfo, login, setLocalUserInfo } from './user'
 import axios from 'axios'

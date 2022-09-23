@@ -20,23 +20,14 @@
     <div class="max-w-7xl mx-auto px-4 h-screen flex flex-col">
       <div
         class="
-          flex-none
-          flex
+          flex-none flex
           py-4
           text-gray-100
           dark:text-gray-200
           items-center
         "
       >
-        <div
-          class="
-            flex-grow flex
-            gap-4
-            items-center
-            justify-start
-            my-0
-          "
-        >
+        <div class="flex-grow flex gap-4 items-center justify-start my-0">
           <div class="">
             <img :src="config.logo" class="h-12" />
           </div>
@@ -69,8 +60,7 @@
           class="
             max-w-4xl
             w-full
-            flex
-            flex-row
+            flex flex-row
             bg-white
             dark:bg-blackgray-5
             shadow
@@ -110,7 +100,11 @@
               </div>
 
               <form class="flex flex-col gap-6" @submit="login">
-                <component v-if="!!data.vueComp" :is="data.vueComp" v-bind:data="data"></component>
+                <component
+                  v-if="!!data.vueComp"
+                  :is="data.vueComp"
+                  v-bind:data="data"
+                ></component>
                 <template v-else>
                   <input type="hidden" name="remember" value="true" />
                   <div>
@@ -178,7 +172,7 @@
 <script>
 import { ref, defineAsyncComponent } from "vue";
 import { request } from "../utils/request";
-import event from "../utils/event";
+import { event } from "../utils/event";
 import { isLogin, setLocalUserInfo } from "../utils/user";
 import logo from "../assets/images/logo.svg";
 import loginFoot from "../assets/images/login-foot.png";
@@ -244,9 +238,9 @@ export default {
     weather((res) => {
       weatherData.value = res;
     });
-  window.appConfig.login.side && window.appConfig.login.side.length > 0
-            ? window.appConfig.login.side
-            : [loginSide]
+    window.appConfig.login.side && window.appConfig.login.side.length > 0
+      ? window.appConfig.login.side
+      : [loginSide];
     return {
       data,
       nowDate,
@@ -262,7 +256,7 @@ export default {
           window.appConfig.login.side && window.appConfig.login.side.length > 0
             ? window.appConfig.login.side
             : [loginSide],
-        foot: window.appConfig.login.foot  || loginFoot,
+        foot: window.appConfig.login.foot || loginFoot,
       },
       readonly: ref(true),
       weatherData,

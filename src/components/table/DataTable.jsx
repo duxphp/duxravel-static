@@ -1,7 +1,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import { vExec } from '../Create'
 import { getUrl, request, searchQuick } from '../../utils/request'
-import event, { requestEvent } from '../../utils/event'
+import { event, requestEvent } from '../../utils/event'
 import { router } from '../../utils/router'
 
 export default defineComponent({
@@ -262,6 +262,33 @@ export default defineComponent({
       requestEvent.add(props.requestEventName, requestEventCallBack)
     }
 
+
+    /**
+     * 外部控制数据的方法
+     */
+    const tableAction = (type, data) => {
+      switch (type) {
+        case 'reload': {
+          getList(props.filter)
+          break
+        }
+        case 'to-page': {
+          pagination.value.current = +data
+          getList(props.filter)
+          break
+        }
+        default: {
+
+        }
+      }
+    }
+
+    if (props.requestEventName) {
+      event.add('table-action-' + this.requestEventName, tableAction)
+    }
+
+
+
     const routerChange = ({ params, agree }) => {
       // 参数变化重置为第一页
       if (agree === 'routerPush') {
@@ -347,13 +374,15 @@ export default defineComponent({
       getList,
       routerChange,
       checkedRowKeys,
-      requestEventCallBack
+      requestEventCallBack,
+      tableAction
     }
   },
 
   beforeUnmount() {
     event.remove('router-change', this.routerChange)
     requestEvent.remove(this.requestEventName, this.requestEventCallBack)
+    event.remove('table-action-' + this.requestEventName, this.tableAction)
   },
 
   render() {

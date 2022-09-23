@@ -12,7 +12,7 @@ import Hammer from "hammerjs";
 import Create from "./Create";
 import ErrorPage from "./ErrorPage.vue";
 import { getComp, getPage, resource } from "../utils/router";
-import event from "../utils/event";
+import { event } from "../utils/event";
 import { getOffset } from "../utils/util";
 
 // 应用样式

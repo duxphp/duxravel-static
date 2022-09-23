@@ -1,4 +1,4 @@
-import event from "./event"
+import { event } from "./event"
 
 /**
  * 预览图片

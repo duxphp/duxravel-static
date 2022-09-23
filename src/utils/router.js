@@ -4,7 +4,7 @@ import { compile } from 'vue/dist/vue.cjs.js'
 import requestConfig from '../config/request'
 
 import { getUrl, request } from "./request"
-import event from './event'
+import { event } from './event'
 import { getXmlByTagName, getXmlByTagNames } from './xml'
 
 window.addEventListener('popstate', e => {

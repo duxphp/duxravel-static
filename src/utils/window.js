@@ -1,5 +1,6 @@
 import * as object from './object'
 import * as date from './date'
+import * as event from './event'
 import * as util from './util'
 import * as string from './string'
 import * as router from './router'
@@ -19,5 +20,6 @@ window.dux = {
   request,
   socket,
   ui,
-  qs
+  qs,
+  event
 }

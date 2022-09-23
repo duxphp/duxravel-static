@@ -68,8 +68,6 @@ export const event = {
   }
 }
 
-export default event
-
 /**
  * 请求返回数据事件系统
  */
