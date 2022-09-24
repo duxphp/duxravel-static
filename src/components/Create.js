@@ -333,9 +333,9 @@ export const jsonToVue = (() => {
     const attrString = keys.map(key => {
       const value = item[key]
       if (key.startsWith('vOn')) {
-        return `:${key.substr(4)}="${value}"`
+        return `@${key.substr(4)}="${value}"`
       } else if (key.startsWith('vBind')) {
-        return `@${key.substr(6)}="${value}"`
+        return `:${key.substr(6)}="${value}"`
       } else if (key.startsWith('vModel')) {
         return `v-model:${key.substr(7) || 'model-value'}="${value}"`
       } else if (key.startsWith('vFor')) {
