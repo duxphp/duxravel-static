@@ -112,9 +112,14 @@ export const request = window.ajax = async params => {
       event.emit('request-menu-select', response.headers['x-menu-select'])
     }
 
+    // 请求事件
     result.data = response.data
     if (result.data?.data?.__event) {
       requestEvent.emit(result.data.data.__event.name, result.data.data.__event.data)
+    }
+    // 处理返回脚本
+    if (result.data?.data?.__script) {
+      new Function(result.data?.data?.__script)
     }
 
     if (isJson) {
