@@ -343,7 +343,7 @@ export const jsonToVue = (() => {
       } else if (key.startsWith('vIf')) {
         return `v-if="${value}"`
       } else if (key.startsWith('vChild')) {
-        return `${key.substr(7)}="${JSON.stringify(value).replace(/\"/g, '\'')}"`
+        return `:${key.substr(7)}="${JSON.stringify(value).replace(/\"/g, '\'')}"`
       } else if (key.startsWith('vSlot')) {
         return `#:${key.substr(6) || 'default'}="${value}"`
       } else if ((key.startsWith('render') || key.startsWith('vRender')) && typeof data[key] === 'object') {
