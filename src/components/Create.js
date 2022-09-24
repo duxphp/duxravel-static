@@ -1,4 +1,5 @@
 import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive } from 'vue'
+import { deepCopy } from '../utils/object'
 
 /**
  * 过滤不需要渲染到组件的参数
@@ -265,6 +266,14 @@ const CompCreate = defineComponent({
     data: {
       type: Object,
       delault: () => ({})
+    },
+    debug: {
+      type: Boolean,
+      default: false
+    },
+    static: {
+      type: Object,
+      delault: () => ({})
     }
   },
 
@@ -285,11 +294,119 @@ const CompCreate = defineComponent({
   },
 
   render() {
-    return renderNodeList.call(
-      Object.fromEntries(this.keys.map(key => [key, this[key]])),
-      this.node
-    ).default?.()
+    return this.debug ?
+      h('div', { style: 'flex: 1,height: 100%;' },
+        h('div', { style: 'position: absolute;left: 0;top: 0;right: 0;bottom: 0;overflow: auto;' },
+          h('pre', null, `<template>
+${jsonToVue(this.node)}
+</template>
+<script>
+${this.static?.scriptString || ''}
+export default {
+  setup(props, context) {
+    ${this.setupScript}
+  }
+}
+
+</script>
+<style>
+${this.static?.style || ''}
+</style>
+${this.static?.css?.map(v => `<link href="${v}"></link>`)?.join('\n') || ''}
+${this.static?.script?.map(v => `<script src="${v}"></script>`)?.join('\n') || ''}
+`))) :
+      renderNodeList.call(
+        Object.fromEntries(this.keys.map(key => [key, this[key]])),
+        this.node
+      ).default?.()
   }
 })
 
 export default CompCreate
+
+/**
+ * 将json转换成Vue模板代码
+ */
+export const jsonToVue = (() => {
+  const getAttr = item => {
+    const keys = Object.keys(item)
+    const attrString = keys.map(key => {
+      const value = item[key]
+      if (key.startsWith('vOn')) {
+        return `:${key.substr(4)}="${value}"`
+      } else if (key.startsWith('vBind')) {
+        return `@${key.substr(6)}="${value}"`
+      } else if (key.startsWith('vModel')) {
+        return `v-model:${key.substr(7) || 'model-value'}="${value}"`
+      } else if (key.startsWith('vFor')) {
+        return `v-for="${value}"`
+      } else if (key.startsWith('vIf')) {
+        return `v-if="${value}"`
+      } else if (key.startsWith('vChild')) {
+        return `${key.substr(7)}="${JSON.stringify(value).replace(/\"/g, '\'')}"`
+      } else if (key.startsWith('vSlot')) {
+        return `#:${key.substr(6) || 'default'}="${value}"`
+      } else if ((key.startsWith('render') || key.startsWith('vRender')) && typeof data[key] === 'object') {
+        return false
+      } else if (key === 'child') {
+        return false
+      } else if (key === 'nodeName') {
+        return false
+      } else if (typeof value === 'object') {
+        return `:${key}="${JSON.stringify(value).replace(/\"/g, '\'')}"`
+      } else if (typeof value === 'boolean' || typeof value === 'number') {
+        return `:${key}="${value}"`
+      }
+      return `${key}="${value}"`
+    }).filter(v => v).join(' ')
+    if (attrString) {
+      return ' ' + attrString
+    }
+    return ''
+  }
+  const getSpace = _level => {
+    let string = ''
+    for (let i = 0; i <= _level; i++) {
+      string += '  '
+    }
+    return string
+  }
+  const getSlotKey = item => Object.keys(item).find(v => v.startsWith('vSlot'))
+  return (node, level = 1) => {
+    if (typeof node === 'string') {
+      return getSpace(level) + node
+    }
+    if (!node) {
+      return ''
+    }
+    if (!Array.isArray(node)) {
+      node = [node]
+    }
+    return node.map(item => {
+      if (typeof item === 'string') {
+        return getSpace(level) + item
+      }
+      if (!item?.nodeName) {
+        return false
+      }
+      const slotKey = getSlotKey(item)
+      if (slotKey) {
+        const _item = deepCopy(item)
+        delete _item[slotKey]
+        return `${getSpace(level)}<template #${slotKey.substr(6) || 'default'}="${item[slotKey]}">
+${jsonToVue(_item, level + 1)}
+${getSpace(level)}</template>`
+      }
+      let _str = `${getSpace(level)}<${item.nodeName}${getAttr(item)}>`
+      if (item.child) {
+        _str += '\n'
+        _str += jsonToVue(item.child, level + 1)
+        _str += '\n'
+        _str += `${getSpace(level)}</${item.nodeName}>`
+      } else {
+        _str += `</${item.nodeName}>`
+      }
+      return _str
+    }).filter(v => v).join('\n')
+  }
+})()

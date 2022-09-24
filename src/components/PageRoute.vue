@@ -132,7 +132,6 @@ export default {
             this.createData = data;
             if (data.static) {
               resource.pageLoad(data.static, this.currentUrl);
-              delete data.static;
             }
           }
         })
