@@ -119,7 +119,7 @@ export const request = window.ajax = async params => {
     }
     // 处理返回脚本
     if (result.data?.data?.__script) {
-      new Function(result.data?.data?.__script)
+      (new Function(result.data?.data?.__script))()
     }
 
     if (isJson) {
