@@ -1,6 +1,6 @@
-import {defineComponent} from 'vue'
-import {getUrl, request} from '../../utils/request'
-import {renderNodeList} from '../Create'
+import { defineComponent } from 'vue'
+import { getUrl, request } from '../../utils/request'
+import { renderNodeList } from '../route/Create'
 
 export default defineComponent({
   props: {
@@ -89,7 +89,7 @@ export default defineComponent({
       title: <div class="flex">
         <div class="flex-grow">操作</div>
         {(!this.number || this.data.length < this.number) && <a-link class="flex-none">
-          <icon-plus onClick={this.onOpen}/>
+          <icon-plus onClick={this.onOpen} />
         </a-link>}
       </div>,
       width: 110,
@@ -105,7 +105,7 @@ export default defineComponent({
           this.$emit('update:value', this.data)
         }
         }>
-          <icon-arrow-up/>
+          <icon-arrow-up />
         </a-link>
         <a-link onClick={() => {
           let index = this.data.findIndex((item) => {
@@ -118,7 +118,7 @@ export default defineComponent({
           this.$emit('update:value', this.data)
         }
         }>
-          <icon-arrow-down/>
+          <icon-arrow-down />
         </a-link>
 
         <a-link onClick={() => {
@@ -129,7 +129,7 @@ export default defineComponent({
           this.$emit('update:value', this.data)
         }
         }>
-          <icon-close/>
+          <icon-close />
         </a-link>
       </div>,
     })
@@ -156,7 +156,7 @@ export default defineComponent({
             tmp[item[this.key]] = item
           })
           const list = this.value.map(item => {
-            return {...item, ...tmp[item[this.key]] || {}}
+            return { ...item, ...tmp[item[this.key]] || {} }
           })
 
           this.setData(list, true)

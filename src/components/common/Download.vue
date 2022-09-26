@@ -18,7 +18,7 @@
 </template>
 <script>
 import { defineComponent, ref } from "vue";
-import { event } from "../utils/event";
+import { event } from "../../utils/event";
 
 const Download = defineComponent({
   setup() {

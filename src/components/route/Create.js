@@ -1,5 +1,5 @@
 import { h, defineComponent, resolveDynamicComponent, toRefs, provide, reactive } from 'vue'
-import { deepCopy } from '../utils/object'
+import { deepCopy } from '../../utils/object'
 
 /**
  * 过滤不需要渲染到组件的参数
@@ -267,6 +267,10 @@ const CompCreate = defineComponent({
       type: Object,
       delault: () => ({})
     },
+    dataValue: {
+      type: Object,
+      delault: () => ({})
+    },
     debug: {
       type: Boolean,
       default: false
@@ -289,6 +293,12 @@ const CompCreate = defineComponent({
     if (typeof props.data !== 'undefined' && typeof res.data === 'undefined') {
       res.data = props.data
     }
+    if (typeof props.dataValue !== 'undefined' && typeof res.dataValue === 'undefined') {
+      Object.keys(props.dataValue).forEach(key => {
+        res[key] = props.dataValue[key]
+      })
+    }
+
     res.keys = Object.keys(res)
     return res
   },

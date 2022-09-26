@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { request } from "../utils/request";
-import { router, getPageContent } from "../utils/router";
+import { request } from "../../utils/request";
+import { router, getPageContent } from "../../utils/router";
 
 export default {
   name: "Route",

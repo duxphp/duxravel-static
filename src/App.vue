@@ -8,7 +8,7 @@
 
 <script>
 import zhCN from "@arco-design/web-vue/es/locale/lang/zh-cn";
-import Page from "./components/Page.vue";
+import Page from "./components/route/Page.vue";
 import { event } from "./utils/event";
 
 export default {

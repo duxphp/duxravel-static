@@ -1,5 +1,4 @@
-import {defineComponent} from 'vue'
-import {getUrl, request} from '../../utils/request'
+import { defineComponent } from 'vue'
 
 
 export default defineComponent({
@@ -46,7 +45,7 @@ export default defineComponent({
         onCancel={this.hidden}
       >
         <div>
-          <a-input vModel={[this.modelValue, 'model-value']} placeholder=""/>
+          <a-input vModel={[this.modelValue, 'model-value']} placeholder="" />
         </div>
       </a-modal>
     }

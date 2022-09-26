@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { router } from "../utils/router";
+import { router } from "../../utils/router";
 
 export default {
   name: "AppMenu",

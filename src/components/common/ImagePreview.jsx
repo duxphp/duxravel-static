@@ -1,10 +1,5 @@
 import { defineComponent } from 'vue'
-import Route from '../Route.vue'
-import { moduleName, router } from "../../utils/router";
-import { getUrl, request } from "../../utils/request";
-import { loginOut, getLocalUserInfo } from "../../utils/user";
 import { event } from '../../utils/event';
-import { weather } from "../../utils/util";
 import { imagePreview } from '../../utils/ui';
 
 export default defineComponent({

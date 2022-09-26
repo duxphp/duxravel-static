@@ -171,14 +171,14 @@
 
 <script>
 import { ref, defineAsyncComponent } from "vue";
-import { request } from "../utils/request";
-import { event } from "../utils/event";
-import { isLogin, setLocalUserInfo } from "../utils/user";
-import logo from "../assets/images/logo.svg";
-import loginFoot from "../assets/images/login-foot.png";
-import loginSide from "../assets/images/login-side.png";
-import { weather } from "../utils/util";
-import { getComp } from "../utils/router";
+import { request } from "../../utils/request";
+import { event } from "../../utils/event";
+import { isLogin, setLocalUserInfo } from "../../utils/user";
+import logo from "../../assets/images/logo.svg";
+import loginFoot from "../../assets/images/login-foot.png";
+import loginSide from "../../assets/images/login-side.png";
+import { weather } from "../../utils/util";
+import { getComp } from "../../utils/router";
 
 export default {
   mounted() {

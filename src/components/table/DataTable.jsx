@@ -1,5 +1,5 @@
 import { defineComponent, ref, watch } from 'vue'
-import { vExec } from '../Create'
+import { vExec } from '../route/Create'
 import { getUrl, request, searchQuick } from '../../utils/request'
 import { event, requestEvent } from '../../utils/event'
 import { router } from '../../utils/router'

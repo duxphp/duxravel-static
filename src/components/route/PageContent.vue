@@ -54,7 +54,7 @@
 
 <script>
 import PageRoute from "./PageRoute.vue";
-import { router } from "../utils/router";
+import { router } from "../../utils/router";
 
 export default {
   name: "PageContent",

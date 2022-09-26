@@ -14,8 +14,8 @@
 </template>
 <script>
 import { defineComponent, ref, nextTick, getCurrentInstance, watch } from "vue";
-import { getUrl, request } from "../utils/request";
-import { getPageContent } from "../utils/router";
+import { getUrl, request } from "../../utils/request";
+import { getPageContent } from "../../utils/router";
 
 export default defineComponent({
   components: {},
