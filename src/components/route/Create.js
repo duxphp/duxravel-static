@@ -18,7 +18,7 @@ const filterComponentProps = data => {
 
 const commandReg = /^v[A-Z]/
 const spaceReg = / /g
-const vForRef = /[ ()]/g
+const vForReg = /[ ()]/g
 /**
  * 判断是不是一个指令
  * @param {*} key 
@@ -200,7 +200,7 @@ export const renderItem = function (data, arg, slotProps) {
     // 循环处理
     if (vFor) {
       const _data = vFor.split(' in ')
-      _data[0] = _data[0].replace(vForRef, '').split(',')
+      _data[0] = _data[0].replace(vForReg, '').split(',')
       const value = exec.call(this, _data[1], arg)
       if (typeof value !== 'object') {
         return
