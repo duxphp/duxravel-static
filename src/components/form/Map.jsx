@@ -290,8 +290,8 @@ export default defineComponent({
             {this.selectPointInfo.province}{this.selectPointInfo.city}{this.selectPointInfo.district}{this.selectPointInfo.street}{this.selectPointInfo.streetNumber}
           </div>
         }
-        {!this.poiFixedCenter && <div className='absolute' style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', marginTop: '-24px', color: '#3385FF' }}>
-          <img src={location} />
+        {!this.poiFixedCenter && <div className='absolute' style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', marginTop: '-18px', color: '#3385FF' }}>
+          <img style={{ width: '36px' }} src={location} />
         </div>}
       </div>
       {this.poiListShow && this.model === 'poi' && <a-list
