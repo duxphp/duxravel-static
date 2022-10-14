@@ -44,6 +44,7 @@ import './utils/window'
 import { setup } from 'twind/shim'
 
 import color from '../color'
+import Spec from "./components/form/Spec";
 
 const colors = Object.fromEntries(Object.keys(color.light).map(key => {
   return [key, Object.fromEntries(color.light[key].map((val, index) => {
@@ -129,6 +130,9 @@ app.component('app-dynamic-data', DynamicData)
 app.component('app-layout', DataLayout)
 app.component('app-dialog', DataDialog)
 app.component('app-image-preview', ImagePreview)
+
+// 规格
+app.component('app-spec', Spec)
 
 // 拖动排序
 app.component('draggable', draggable)
