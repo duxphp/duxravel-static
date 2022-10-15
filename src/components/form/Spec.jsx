@@ -8,14 +8,12 @@ export default defineComponent({
         'fields': {
             type: Array
         },
-        'sku': {
-            type: Array
-        }
     },
     data() {
-        const sku = this.sku || []
         const fields = this.fields || []
-        const list = this.value || []
+        const sku = this.value["sku"] || []
+        const list = this.value["data"] || []
+
         return {
             fields: fields,
             sku: sku,
@@ -44,7 +42,9 @@ export default defineComponent({
                 this.specArray.map((item, index) => {
                     if (!this.list[index]) {
                         this.list[index] = {
-                            status: true
+                            status: true,
+                            id: 0,
+                            spec: item.map(value => value).join(':')
                         }
                     }
                     this.fields.map(field => {
@@ -62,17 +62,25 @@ export default defineComponent({
                         }
                     })
                 })
+                this.$emit('update:value', {
+                    sku: this.sku,
+                    data: this.list
+                })
+                console.log(this.list)
+
             },
             immediate: true,
             deep: true
         },
         list: {
             handler(n, o) {
-                console.log(this.list)
-                this.$emit('update:value', this.list)
+                this.$emit('update:value', {
+                    sku: this.sku,
+                    data: this.list
+                })
             },
             deep: true
-        }
+        },
     },
     methods: {
         cartesian(...args) {
