@@ -4,15 +4,17 @@ export default defineComponent({
     props: {
         'value': {
             type: Array,
+            default: [],
         },
         'fields': {
-            type: Array
+            type: Array,
+            default: [],
         },
     },
     data() {
         const fields = this.fields || []
-        const sku = this.value["sku"] || []
-        const list = this.value["data"] || []
+        const sku = this.value && this.value["sku"] ? this.value["sku"] : []
+        const list = this.value && this.value["data"]  ? this.value["data"] : []
 
         return {
             fields: fields,
