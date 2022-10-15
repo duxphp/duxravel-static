@@ -12,14 +12,10 @@ export default defineComponent({
             type: Array
         }
     },
-
     data() {
-        const list = this.value || []
         const sku = this.sku || []
         const fields = this.fields || []
-
-
-
+        const list = this.value || []
         return {
             fields: fields,
             sku: sku,
@@ -32,7 +28,7 @@ export default defineComponent({
     },
     watch: {
         sku: {
-            handler(n,o) {
+            handler(n, o) {
                 this.specFilter = this.sku.map(item => {
                     if (!item.name || !item.spec.length) {
                         return false;
@@ -44,15 +40,41 @@ export default defineComponent({
                     return Object.assign([], item.spec)
                 }).filter(item => item)
                 this.specArray = this.cartesian(...array)
+
+                this.specArray.map((item, index) => {
+                    if (!this.list[index]) {
+                        this.list[index] = {
+                            status: true
+                        }
+                    }
+                    this.fields.map(field => {
+                        if (!this.list[index].hasOwnProperty(field.key)) {
+                            switch (field.type) {
+                                case "price":
+                                    this.list[index][field.key] = 0.00
+                                    break
+                                case "number":
+                                    this.list[index][field.key] = 0
+                                    break
+                                default:
+                                    this.list[index][field.key] = ''
+                            }
+                        }
+                    })
+                })
             },
             immediate: true,
+            deep: true
+        },
+        list: {
+            handler(n, o) {
+                console.log(this.list)
+                this.$emit('update:value', this.list)
+            },
             deep: true
         }
     },
     methods: {
-        onSelect(value) {
-            this.$emit('update:value', value)
-        },
         cartesian(...args) {
             return args.reduce(
                 (total, current) => {
@@ -70,76 +92,117 @@ export default defineComponent({
     },
     render() {
         return <div className="w-full">
-                {
-                    this.sku.map((item, index) => <div className="border-1 border-gray-200  p-3 mb-3">
-                        <div className="flex flex-wrap flex-col lg:flex-row gap-4 lg:items-center mb-4">
-                            <div className="flex-none">规格名</div>
-                            <div className="flex-grow flex flex-col lg:flex-row gap-4 lg:items-center">
-                                <div>
-                                    <a-input style="width:160px;" vModel={[item.name, 'model-value']}>
+            <a-button type="primary" onClick={() => {
+
+                window.appDialog.prompt({
+                    title: '请输入规格名称',
+                }).then(value => {
+                    this.sku.push({
+                        name: value,
+                        spec: [],
+                    })
+                })
+            }}>添加规格</a-button>
+            {
+                this.sku.map((item, index) => <div className="border-1 border-gray-200  p-3 mt-3">
+                    <div className="flex flex-wrap flex-col lg:flex-row gap-4 lg:items-center mb-4">
+                        <div className="flex-none">规格名</div>
+                        <div className="flex-grow flex flex-col lg:flex-row gap-4 lg:items-center">
+                            <div>
+                                <a-input style="width:160px;" vModel={[item.name, 'model-value']}>
+                                    {
                                         {
-                                            {
-                                                "append": () => <a href="javascript:;" className="text-red-600">删除</a>
-                                            }
+                                            "append": () => <a href="javascript:;" className="text-red-600"
+                                                               onClick={() => {
+                                                                   delete this.sku[index]
+                                                               }}><icon-close /></a>
                                         }
-                                    </a-input>
-                                </div>
+                                    }
+                                </a-input>
                             </div>
                         </div>
-                        <div className="flex flex-wrap flex-col lg:flex-row gap-4 lg:items-center">
-                            <div className="flex-none">规格值</div>
-                            <div className="flex-grow">
-                                <div className="flex flex-wrap  flex-col lg:flex-row gap-2 lg:items-center">
-                                    {
-                                        item.spec.length > 0 && item.spec.map((spec, i) => <div data-item>
-                                            <a-input style="width:160px;"  vModel={[item.spec[i], 'model-value']}>
+                    </div>
+                    <div className="flex flex-wrap flex-col lg:flex-row gap-4 lg:items-center">
+                        <div className="flex-none">规格值</div>
+                        <div className="flex-grow">
+                            <div className="flex flex-wrap  flex-col lg:flex-row gap-2 lg:items-center">
+                                {
+                                    item.spec.length > 0 && item.spec.map((spec, i) => <div data-item>
+                                        <a-input style="width:160px;" vModel={[item.spec[i], 'model-value']}>
+                                            {
                                                 {
-                                                    {
-                                                        "append": () => <a href="javascript:;" className="text-red-600">删除</a>
-                                                    }
+                                                    "append": () => <a href="javascript:;" className="text-red-600"
+                                                                       onClick={() => {
+                                                                           delete item.spec[i]
+                                                                       }}>
+                                                        <icon-close />
+                                                    </a>
                                                 }
-                                            </a-input>
-                                        </div>)
-                                    }
-                                    <div>
-                                        <div className="relative">
-                                            <a-button >添加</a-button>
-                                        </div>
+                                            }
+                                        </a-input>
+                                    </div>)
+                                }
+                                <div>
+                                    <div className="relative">
+                                        <a-button onClick={() => {
+                                            window.appDialog.prompt({
+                                                title: '请输入规格名称',
+                                            }).then(value => {
+                                                item.spec.push(value)
+                                            })
+                                        }}>
+                                            {
+                                                {
+                                                    "icon": <icon-plus />
+                                                }
+                                            }
+                                        </a-button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>)
-                }
-            <div className="overflow-x-scroll arco-table">
+                    </div>
+                </div>)
+            }
+            <div className="overflow-x-scroll arco-table mt-3">
                 <table className="arco-table-element">
                     <thead>
                     <tr className="arco-table-tr">
-                        {this.specFilter.map(item => <th class="arco-table-th"><span className="arco-table-cell arco-table-cell-align-left">{item.name}</span></th>).filter(item => item)}
+                        {this.specFilter.map(item => <th class="arco-table-th"><span
+                            className="arco-table-cell arco-table-cell-align-left">{item.name}</span>
+                        </th>).filter(item => item)}
                         {this.fields.map(item => <th class="arco-table-th">
                             <div class="arco-table-cell arco-table-cell-align-left flex items-center">
                                 <div class="flex-grow">{item.name}</div>
-                                <a class="flex-none hover:text-blue-900" href="javascript:;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7"/></svg>
+                                <a class="flex-none hover:text-blue-900" href="javascript:;" onClick={() => {
+                                    let value = this.list[0][item.key]
+                                    this.list.map(vo => {
+                                        vo[item.key] = value
+                                    })
+                                }}>
+                                    <icon-double-down />
                                 </a>
                             </div>
                         </th>)}
-                        <th className="arco-table-th" width="70" style="text-align: right"><span className="arco-table-cell arco-table-cell-align-left">上架</span></th>
+                        <th className="arco-table-th" width="70" style="text-align: right"><span
+                            className="arco-table-cell arco-table-cell-align-left">上架</span></th>
                     </tr>
                     </thead>
                     <tbody>
                     {
                         this.specArray.map((item, key) => <tr className="arco-table-tr">
-                            {item.map(value => <td className="arco-table-td"><span className="arco-table-cell arco-table-cell-align-left">{value}</span></td>)}
-                                {this.fields.map(column => <td className="arco-table-td"><span className="arco-table-cell arco-table-cell-align-left">
-                                    {column.type === 'image' && <app-file image={true} size={100}></app-file>}
-                                    {column.type === 'price' && <a-input-number precision={2} />}
-                                    {column.type === 'number' && <a-input-number />}
-                                    {column.type === 'text' && <a-input  allow-clear />}
+                            {item.map(value => <td className="arco-table-td"><span
+                                className="arco-table-cell arco-table-cell-align-left">{value}</span></td>)}
+                            {this.fields.map(column => <td className="arco-table-td"><span
+                                className="arco-table-cell arco-table-cell-align-left">
+                                {column.type === 'image' && <app-file image={true} size={100} vModel={[this.list[key][column.key], 'value']} ></app-file>}
+                                {column.type === 'price' && <a-input-number precision={2} step={0.01}  model-event="input" vModel={[this.list[key][column.key], 'model-value']} />}
+                                {column.type === 'number' && <a-input-number model-event="input" precision={0} step={1} vModel={[this.list[key][column.key], 'model-value']} />}
+                                {column.type === 'text' && <a-input vModel={[this.list[key][column.key], 'model-value']} allow-clear/>}
                                     </span></td>)}
                             <td className="arco-table-td" style="text-align: right">
                                 <label className="arco-table-cell arco-table-cell-align-left">
-                                    <a-checkbox value="1" />
+                                    <a-checkbox vModel={[this.list[key]['status'], 'model-value']} value="1" />
                                 </label>
                             </td>
                         </tr>)
