@@ -13,23 +13,23 @@ export default defineComponent({
       keyword: '',
       loading: false,
       modelValue: null,
-      options: []
     }
   },
   async created() {
     if (this.dataUrl) {
       await this.handleSearch('', this.value)
     }
-    // if (this.optionRender) {
+    //if (this.optionRender) {
     //   this.nParams.formatLabel = (item) => {
     //     return item && (this.optionRender(item) || item.label)
     //   }
-    // }
-    this.options.map(item => {
+    //}
+    this.nParams.options.map(item => {
       item.label = item.label.toString()
       return item
     })
     this.modelValue = this.value
+
   },
   watch: {
     dataUrl() {
@@ -43,7 +43,7 @@ export default defineComponent({
     updateValue(value) {
       this.modelValue = value
       this.$emit('update:value', value)
-      this.$emit('update:item', { ...this.options.find(item => item.value == value), render: void 0 })
+      this.$emit('update:item', { ...this.nParams.options.find(item => item.value == value), render: void 0 })
     },
     handleSearch(query, value) {
       this.loading = true
@@ -55,7 +55,7 @@ export default defineComponent({
           id: value
         }
       }).then(res => {
-        this.options = res.data instanceof Array ? res.data.map((item) => {
+        this.nParams.options = res.data instanceof Array ? res.data.map((item) => {
           const data = {
             label: item.name.toString(),
             value: item.id,
@@ -77,7 +77,6 @@ export default defineComponent({
   },
   render() {
     return <a-select
-      options={this.options}
       {...this.nParams}
       modelValue={this.modelValue}
       loading={this.loading}

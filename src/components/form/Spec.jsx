@@ -66,6 +66,7 @@ export default defineComponent({
                 })
                 this.$emit('update:value', {
                     sku: this.sku,
+
                     data: this.list
                 })
                 console.log(this.list)
