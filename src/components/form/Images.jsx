@@ -93,7 +93,7 @@ export default defineComponent({
       >
         {{
           item: (item) => <div
-            class="relative bg-gray-100  hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2  rounded bg-cover bg-center bg-no-repeat flex items-end w-28 h-28"
+            class="relative bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 rounded bg-cover bg-center bg-no-repeat block flex items-end"
             style={{backgroundSize: '90%', backgroundImage: `url(${item.element || '/service/image/placeholder/180/180/选择图片'})`}}
           >
             <div class="flex p-2 gap-2 bg-white bg-opacity-80  dark:bg-blackgray-5 dark:bg-opacity-80 w-28 h-28 opacity-0 hover:opacity-100 items-center">

@@ -24,7 +24,7 @@ export default defineComponent({
       type: Boolean
     },
     'mini': {
-      type: Boolean
+      type: Boolean,
     },
     'size': {
       type: Number,
@@ -144,7 +144,10 @@ export default defineComponent({
       >
         <a-image-preview src={this.value || '/service/image/placeholder/180/180/选择图片'} vModel={[this.visible, 'visible']} />
         {!this.mini ?
-          <div class="flex gap-2 h-7 w-full items-center bg-white bg-opacity-60 dark:bg-blackgray-5 dark:bg-opacity-80">
+          <div class="flex p-2 gap-2 bg-white bg-opacity-80  dark:bg-blackgray-5 dark:bg-opacity-80 w-28 h-28 opacity-0 hover:opacity-100 items-center" style={{
+            width: this.size + 'px',
+            height: this.size + 'px',
+          }}>
             <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
               onClick={() => {
                 this.visible = true
