@@ -9,24 +9,22 @@ import Editor from '@tinymce/tinymce-vue'
 import tinymce from 'tinymce/tinymce' //static/tinymce默认hidden，不引入则不显示编辑器
 import 'tinymce/themes/silver'  //编辑器主题，不引入则报错
 import 'tinymce/icons/default'  //引入编辑器图标icon，不引入则不显示对应图标
-
+import 'tinymce/models/dom'
 // 扩展插件
-import 'tinymce/plugins/advlist'  //高级列表
+//import 'tinymce/plugins/advlist'  //高级列表
 import 'tinymce/plugins/anchor'  //锚点
 import 'tinymce/plugins/autolink'  //自动链接
 import 'tinymce/plugins/autoresize'  //编辑器高度自适应,注：plugins里引入此插件时，Init里设置的height将失效
-import 'tinymce/plugins/autosave'  //自动存稿
+//import 'tinymce/plugins/autosave'  //自动存稿
 import 'tinymce/plugins/charmap'  //特殊字符
 import 'tinymce/plugins/code'  //编辑源码
 import 'tinymce/plugins/codesample'  //代码示例
 import 'tinymce/plugins/directionality'  //文字方向
 import 'tinymce/plugins/emoticons'  //表情
-import 'tinymce/plugins/fullpage'  //文档属性
 import 'tinymce/plugins/fullscreen'  //全屏
 import 'tinymce/plugins/help'  //帮助
-import 'tinymce/plugins/hr'  //水平分割线
 import 'tinymce/plugins/image'  //插入编辑图片
-import 'tinymce/plugins/imagetools'  //图片工具
+//import 'tinymce/plugins/editimage'  //图片工具
 import 'tinymce/plugins/importcss'  //引入css
 import 'tinymce/plugins/insertdatetime'  //插入日期时间
 import 'tinymce/plugins/link'  //超链接
@@ -34,19 +32,19 @@ import 'tinymce/plugins/lists' //列表插件
 import 'tinymce/plugins/media' //插入编辑媒体
 import 'tinymce/plugins/nonbreaking' //插入不间断空格
 import 'tinymce/plugins/pagebreak' //插入分页符
-import 'tinymce/plugins/paste' //粘贴插件
+//import 'tinymce/plugins/paste' //粘贴插件
 import 'tinymce/plugins/preview'//预览
-import 'tinymce/plugins/print'//打印
+//import 'tinymce/plugins/print'//打印
 import 'tinymce/plugins/quickbars'  //快速工具栏
 import 'tinymce/plugins/save'  //保存
 import 'tinymce/plugins/searchreplace'  //查找替换
 // import 'tinymce/plugins/spellchecker'  //拼写检查，暂未加入汉化，不建议使用
-import 'tinymce/plugins/tabfocus'  //切入切出，按tab键切出编辑器，切入页面其他输入框中
+//import 'tinymce/plugins/tabfocus'  //切入切出，按tab键切出编辑器，切入页面其他输入框中
 import 'tinymce/plugins/table'  //表格
 import 'tinymce/plugins/template'  //内容模板
-import 'tinymce/plugins/textcolor'  //文字颜色
-import 'tinymce/plugins/textpattern'  //快速排版
-import 'tinymce/plugins/toc'  //目录生成器
+//import 'tinymce/plugins/textcolor'  //文字颜色
+//import 'tinymce/plugins/textpattern'  //快速排版
+//import 'tinymce/plugins/tableofcontents'  //目录生成器
 import 'tinymce/plugins/visualblocks'  //显示元素范围
 import 'tinymce/plugins/visualchars'  //显示不可见字符
 import 'tinymce/plugins/wordcount'  //字数统计
@@ -67,12 +65,12 @@ export default defineComponent({
         },
         plugins: {
             type: [String, Array],
-            default: 'print preview searchreplace autolink directionality visualblocks visualchars image link media template code codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount imagetools textpattern help emoticons'
+            default: ' preview searchreplace autolink directionality visualblocks visualchars image link media template code codesample table charmap pagebreak nonbreaking insertdatetime  lists wordcount help emoticons'
         },
         toolbar: {
             type: [String, Array],
-            default: ' code preview print | formatselect fontsizeselect lineheight | forecolor backcolor bold italic underline strikethrough  subscript superscript  removeformat | \
-            alignleft aligncenter alignright alignjustify outdent indent | bullist numlist | pagebreak hr link table  |  image media  filemanage  codesample charmap emoticons'
+            default: ' code preview | blocks fontsize lineheight | forecolor backcolor bold italic underline strikethrough  subscript superscript  removeformat | \
+            alignleft aligncenter alignright alignjustify outdent indent | bullist numlist | pagebreak link table  |  image media  filemanage  codesample charmap emoticons'
         },
         'upload': {
           type: String,
@@ -82,20 +80,21 @@ export default defineComponent({
     data() {
         return {
             init: {
-                language_url: `${this.baseUrl}/static/tinymce/langs/zh_CN.js`,  //引入语言包文件
-                language: 'zh_CN',  //语言类型
+                language_url: `${this.baseUrl}/static/tinymce/langs/zh-Hans.js`,  //引入语言包文件
+                language: 'zh-Hans',  //语言类型
                 skin_url: `${this.baseUrl}/static/tinymce/skins/ui/` + (window.darkMode === 'dark' ? 'oxide-dark' : 'oxide'),
-                content_css: `${this.baseUrl}/static/tinymce/skins/content/${window.darkMode === 'dark' ? 'dark' : 'default'}/content.css`,
+                content_css: `${this.baseUrl}/static/tinymce/skins/content/${window.darkMode === 'dark' ? 'dark' : 'default'}/content.min.css`,
                 emoticons_database_url: `${this.baseUrl}/static/tinymce/emojis.min.js`,
                 
                 plugins: this.plugins,
                 toolbar: this.toolbar,
+                promotion: false,
                 width: '100%',
                 min_height: 500,
-                fontsize_formats: '12px 14px 16px 18px 24px 36px 48px 56px 72px',
+                font_size_formats: '12px 14px 16px 18px 24px 36px 48px 56px 72px',
                 convert_urls: false,
                 relative_urls: false,
-                lineheight_formats: "0.5 0.8 1 1.2 1.5 1.75 2 2.5 3 4 5",
+                line_height_formats: "0.5 0.8 1 1.2 1.5 1.75 2 2.5 3 4 5",
                 placeholder: '请输入内容',
                 branding: false,
                 resize: false,
@@ -180,20 +179,22 @@ export default defineComponent({
                     if (meta.filetype == 'image') {
                         type = 'image';
                     }
-                    window.selectFile(false, type).then(res => {
+                    window.fileManage({
+                        multiple: false
+                    }).then(res => {
                         callback(res.url)
                     })
                 },
                 file_picker_types: 'file image media',
                 
             },
-        
-            content: this.value
+
+            html: this.value
         }
     },
     watch: {
         value(content) {
-            this.content = content
+            this.html = content
         },
         content(content) {
             this.$emit('update:value', content)
@@ -211,10 +212,10 @@ export default defineComponent({
         },
         //清空内容
         clear() {
-            this.content = ''
+            this.html = ''
         },
     },
     render() {
-        return <Editor vModel={this.content} init={this.init} disabled={this.disabled} onClick={this.onClick} />
+        return <Editor vModel={this.html} init={this.init} disabled={this.disabled} onClick={this.onClick} />
     }
 })

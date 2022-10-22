@@ -18,7 +18,7 @@
     "nprogress": "^0.2.0",
     "pusher-js": "^7.3.0",
     "qs": "^6.10.1",
-    "tinymce": "^5.10.2",
+    "tinymce": "^6.0.0",
     "twind": "^0.16.17",
     "vite-plugin-windicss": "^1.8.7",
     "vue": "^3.2.37",
