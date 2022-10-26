@@ -69,7 +69,6 @@ export default defineComponent({
 
                     data: this.list
                 })
-                console.log(this.list)
 
             },
             immediate: true,

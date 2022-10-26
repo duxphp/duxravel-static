@@ -127,7 +127,6 @@ export default {
       window.Apex.theme.mode = type;
       window.Apex.chart.foreColor = type === "dark" ? "#f6f7f8" : "#373d3f";
 
-      //console.log(window.Apex.theme.mode, type)
       if (type === "dark") {
         document.body.classList.add("dark");
         document.body.setAttribute("arco-theme", "dark");

@@ -58,7 +58,6 @@ export default defineComponent({
   },
   watch: {
     defaultData(val) {
-      // console.log('数据更新', val)
       val instanceof Array && (this.data = this.formatData(val))
     }
   },

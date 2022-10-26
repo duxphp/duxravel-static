@@ -305,7 +305,6 @@ export const resource = {
     current.list.push(...res.map(item => item.map(item => item[0])).flat())
 
     !asyncLoad && current.num++
-    console.log('加载', page, asyncLoad, current.num)
   },
 
   /**
@@ -318,7 +317,6 @@ export const resource = {
     if (!current || current.num > num) {
       return
     }
-    console.log('卸载', page)
     // 除了卸载页面其他所有页面的资源
     const all = new Set(Object.keys(this.pageLoads).map(key => key === page ? [] : this.pageLoads[key].list).flat())
 
