@@ -76,17 +76,6 @@ export default {
     },
   },
   methods: {
-    // 加载样式
-    loadStyle(style) {
-      const element = document.createElement("style");
-      element.innerHTML = style;
-      document.getElementsByTagName("html")[0].appendChild(element);
-      appStyle = element;
-    },
-    // 卸载样式
-    unloadStyle() {
-      appStyle?.parentNode?.removeChild?.(appStyle);
-    },
     routeChange(data) {
       // 监听用于刷新页面
       if (

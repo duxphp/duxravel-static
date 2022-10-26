@@ -248,7 +248,7 @@ export const resource = {
    *  list: ['资源1', '资源2']
    * }
    */
-  pageLoad: {},
+  pageLoads: {},
 
   loadTypeString: {
     css: data => getXmlByTagNames(data, 'link').filter(item => item.attr.href).map(item => item.attr.href),
@@ -281,10 +281,13 @@ export const resource = {
    * @param {boolean} asyncLoad 页面加载成功了，加载页面上定义的异步加载js文件
    */
   async pageLoad(data, page, asyncLoad) {
-    const current = this.pageLoad[page] = {
-      num: 0,
-      list: []
+    if(!this.pageLoads[page]) {
+      this.pageLoads[page] = {
+        num: 0,
+        list: []
+      }
     }
+    const current = this.pageLoads[page]
     // 资源加载列表
     const loadList = asyncLoad
       ? [
@@ -301,7 +304,8 @@ export const resource = {
 
     current.list.push(...res.map(item => item.map(item => item[0])).flat())
 
-    current.num++
+    !asyncLoad && current.num++
+    console.log('加载', page, asyncLoad, current.num)
   },
 
   /**
@@ -310,12 +314,13 @@ export const resource = {
    * @param {number} num 要卸载的页面资源个数 默认是1当有大于等于1个相同页面时，将不会卸载当前的资源
    */
   uninstall(page, num = 1) {
-    const current = this.pageLoad[page]
+    const current = this.pageLoads[page]
     if (!current || current.num > num) {
       return
     }
+    console.log('卸载', page)
     // 除了卸载页面其他所有页面的资源
-    const all = new Set(Object.keys(this.pageLoad).map(key => key === page ? [] : this.pageLoad[key].list).flat())
+    const all = new Set(Object.keys(this.pageLoads).map(key => key === page ? [] : this.pageLoads[key].list).flat())
 
     // 卸载数据
     current.list.forEach(key => {
@@ -326,7 +331,7 @@ export const resource = {
       }
     })
     // 删除当前加载的页面
-    delete this.pageLoad[page]
+    delete this.pageLoads[page]
   },
   loadScriptString(list) {
     list.forEach(item => new Function(item))
