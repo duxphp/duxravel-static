@@ -14,7 +14,7 @@ export default defineComponent({
     data() {
         const fields = this.fields || []
         const sku = this.value && this.value["sku"] ? this.value["sku"] : []
-        const list = this.value && this.value["data"]  ? this.value["data"] : []
+        const list = this.value && this.value["data"] ? this.value["data"] : []
 
         return {
             fields: fields,
@@ -48,7 +48,7 @@ export default defineComponent({
                             id: 0,
                             spec: item.map(value => value).join(':')
                         }
-                    }else {
+                    } else {
                         let keys = Object.keys(this.list[index])
                         this.list[index].status = keys.includes("status") ? this.list[index].status : 0
                         this.list[index].id = keys.includes("id") ? this.list[index].id : 0
@@ -118,7 +118,8 @@ export default defineComponent({
                         spec: [],
                     })
                 })
-            }}>添加规格</a-button>
+            }}>添加规格
+            </a-button>
             {
                 this.sku.map((item, index) => <div className="border-1 border-gray-200  p-3 mt-3">
                     <div className="flex flex-wrap flex-col lg:flex-row gap-4 lg:items-center mb-4">
@@ -131,7 +132,9 @@ export default defineComponent({
                                             "append": () => <a href="javascript:;" className="text-red-600"
                                                                onClick={() => {
                                                                    delete this.sku[index]
-                                                               }}><icon-close /></a>
+                                                               }}>
+                                                <icon-close/>
+                                            </a>
                                         }
                                     }
                                 </a-input>
@@ -151,7 +154,7 @@ export default defineComponent({
                                                                        onClick={() => {
                                                                            delete item.spec[i]
                                                                        }}>
-                                                        <icon-close />
+                                                        <icon-close/>
                                                     </a>
                                                 }
                                             }
@@ -169,7 +172,7 @@ export default defineComponent({
                                         }}>
                                             {
                                                 {
-                                                    "icon": <icon-plus />
+                                                    "icon": <icon-plus/>
                                                 }
                                             }
                                         </a-button>
@@ -180,51 +183,68 @@ export default defineComponent({
                     </div>
                 </div>)
             }
-            <div className="overflow-x-scroll arco-table mt-3">
-                <table className="arco-table-element">
-                    <thead>
-                    <tr className="arco-table-tr">
-                        {this.specFilter.map(item => <th class="arco-table-th"><span
-                            className="arco-table-cell arco-table-cell-align-left">{item.name}</span>
-                        </th>).filter(item => item)}
-                        {this.fields.map(item => <th class="arco-table-th">
-                            <div class="arco-table-cell arco-table-cell-align-left flex items-center">
-                                <div class="flex-grow">{item.name}</div>
-                                <a class="flex-none hover:text-blue-900" href="javascript:;" onClick={() => {
-                                    let value = this.list[0][item.key]
-                                    this.list.map(vo => {
-                                        vo[item.key] = value
-                                    })
-                                }}>
-                                    <icon-double-down />
-                                </a>
-                            </div>
-                        </th>)}
-                        <th className="arco-table-th" width="70" style="text-align: right"><span
-                            className="arco-table-cell arco-table-cell-align-left">上架</span></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        this.specArray.map((item, key) => <tr className="arco-table-tr">
-                            {item.map(value => <td className="arco-table-td"><span
-                                className="arco-table-cell arco-table-cell-align-left">{value}</span></td>)}
-                            {this.fields.map(column => <td className="arco-table-td"><span
-                                className="arco-table-cell arco-table-cell-align-left">
-                                {column.type === 'image' && <app-file image={true} size={100} vModel={[this.list[key][column.key], 'value']} ></app-file>}
-                                {column.type === 'price' && <a-input-number precision={2} step={0.01}  model-event="input" vModel={[this.list[key][column.key], 'model-value']} />}
-                                {column.type === 'number' && <a-input-number model-event="input" precision={0} step={1} vModel={[this.list[key][column.key], 'model-value']} />}
-                                {column.type === 'text' && <a-input vModel={[this.list[key][column.key], 'model-value']} allow-clear/>}
-                                    </span></td>)}
-                            <td className="arco-table-td" style="text-align: right">
-                                <label className="arco-table-cell arco-table-cell-align-left">
-                                    <a-checkbox vModel={[this.list[key]['status'], 'model-value']} value="1" />
-                                </label>
-                            </td>
-                        </tr>)
-                    }
-                    </tbody>
-                </table>
+            <div className="arco-table arco-table-size-large mt-3">
+                <div className="arco-table-container">
+                    <div className="arco-scrollbar arco-scrollbar-type-embed" style="height: 100%;">
+                        <div className="arco-scrollbar-container arco-table-content arco-table-content-scroll-x">
+                            <table className="arco-table-element" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr className="arco-table-tr">
+                                    {this.specFilter.map(item => <th class="arco-table-th"><span
+                                        className="arco-table-cell arco-table-cell-align-left">{item.name}</span>
+                                    </th>).filter(item => item)}
+                                    {this.fields.map(item => <th class="arco-table-th">
+                                        <div class="arco-table-cell arco-table-cell-align-left flex flex-nowrap items-center">
+                                            <div class="flex-grow w-20">{item.name}</div>
+                                            <a class="flex-none hover:text-blue-900" href="javascript:;"
+                                               onClick={() => {
+                                                   let value = this.list[0][item.key]
+                                                   this.list.map(vo => {
+                                                       vo[item.key] = value
+                                                   })
+                                               }}>
+                                                <icon-double-down/>
+                                            </a>
+                                        </div>
+                                    </th>)}
+                                    <th className="arco-table-th" width="70" style="text-align: right"><span
+                                        className="arco-table-cell arco-table-cell-align-left flex flex-nowrap "><div className="flex-grow w-20">上架</div></span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    this.specArray.map((item, key) => <tr className="arco-table-tr">
+                                        {item.map(value => <td className="arco-table-td"><span
+                                            className="arco-table-cell arco-table-cell-align-left"><span className="arco-table-td-content">{value}</span></span></td>)}
+                                        {this.fields.map(column => <td className="arco-table-td"><span
+                                            className="arco-table-cell arco-table-cell-align-left"><span className="arco-table-td-content">
+                                {column.type === 'image' && <app-file image={true} size={100}
+                                                                      vModel={[this.list[key][column.key], 'value']}></app-file>}
+                                            {column.type === 'price' &&
+                                                <a-input-number precision={2} step={0.01} model-event="input"
+                                                                vModel={[this.list[key][column.key], 'model-value']}/>}
+                                            {column.type === 'number' &&
+                                                <a-input-number model-event="input" precision={0} step={1}
+                                                                vModel={[this.list[key][column.key], 'model-value']}/>}
+                                            {column.type === 'text' &&
+                                                <a-input vModel={[this.list[key][column.key], 'model-value']}
+                                                         allow-clear/>}
+                                    </span></span></td>)}
+                                        <td className="arco-table-td" style="text-align: right">
+                                            <label className="arco-table-cell arco-table-cell-align-right">
+                                                <span className="arco-table-td-content">
+                                                <a-checkbox vModel={[this.list[key]['status'], 'model-value']}
+                                                            value="1"/>
+                                                </span>
+                                            </label>
+                                        </td>
+                                    </tr>)
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     }
