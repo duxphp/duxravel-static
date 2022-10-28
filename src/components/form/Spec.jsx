@@ -50,11 +50,10 @@ export default defineComponent({
                         }
                     }else {
                         let keys = Object.keys(this.list[index])
-                        this.list[index] = {
-                            status: keys.includes("status") ? this.list[index].status : 0,
-                            id: keys.includes("id") ? this.list[index].id : 0,
-                            spec: item.map(value => value).join(':')
-                        }
+                        this.list[index].status = keys.includes("status") ? this.list[index].status : 0
+                        this.list[index].id = keys.includes("id") ? this.list[index].id : 0
+                        this.list[index].spec = item.map(value => value).join(':')
+
                     }
                     this.fields.map(field => {
                         if (!this.list[index].hasOwnProperty(field.key)) {
