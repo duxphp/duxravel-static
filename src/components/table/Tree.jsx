@@ -277,47 +277,29 @@ export default defineComponent({
     },
     handleDrop({ dragNode, dropNode, dropPosition }) {
       const sort = {
-        id: dragNode.key,
+        id: dragNode[this.fieldNames.key],
         parent: null,
         before: null,
         after: null
       }
 
-      this.loopData(dragNode.key, (_, index, arr) => {
+      this.loopData(dragNode[this.fieldNames.key], (_, index, arr) => {
         arr.splice(index, 1);
       });
 
-      // 返回的数据不符合映射，重新组合
-      const newData = {
-        [this.fieldNames.title]: dragNode[this.fieldNames.title],
-        [this.fieldNames.key]: dragNode[this.fieldNames.key],
-        [this.fieldNames.children]: dragNode[this.fieldNames.children],
-        rawData: dragNode.rawData
-      }
-      if (dragNode[this.fieldNames.title] === undefined) {
-        newData[this.fieldNames.title] = dragNode.title
-      }
-      if (dragNode[this.fieldNames.key] === undefined) {
-        newData[this.fieldNames.key] = dragNode.key
-      }
-      if (dragNode[this.fieldNames.children] === undefined) {
-        newData[this.fieldNames.children] = dragNode.children
-      }
-
-
       if (dropPosition === 0) {
-        this.loopData(dropNode.key, (item) => {
+        this.loopData(dropNode[this.fieldNames.key], (item) => {
           item.children = item.children || [];
-          item.children.push(newData);
+          item.children.push(dragNode);
           // 父级
           sort.parent = item[this.fieldNames.key]
           // 改变等级
-          newData.level = item.level + 1
+          dragNode.level = item.level + 1
         })
       } else {
-        this.loopData(dropNode.key, (_, index, arr, parent) => {
+        this.loopData(dropNode[this.fieldNames.key], (_, index, arr, parent) => {
           const nodeIndex = dropPosition < 0 ? index : index + 1
-          arr.splice(nodeIndex, 0, newData)
+          arr.splice(nodeIndex, 0, dragNode)
           // 上一个
           sort.before = arr[nodeIndex - 1]?.[this.fieldNames.key] || null
           // 下一个
@@ -325,7 +307,7 @@ export default defineComponent({
           // 父级
           sort.parent = parent ? parent[this.fieldNames.key] : null
           // 改变等级
-          newData.level = parent ? parent.level + 1 : 0
+          dragNode.level = parent ? parent.level + 1 : 0
         })
       }
 
