@@ -68,7 +68,7 @@ export default defineComponent({
       }).then(res => {
         res.map((item) => {
           this.list.push(item.url)
-          this.$emit('update:value', value)
+          this.$emit('update:value', this.list)
         })
       })
     }
