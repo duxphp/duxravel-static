@@ -40,12 +40,14 @@ export default {
       type: String,
       default: "modal",
     },
+    modeClass: String,
     title: String,
     before: Function,
     after: Function,
   },
   created() {
-    this.className = this.class;
+    this.className = this.class
+    console.log(this.modeClass)
   },
   methods: {
     ajaxAction() {
@@ -82,7 +84,7 @@ export default {
       } else if (this.type === "dialog") {
         // 弹出路由
         this.before && this.before();
-        router.dialog(this.href, this.mode);
+        router.dialog(this.href, this.mode, this.modeClass);
         setTimeout(() => {
           this.after && this.after();
         }, 1000);

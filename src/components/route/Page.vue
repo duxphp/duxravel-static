@@ -197,6 +197,7 @@
     :currentUrl="item.url"
     :windowType="'dialog'"
     :mode="item.mode"
+    :className="item.className"
     @close-dialog="closeDialog(index)"
   />
   <Download />
@@ -291,11 +292,12 @@ export default {
     // 弹窗key
     let dialogKey = 0;
     // 弹出路由
-    event.add("router-dialog", ({ url, mode }) => {
+    event.add("router-dialog", ({ url, mode, className }) => {
       this.dialogRouter.push({
         key: dialogKey++,
         url,
         mode,
+        className,
       });
     });
 

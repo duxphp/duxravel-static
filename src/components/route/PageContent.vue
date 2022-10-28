@@ -10,7 +10,7 @@
   <a-modal
     v-else-if="mode === 'modal'"
     v-model:visible="dialogShow"
-    modalClass="page-dialog max-w-2xl w-full"
+    :modalClass="'page-dialog max-w-2xl w-full ' + className"
     :closable="false"
     :mask="true"
     :footer="false"
@@ -30,7 +30,7 @@
   <a-drawer
     v-else
     v-model:visible="dialogShow"
-    class="page-drawer"
+    :class="'page-drawer ' + className"
     :mask="true"
     :footer="false"
     :width="350"
@@ -68,11 +68,13 @@ export default {
       type: String,
       default: "modal",
     },
+    className: String,
   },
   components: {
     PageRoute,
   },
   data() {
+    console.log(this.className)
     return {
       url: "",
       // 记录窗口里面的路由历史
