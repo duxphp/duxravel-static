@@ -73,7 +73,6 @@ export default defineComponent({
       allowClear={true}
       onChange={this.updateValue}
       filterTreeNode={this.filterTreeNode}
-      onlyCheckLeaf={true}
     />
   }
 })

@@ -346,12 +346,13 @@ export default defineComponent({
             blockNode={true}
             draggable={this.draggable}
             onDrop={this.handleDrop}
+            onlyCheckLeaf={true}
             selectedKeys={this.value ? [this.value] : null}
             onSelect={(value) => {
               this.$emit('update:value', this.value === value[0] ? null : value[0])
             }}
-            expandedKeys={this.expandedKeys}
-            onExpand={res => this.expandedKeys = res}
+            //expandedKeys={this.expandedKeys}
+            //onExpand={res => this.expandedKeys = res}
             fieldNames={this.fieldNames}
             {...this.nParams}
           >
