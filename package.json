@@ -8,7 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@arco-design/web-vue": "^2.37.4",
+    "@arco-design/web-vue": "^2.38.0",
     "@tinymce/tinymce-vue": "^5.0.0",
     "apexcharts": "^3.35.2",
     "axios": "^0.27.2",

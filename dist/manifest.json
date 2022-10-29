@@ -12,11 +12,11 @@
     "src": "src/assets/images/login-side.png"
   },
   "src/main.js": {
-    "file": "static/manage/main.5b0b1abc.js",
+    "file": "static/manage/main.c1ef3671.js",
     "src": "src/main.js",
     "isEntry": true,
     "css": [
-      "static/manage/main.95755a67.css"
+      "static/manage/main.887cbedb.css"
     ],
     "assets": [
       "static/manage/logo.d66db2fc.svg",
@@ -25,7 +25,7 @@
     ]
   },
   "src/main.css": {
-    "file": "static/manage/main.95755a67.css",
+    "file": "static/manage/main.887cbedb.css",
     "src": "src/main.css"
   }
 }

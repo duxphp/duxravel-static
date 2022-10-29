@@ -16,6 +16,7 @@
     :footer="false"
     :alignCenter="false"
     @before-close="dialogClose"
+    style="z-index: 200"
   >
     <div ref="dialogAnimation" class="dialog-animation">
       <PageRoute
@@ -35,6 +36,7 @@
     :footer="false"
     :width="350"
     @before-close="dialogClose"
+    style="z-index: 200"
     @cancel="
       () => {
         this.changeRouter('', 'back');
