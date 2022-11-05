@@ -1,8 +1,9 @@
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch, getCurrentInstance } from 'vue'
 import { vExec } from '../route/Create'
 import { getUrl, request, searchQuick } from '../../utils/request'
 import { event, requestEvent } from '../../utils/event'
 import { router } from '../../utils/router'
+
 
 export default defineComponent({
   props: {
@@ -54,6 +55,10 @@ export default defineComponent({
     columnsData: {
       type: Object,
       default: () => ({})
+    },
+    defaultExpand: {
+      type: Boolean,
+      default: false,
     }
   },
   watch: {
@@ -62,6 +67,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const {proxy} = getCurrentInstance()
 
     // 格式化数据
     const formatData = (data, replaceKeys = props.columns.filter(v => v.replace)) => {
@@ -179,6 +185,13 @@ export default defineComponent({
         pagination.value.pageSize = res.pageSize
         data.value = formatData(res.data)
         loading.value = false
+
+        if (props.defaultExpand) {
+          setTimeout(() => {
+            proxy.$refs.tableRef.expandAll(true)
+          }, 10)
+        }
+
       }).catch(() => {
         loading.value = false
       })
@@ -360,6 +373,7 @@ export default defineComponent({
 
     const columns = props.columns.map(item => vExec.call({ colSortable, columnsData: props.columnsData }, item, { editValue, editStatus }))
 
+
     return {
       formatData,
       sorter,
@@ -385,6 +399,7 @@ export default defineComponent({
   render() {
     return <div class="relative">
       <a-table
+          ref="tableRef"
         loading={this.loading}
         rowSelection={this.select ? {
           type: 'checkbox',
