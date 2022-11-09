@@ -47,7 +47,6 @@ export default {
   },
   created() {
     this.className = this.class
-    console.log(this.modeClass)
   },
   methods: {
     ajaxAction() {
