@@ -64,8 +64,41 @@ export default defineComponent({
         this.loading = false
       })
     },
+    formatData(value) {
+      let labelPath = []
+      function getNodeRoute(tree) {
+        for (let index = 0; index < tree.length; index++) {
+          if (tree[index].children) {
+            let endRecursiveLoop = getNodeRoute(tree[index].children)
+            if (endRecursiveLoop) {
+              labelPath.push(tree[index].label)
+              return true
+            }
+          }
+          if (tree[index].value == value) {
+            labelPath.push(tree[index].label)
+            return true
+          }
+        }
+      }
+      getNodeRoute(this.nParams.options)
+      return labelPath.reverse()
+    },
+    getLabel(value) {
+      let labels = []
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          labels.push(this.formatData(item))
+        })
+      } else {
+        labels.push(this.formatData(value))
+      }
+      return labels
+    },
     updateValue(value, label) {
       this.modelValue = value
+      const labels = this.getLabel(value)
+      this.$emit('label', labels)
       this.$emit('update:value', value)
     },
   },
