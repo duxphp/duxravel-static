@@ -74,7 +74,7 @@ class WS {
   }
 
   unInit() {
-    this.ws.close?.(1000)
+    this.ws?.close?.(1000)
     this.ws = null
     this.callbacks.splice(0)
     this.callbackTypes = {}
