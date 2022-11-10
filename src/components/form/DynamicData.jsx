@@ -42,7 +42,7 @@ export default defineComponent({
             }}>
               <icon-plus />
             </a-button>
-            {index > 0 && <a-button shape="circle" type="secondary" status="danger" disabled={this.min && this.list.length <= this.min} onClick={() => {
+            {this.list.length > 0 && <a-button shape="circle" type="secondary" status="danger" disabled={this.min && this.list.length <= this.min} onClick={() => {
               this.list.splice(index, 1)
               // this.$emit('update:value', this.list)
             }}>
