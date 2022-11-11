@@ -196,7 +196,7 @@ export default defineComponent({
         value(content) {
             this.html = content
         },
-        content(content) {
+        html(content) {
             this.$emit('update:value', content)
         },
     },
