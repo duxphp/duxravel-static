@@ -5,7 +5,7 @@ export default defineComponent({
   props: {
     'n-params': {
       type: Array,
-      default: [],
+      default: () => ({}),
     },
     'value': {
       type: [String, Number, Array]
