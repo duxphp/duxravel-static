@@ -18,10 +18,14 @@ export default defineComponent({
     return {
       loading: false,
       search: false,
-      modelValue: null
+      modelValue: null,
+      options: []
     }
   },
   async created() {
+    if(this.nParams?.options) {
+      this.options = this.nParams?.options
+    }
     if (this.dataUrl) {
       await this.getData()
     }
@@ -41,10 +45,8 @@ export default defineComponent({
   methods: {
     getData() {
       this.loading = true
-      this.nParams.options = []
       return request({
-        url: getUrl(this.dataUrl),
-        method: 'get',
+        url: getUrl(this.dataUrl)
       }).then(res => {
         function formatData(data) {
           let tmp = [];
@@ -58,7 +60,7 @@ export default defineComponent({
           }
           return tmp
         }
-        this.nParams.options = res instanceof Array ? formatData(res) : []
+        this.options = res instanceof Array ? formatData(res) : []
         this.loading = false
       }).catch(() => {
         this.loading = false
@@ -81,7 +83,7 @@ export default defineComponent({
           }
         }
       }
-      getNodeRoute(this.nParams.options)
+      getNodeRoute(this.options)
       return labelPath.reverse()
     },
     getLabel(value) {
