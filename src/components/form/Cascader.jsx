@@ -23,7 +23,7 @@ export default defineComponent({
     }
   },
   async created() {
-    if(this.nParams?.options) {
+    if (this.nParams?.options) {
       this.options = this.nParams?.options
     }
     if (this.dataUrl) {
@@ -53,7 +53,7 @@ export default defineComponent({
           for (let datum of data) {
             if (datum.children instanceof Array && datum.children.length > 0) {
               datum.children = formatData(datum.children)
-            }else {
+            } else {
               delete datum.children
             }
             tmp.push(datum)
@@ -112,6 +112,7 @@ export default defineComponent({
     >
       <a-cascader
         {...nParams}
+        options={this.options}
         triggerProps={{
           alignPoint: true,
           ...nParams.triggerProps
