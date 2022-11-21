@@ -30,6 +30,11 @@ export default defineComponent({
       await this.getData()
     }
     this.modelValue = this.value
+
+    this.$emit('loading-end', {
+      label: this.getLabel(this.modelValue),
+      value: this.modelValue
+    })
   },
   mounted() {
     // BUG FIX 偶尔会出现搜索输入变小问题

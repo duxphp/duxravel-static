@@ -67,7 +67,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const {proxy} = getCurrentInstance()
+    const { proxy } = getCurrentInstance()
 
     // 格式化数据
     const formatData = (data, replaceKeys = props.columns.filter(v => v.replace)) => {
@@ -371,7 +371,7 @@ export default defineComponent({
       sortDirections: ['ascend', 'descend'],
     }
 
-    const columns = props.columns.map(item => vExec.call({ colSortable, columnsData: props.columnsData }, item, { editValue, editStatus }))
+    const columns = props.columns.map(item => vExec.call({ listData: data, colSortable, columnsData: props.columnsData }, item, { editValue, editStatus }))
 
 
     return {
@@ -399,7 +399,7 @@ export default defineComponent({
   render() {
     return <div class="relative">
       <a-table
-          ref="tableRef"
+        ref="tableRef"
         loading={this.loading}
         rowSelection={this.select ? {
           type: 'checkbox',
