@@ -100,8 +100,8 @@ export default defineComponent({
     updateValue(value, label) {
       this.modelValue = value
       const labels = this.getLabel(value)
-      this.$emit('label', labels)
       this.$emit('update:value', value)
+      this.$emit('label', labels)
     },
   },
   render() {
