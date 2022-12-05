@@ -41,7 +41,13 @@ export default defineComponent({
       type: Array,
       default: () => []
     },
+    // 项目上显示的右键菜单
     contextMenus: {
+      type: Array,
+      default: () => []
+    },
+    // 空白处显示的右键菜单
+    blankContextMenus: {
       type: Array,
       default: () => []
     },
@@ -322,10 +328,35 @@ export default defineComponent({
         this.loading = false
       })
 
+    },
+    renderMenu(item, child) {
+      const menus = this[item ? 'contextMenus' : 'blankContextMenus']
+
+      if (!menus?.length) {
+        return child
+      }
+      return <a-dropdown
+        trigger="contextMenu"
+        position="tr"
+        onSelect={(key) => {
+          const menu = menus.find(menu => menu.key === key)
+          new Function('item', 'options', menu.event)(item, this.options)
+        }}
+        class="w-32"
+      >
+        {{
+          default: () => {
+            return child
+          },
+          content: () => {
+            return menus.map(menu => <a-doption value={menu.key}>{menu.text}</a-doption>)
+          }
+        }}
+      </a-dropdown>
     }
   },
-  render() {
 
+  render() {
     const color = this.iconColor
     return <div class="flex flex-col h-full">
       {this.search && <a-input-search
@@ -338,7 +369,7 @@ export default defineComponent({
       {this.data.length > 0 ? <div
         class="flex-grow h-10 app-scrollbar overflow-y-auto overflow-x-hidden"
       >
-        <a-spin class="block flex flex-col h-full" loading={this.loading} tip="加载节点中...">
+        <a-spin class="flex-col h-full flex" loading={this.loading} tip="加载节点中...">
           <a-tree
             class="app-tree"
             data={this.data}
@@ -362,28 +393,10 @@ export default defineComponent({
                   const bgColor = "bg-" + color[item.level] + "-400"
                   const borderColor = "border-" + color[item.level] + "-500"
                   return this.contextMenus.length
-                    ? <a-dropdown
-                      trigger="contextMenu"
-                      position="tr"
-                      onSelect={(key) => {
-                        const menu = this.contextMenus.find(menu => menu.key === key)
-                        new Function('item', 'options', menu.event)(item, this.options)
-                      }}
-
-                      class="w-32"
-                    >
-                      {{
-                        default: () => {
-                          return <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center">
-                            <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
-                            {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
-                          </div>
-                        },
-                        content: () => {
-                          return this.contextMenus.map(menu => <a-doption value={menu.key}>{menu.text}</a-doption>)
-                        }
-                      }}
-                    </a-dropdown>
+                    ? this.renderMenu(item, <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center">
+                      <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
+                      {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
+                    </div>)
                     : <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center ">
                       <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
                       {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
@@ -393,8 +406,11 @@ export default defineComponent({
 
             }
           </a-tree>
+          {
+            !!this.blankContextMenus?.length && this.renderMenu(null, <div style={{ flex: 1 }}></div>)
+          }
         </a-spin>
-      </div> : <a-empty />
+      </div> : this.renderMenu(null, <a-empty />)
       }
     </div>
   }
