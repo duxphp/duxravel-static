@@ -340,7 +340,7 @@ export default defineComponent({
         position="tr"
         onSelect={(key) => {
           const menu = menus.find(menu => menu.key === key)
-          new Function('item', 'options', menu.event)(item, this.options)
+          new Function('item', 'options', 'that', menu.event)(item, this.options, this)
         }}
         class="w-32"
       >
