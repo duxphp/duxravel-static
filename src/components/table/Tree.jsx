@@ -329,8 +329,8 @@ export default defineComponent({
       })
 
     },
-    renderMenu(item, child) {
-      const menus = this[item ? 'contextMenus' : 'blankContextMenus']
+    renderMenu(item, blank, child) {
+      const menus = this[blank ? 'blankContextMenus' : 'contextMenus']
 
       if (!menus?.length) {
         return child
@@ -393,7 +393,7 @@ export default defineComponent({
                   const bgColor = "bg-" + color[item.level] + "-400"
                   const borderColor = "border-" + color[item.level] + "-500"
                   return this.contextMenus.length
-                    ? this.renderMenu(item, <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center">
+                    ? this.renderMenu(item, false, <div class="flex-grow whitespace-nowrap py-1 flex gap-2 items-center">
                       <span class={['inline-flex rounded-full border-2 w-4 h-4', bgColor, borderColor]} />
                       {this.$slots.label ? this.$slots.label(item) : item[this.fieldNames.title]}
                     </div>)
@@ -407,10 +407,10 @@ export default defineComponent({
             }
           </a-tree>
           {
-            !!this.blankContextMenus?.length && this.renderMenu(null, <div style={{ flex: 1 }}></div>)
+            !!this.blankContextMenus?.length && this.renderMenu(this.data, true, <div style={{ flex: 1 }}></div>)
           }
         </a-spin>
-      </div> : this.renderMenu(null, <a-empty />)
+      </div> : this.renderMenu(this.data, true, <a-empty />)
       }
     </div>
   }
