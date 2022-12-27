@@ -1,7 +1,7 @@
-import {defineComponent, ref, watch} from 'vue'
-import {getUrl, request, searchQuick} from '../../utils/request'
-import {getLocalUserInfo} from '../../utils/user'
-import {formatType} from '../../utils/component'
+import { defineComponent, ref, watch } from 'vue'
+import { getUrl, request, searchQuick } from '../../utils/request'
+import { getLocalUserInfo } from '../../utils/user'
+import { formatType } from '../../utils/component'
 
 
 export default defineComponent({
@@ -87,8 +87,10 @@ export default defineComponent({
       }
       // 获取分类 和列表
       request(api.value.cateList).then(res => {
-        cate.value = res
-        filter.value.id = res[0]?.dir_id || ''
+        if (res instanceof Array) {
+          cate.value = res
+          filter.value.id = res[0]?.dir_id || ''
+        }
         initStatus = true
       })
     }
@@ -264,132 +266,132 @@ export default defineComponent({
   },
   render() {
     return <a-modal modalClass="file-manage page-dialog max-w-screen-md w-full" visible={this.showModal}
-                    closable={false} footer={false} onClose={this.closeModal} onCancel={this.closeModal}>
+      closable={false} footer={false} onClose={this.closeModal} onCancel={this.closeModal}>
 
-        <div class="arco-modal-header flex gap-2">
-          <div class="flex-grow flex flex-row gap-2">
-            {!!this.filter.id && <a-upload
-              action={getUrl(this.api.upload)}
-              accept={this.accept}
-              headers={{
-                'Accept': 'application/json',
-                Authorization: `${getLocalUserInfo().token || ''}`
-              }}
-              data={{
-                id: this.filter.id
-              }}
-              onChange={this.fileChange}
-              multiple
-              showFileList={false}
-            >
-              {this.uploadProgress.status ? this.uploadProgress.progress + '%' : '上传文件'}
-            </a-upload>}
-          </div>
-          <div class="flex-none flex flex-row gap-2">
-            {this.typeOption.length > 1 && <div class="w-32">
-              <a-select
-                vModel={[this.filter.filter, 'modelValue']}
-                options={this.typeOption}
-              />
-            </div>}
-            <div class="w-32">
-              <a-input
-                vModel={[this.filter.keyword, 'modelValue']}
-                type="text"
-                placeholder="搜索"
-              />
-            </div>
-          </div>
-          <div class="flex-none">
-            <div class="arco-icon-hover arco-icon-hover-size-medium" onClick={this.closeModal}>
-              <icon-close/>
-            </div>
+      <div class="arco-modal-header flex gap-2">
+        <div class="flex-grow flex flex-row gap-2">
+          {!!this.filter.id && <a-upload
+            action={getUrl(this.api.upload)}
+            accept={this.accept}
+            headers={{
+              'Accept': 'application/json',
+              Authorization: `${getLocalUserInfo().token || ''}`
+            }}
+            data={{
+              id: this.filter.id
+            }}
+            onChange={this.fileChange}
+            multiple
+            showFileList={false}
+          >
+            {this.uploadProgress.status ? this.uploadProgress.progress + '%' : '上传文件'}
+          </a-upload>}
+        </div>
+        <div class="flex-none flex flex-row gap-2">
+          {this.typeOption.length > 1 && <div class="w-32">
+            <a-select
+              vModel={[this.filter.filter, 'modelValue']}
+              options={this.typeOption}
+            />
+          </div>}
+          <div class="w-32">
+            <a-input
+              vModel={[this.filter.keyword, 'modelValue']}
+              type="text"
+              placeholder="搜索"
+            />
           </div>
         </div>
+        <div class="flex-none">
+          <div class="arco-icon-hover arco-icon-hover-size-medium" onClick={this.closeModal}>
+            <icon-close />
+          </div>
+        </div>
+      </div>
 
-        <div class="flex flex-row items-stretch  ">
-          <div
-            class="flex-none manage-sidebar w-40 border-r border-gray-300 dark:border-blackgray-2 h-96 overflow-y-auto block">
-            <ul>
+      <div class="flex flex-row items-stretch  ">
+        <div
+          class="flex-none manage-sidebar w-40 border-r border-gray-300 dark:border-blackgray-2 h-96 overflow-y-auto block">
+          <ul>
+            {
+              this.cate.map((item, index) => <li
+                class={`cate-item flex justify-between py-3 px-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-blackgray-2 dark:text-gray-400  ${this.filter.id === item.dir_id ? 'active text-blue-600 dark:text-blue-600' : ''}`}
+                onClick={() => this.filter.id = item.dir_id}
+              >
+                <div class="flex gap-2 items-center">
+                  <icon-folder />
+                  {item.name}
+                </div>
+                <span class="del" onClick={e => {
+                  this.delCate(index)
+                }}><icon-delete /></span>
+              </li>)
+            }
+            <li class="p-3">
+              <a-input
+                class="add"
+                vModel={[this.cateAddValue, 'modelValue']}
+                onBlur={this.addCate}
+                type="text"
+                placeholder="添加新分类"
+                loading={this.cateAddStatus}
+              />
+            </li>
+          </ul>
+        </div>
+        <div class="flex-grow manage-main  dark:bg-blackgray-2 h-96 overflow-y-auto">
+          <a-spin loading={this.listLoading} class="block" tip="载入文件中，请稍等...">
+            {this.list.length > 0 && <ul class="files-list grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5 p-4">
               {
-                this.cate.map((item, index) => <li
-                  class={`cate-item flex justify-between py-3 px-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-blackgray-2 dark:text-gray-400  ${this.filter.id === item.dir_id ? 'active text-blue-600 dark:text-blue-600' : ''}`}
-                  onClick={() => this.filter.id = item.dir_id}
-                >
-                  <div class="flex gap-2 items-center">
-                    <icon-folder/>
-                    {item.name}
+                this.list.map(item => <li onClick={() => this.selectItem(item)}>
+                  <div
+                    class={`item mb-1 mt-1 rounded p-2 text-gray-800 dark:text-gray-300 select-none cursor-pointer${this.isSelectItem(item) ? ' active bg-gray-100 text-blue-600 dark:bg-blackgray-3 dark:text-blue-600' : ''}`}
+                    data-id="550">
+                    <div
+                      class="h-20 rounded bg-cover bg-center bg-no-repeat rounded"
+                      style={{ backgroundImage: `url(${item.url})` }}
+                    >
+                    </div>
+                    <div class="mt-1">
+                      <div class="truncate">{item.title}</div>
+                      <div class="text-xs text-gray-500 truncate">{item.time}</div>
+                      <div class="text-xs text-gray-500 truncate">{item.size}</div>
+                    </div>
                   </div>
-                  <span class="del" onClick={e => {
-                    this.delCate(index)
-                  }}><icon-delete/></span>
                 </li>)
               }
-              <li class="p-3">
-                <a-input
-                  class="add"
-                  vModel={[this.cateAddValue, 'modelValue']}
-                  onBlur={this.addCate}
-                  type="text"
-                  placeholder="添加新分类"
-                  loading={this.cateAddStatus}
-                />
-              </li>
-            </ul>
-          </div>
-          <div class="flex-grow manage-main  dark:bg-blackgray-2 h-96 overflow-y-auto">
-            <a-spin loading={this.listLoading} class="block" tip="载入文件中，请稍等...">
-              {this.list.length > 0 && <ul class="files-list grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5 p-4">
-                {
-                  this.list.map(item => <li onClick={() => this.selectItem(item)}>
-                    <div
-                      class={`item mb-1 mt-1 rounded p-2 text-gray-800 dark:text-gray-300 select-none cursor-pointer${this.isSelectItem(item) ? ' active bg-gray-100 text-blue-600 dark:bg-blackgray-3 dark:text-blue-600' : ''}`}
-                      data-id="550">
-                      <div
-                        class="h-20 rounded bg-cover bg-center bg-no-repeat rounded"
-                        style={{backgroundImage: `url(${item.url})`}}
-                      >
-                      </div>
-                      <div class="mt-1">
-                        <div class="truncate">{item.title}</div>
-                        <div class="text-xs text-gray-500 truncate">{item.time}</div>
-                        <div class="text-xs text-gray-500 truncate">{item.size}</div>
-                      </div>
-                    </div>
-                  </li>)
-                }
-              </ul>}
-              {this.pageTotal > 1 && <div class="flex justify-center py-2"><a-pagination
-                vModel={[this.filter.page, 'current']}
-                total={this.pageTotal}
-                pageSize={this.pageSize}
-              /></div>}
-              {this.list.length === 0 && <div class="flex flex-col justify-center items-center h-96">
-                <a-empty />
-              </div>}
-            </a-spin>
-          </div>
+            </ul>}
+            {this.pageTotal > 1 && <div class="flex justify-center py-2"><a-pagination
+              vModel={[this.filter.page, 'current']}
+              total={this.pageTotal}
+              pageSize={this.pageSize}
+            /></div>}
+            {this.list.length === 0 && <div class="flex flex-col justify-center items-center h-96">
+              <a-empty />
+            </div>}
+          </a-spin>
         </div>
-        {this.isMultiple && <div class="arco-modal-footer flex items-center gap-4 flex-row">
-          <c-scrollbar class="flex-grow" trigger="hover" direction="x">
-            <div class="flex gap-2 flex-nowrap flex-row flex-shrink-0">
-              {
-                this.select.map(item => <div class="relative flex-shrink-0" key={item.file_id} onClick={() => this.selectItem(item)}>
-                  <img class="w-8 h-8 rounded" src={item.url}/>
-                  <div
-                    class="absolute inset-0 bg-black bg-opacity-60 text-xs opacity-0  flex items-center justify-center text-white hover:opacity-100 select-none">删除
-                  </div>
-                </div>)
-              }
-            </div>
-          </c-scrollbar>
-
-
-          <div class="flex-none justify-end flex gap-2">
-            <a-button onClick={this.closeModal}>关闭</a-button>
-            <a-button type="primary" onClick={this.submit}>确定</a-button>
+      </div>
+      {this.isMultiple && <div class="arco-modal-footer flex items-center gap-4 flex-row">
+        <c-scrollbar class="flex-grow" trigger="hover" direction="x">
+          <div class="flex gap-2 flex-nowrap flex-row flex-shrink-0">
+            {
+              this.select.map(item => <div class="relative flex-shrink-0" key={item.file_id} onClick={() => this.selectItem(item)}>
+                <img class="w-8 h-8 rounded" src={item.url} />
+                <div
+                  class="absolute inset-0 bg-black bg-opacity-60 text-xs opacity-0  flex items-center justify-center text-white hover:opacity-100 select-none">删除
+                </div>
+              </div>)
+            }
           </div>
-        </div>}
+        </c-scrollbar>
+
+
+        <div class="flex-none justify-end flex gap-2">
+          <a-button onClick={this.closeModal}>关闭</a-button>
+          <a-button type="primary" onClick={this.submit}>确定</a-button>
+        </div>
+      </div>}
     </a-modal>
   }
 })
