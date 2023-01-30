@@ -12,6 +12,7 @@
     v-model:visible="dialogShow"
     :modalClass="'page-dialog max-w-2xl w-full ' + className"
     :closable="false"
+    :mask-closable="false"
     :mask="true"
     :footer="false"
     :alignCenter="false"
