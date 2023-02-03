@@ -236,6 +236,7 @@ export default defineComponent({
         this.loading = false
         this.expandedKeys = treeExpanded.get(this.expandedKeysName())
         this.data = this.originData = this.renderData(res.data)
+        this.$emit('data-load', this.data)
       }).catch(() => {
         this.loading = false
       })
@@ -382,8 +383,8 @@ export default defineComponent({
             onSelect={(value) => {
               this.$emit('update:value', this.value === value[0] ? null : value[0])
             }}
-            //expandedKeys={this.expandedKeys}
-            //onExpand={res => this.expandedKeys = res}
+            expandedKeys={this.expandedKeys}
+            onExpand={res => this.expandedKeys = res}
             fieldNames={this.fieldNames}
             {...this.nParams}
           >

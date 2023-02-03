@@ -77,7 +77,6 @@ export default {
     PageRoute,
   },
   data() {
-    console.log(this.className)
     return {
       url: "",
       // 记录窗口里面的路由历史
