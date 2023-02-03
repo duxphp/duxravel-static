@@ -45,8 +45,10 @@ export default defineComponent({
         url: getUrl(this.dataUrl),
         method: 'get',
       }).then(res => {
-        this.nParams.options = res  instanceof Array ? res : []
+        res = res  instanceof Array ? res : []
+        this.nParams.options = res
         this.loading = false
+        this.$emit('data-load', res)
       }).catch(() => {
         this.loading = false
       })
