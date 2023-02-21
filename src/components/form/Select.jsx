@@ -18,7 +18,7 @@ export default defineComponent({
     }
   },
   async created() {
-    if(this.nParams?.options) {
+    if (this.nParams?.options) {
       this.options = deepCopy(this.nParams.options)
     }
     if (this.dataUrl) {
@@ -81,6 +81,7 @@ export default defineComponent({
   },
   render() {
     return <a-select
+      search
       {...this.nParams}
       options={this.options}
       modelValue={this.modelValue}
