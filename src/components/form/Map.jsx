@@ -285,9 +285,11 @@ export default defineComponent({
         {
           !!Object.keys(this.selectPointInfo).length && <div
             className='absolute flex items-center justify-center pl-2 pr-2'
-            style={{ bottom: '10px', right: '10px', backgroundColor: '#fff', height: '32px', borderRadius: '3px' }}
+            style={{ bottom: '16px', right: '10px', backgroundColor: '#fff', height: '56px', borderRadius: '3px', zIndex: 10 }}
           >
             {this.selectPointInfo.province}{this.selectPointInfo.city}{this.selectPointInfo.district}{this.selectPointInfo.street}{this.selectPointInfo.streetNumber}
+            <br />
+            {this.selectPointInfo.lng},{this.selectPointInfo.lat}
           </div>
         }
         {!this.poiFixedCenter && <div className='absolute' style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', marginTop: '-18px', color: '#3385FF' }}>
