@@ -55,8 +55,13 @@ export const vExec = function (data, arg, slotProps) {
     const _value = data[key]
     delete data[key]
     const _key = key.substr(7) || 'modelValue'
-    data['vBind:' + _key] = _value
-    data['vOn:update:' + _key] = `__value => ${_value} = __value;`
+    if (!data['vBind:' + _key]) {
+      data['vBind:' + _key] = _value
+    }
+    const onKey = 'vOn:update:' + _key
+    if (data[onKey] && typeof data[onKey] === 'string') {
+      data[onKey] = [data[onKey], `__value => ${_value} = __value;`]
+    }
   })
 
   // 查找keys
@@ -106,10 +111,12 @@ export const vExec = function (data, arg, slotProps) {
       const _key = `on${key.substr(4, 1).toUpperCase()}${key.substr(5)}`
       const script = data[key]
       execData[_key] = ($event, ...arg) => {
-        const res = exec.call(this, script, { ...newArg, $event })
-        if (typeof res === 'function') {
-          res.call(this, $event, ...arg)
-        }
+        (typeof script === 'string' ? [script] : script).forEach(_script => {
+          const res = exec.call(this, _script, { ...newArg, $event })
+          if (typeof res === 'function') {
+            res.call(this, $event, ...arg)
+          }
+        })
       }
     } else if (key.startsWith('vBind')) {
       // 数据绑定处理
