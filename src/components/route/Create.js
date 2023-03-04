@@ -59,8 +59,11 @@ export const vExec = function (data, arg, slotProps) {
       data['vBind:' + _key] = _value
     }
     const onKey = 'vOn:update:' + _key
-    if (data[onKey] && typeof data[onKey] === 'string') {
-      data[onKey] = [data[onKey], `__value => ${_value} = __value;`]
+    const _script = `__value => ${_value} = __value;`
+    if (data[onKey] && typeof data[onKey] !== 'object') {
+      data[onKey] = [data[onKey], _script]
+    } else if (!data[onKey]) {
+      data[onKey] = [_script]
     }
   })
 
