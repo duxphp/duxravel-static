@@ -37,7 +37,7 @@ const exec = function (script, params = {}) {
     const keys = Object.keys(data)
     return (new Function(...keys, 'return ' + script)).apply(null, keys.map(key => data[key]))
   } catch (error) {
-    console.error(error)
+    console.warn('script run error: ' + script, error)
   }
 }
 
