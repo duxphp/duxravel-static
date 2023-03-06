@@ -58,7 +58,8 @@ export default defineComponent({
       this.$emit('update:value', value)
     },
     filterTreeNode(searchValue, nodeData) {
-        return nodeData.label.toString().toLowerCase().indexOf(searchValue.toString().toLowerCase()) > -1;
+        let search = nodeData.search ? nodeData.search : nodeData.label
+        return search.toString().toLowerCase().indexOf(searchValue.toString().toLowerCase()) > -1;
     }
   },
   render() {
