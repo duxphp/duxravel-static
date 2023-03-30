@@ -218,6 +218,47 @@ export default defineComponent({
       })
     }
 
+    // 数据删除
+    const imageManage = ref({
+      select: [],
+      show: false
+    })
+
+    // 列表改变时，清空选项
+    watch(list, () => {
+      imageManage.value.select = []
+    })
+
+    const imageSelect = id => {
+      const index = imageManage.value.select.indexOf(id)
+      if (~index) {
+        imageManage.value.select.splice(index, 1)
+      } else {
+        imageManage.value.select.push(id)
+      }
+    }
+
+    const imageDel = () => {
+      if (!imageManage.value.select.length) {
+        return
+      }
+      window.dialog.error({
+        title: '删除提示',
+        content: `此操作不可撤销，确定要删除这些图片吗？`,
+        hideCancel: false,
+        onOk: () => {
+          request({
+            url: api.value.del,
+            data: {
+              id: imageManage.value.select.join(',')
+            }
+          }).then(() => {
+            getList()
+          })
+        }
+      })
+    }
+
     const type = props.type.split(',')
     const types = {
       all: '全部',
@@ -261,7 +302,10 @@ export default defineComponent({
       cateAddStatus,
       cateAddValue,
       delCate,
-      api
+      api,
+      imageManage,
+      imageSelect,
+      imageDel
     }
   },
   render() {
@@ -288,6 +332,15 @@ export default defineComponent({
           </a-upload>}
         </div>
         <div class="flex-none flex flex-row gap-2">
+          {this.imageManage.show && <a-button onClick={() => this.imageManage.select = this.list.map(item => item.file_id)}>
+            全选
+          </a-button>}
+          {this.imageManage.show && <a-button onClick={this.imageDel}>
+            删除
+          </a-button>}
+          <a-button onClick={() => this.imageManage.show = !this.imageManage.show}>
+            {this.imageManage.show ? '完成' : '管理'}
+          </a-button>
           {this.typeOption.length > 1 && <div class="w-32">
             <a-select
               vModel={[this.filter.filter, 'modelValue']}
@@ -343,8 +396,9 @@ export default defineComponent({
           <a-spin loading={this.listLoading} class="block" tip="载入文件中，请稍等...">
             {this.list.length > 0 && <ul class="files-list grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5 p-4">
               {
-                this.list.map(item => <li onClick={() => this.selectItem(item)}>
+                this.list.map(item => <li>
                   <div
+                    onClick={() => this.selectItem(item)}
                     class={`item mb-1 mt-1 rounded p-2 text-gray-800 dark:text-gray-300 select-none cursor-pointer${this.isSelectItem(item) ? ' active bg-gray-100 text-blue-600 dark:bg-blackgray-3 dark:text-blue-600' : ''}`}
                     data-id="550">
                     <div
@@ -358,6 +412,7 @@ export default defineComponent({
                       <div class="text-xs text-gray-500 truncate">{item.size}</div>
                     </div>
                   </div>
+                  {this.imageManage.show && <a-checkbox modelValue={this.imageManage.select.includes(item.file_id)} onChange={() => this.imageSelect(item.file_id)} />}
                 </li>)
               }
             </ul>}
