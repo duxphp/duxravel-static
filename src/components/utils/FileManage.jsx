@@ -298,6 +298,7 @@ export default defineComponent({
       fileChange,
       uploadProgress,
       pageTotal,
+      pageSize,
       addCate,
       cateAddStatus,
       cateAddValue,
