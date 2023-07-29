@@ -8,6 +8,14 @@ export default defineComponent({
     value: [String, Number, Array],
     dataUrl: String,
     optionRender: Function,
+    labelKey: {
+      type: String,
+      default: 'name'
+    },
+    valueKey: {
+      type: String,
+      default: 'id'
+    },
   },
   data() {
     return {
@@ -61,8 +69,8 @@ export default defineComponent({
       }).then(res => {
         this.options = res.data instanceof Array ? res.data.map((item) => {
           const data = {
-            label: item.name.toString(),
-            value: item.id,
+            label: item[this.labelKey]?.toString(),
+            value: item[this.valueKey],
             rowData: item
           }
           if (this.optionRender) {
