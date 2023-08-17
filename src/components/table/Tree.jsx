@@ -350,7 +350,11 @@ export default defineComponent({
             return child
           },
           content: () => {
-            return menus.map(menu => <a-doption value={menu.key}>{menu.text}</a-doption>)
+            let _menus = menus
+            if (item?.menuFilter instanceof Array) {
+              _menus = menus.filter(v => item.menuFilter.includes(v.key))
+            }
+            return _menus.map(menu => <a-doption value={menu.key}>{menu.text}</a-doption>)
           }
         }}
       </a-dropdown>
