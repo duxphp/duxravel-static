@@ -147,6 +147,10 @@ export default defineComponent({
           node[this.fieldNames.title] = item[this.fieldNames.title]
           node[this.fieldNames.key] = item[this.fieldNames.key]
           node.level = index
+          // 菜单筛选项
+          if(item.menuFilter) {
+            node.menuFilter = item.menuFilter
+          }
 
           let children = item[this.fieldNames.children]
           if (children && children.length) {
