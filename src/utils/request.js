@@ -329,6 +329,10 @@ export const download = (url, type) => {
         key: downloadKey,
         error: true
       })
+      this.response.text().then(text => {
+        const result = JSON.parse(text)
+        window.message?.error(result?.message || '业务繁忙，请稍后再试')
+      })
     }
   };
   // 发送ajax请求
