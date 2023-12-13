@@ -24,6 +24,7 @@
     "vue": "^3.2.37",
     "vue-json-viewer": "3.0.4",
     "vue3-apexcharts": "^1.4.1",
+    "vue3-print-nb": "^0.1.4",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {

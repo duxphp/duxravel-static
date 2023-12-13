@@ -4,6 +4,8 @@ import ArcoVue from '@arco-design/web-vue'
 import NProgress from 'nprogress'
 import CScrollbar from 'c-scrollbar'
 
+import print from 'vue3-print-nb'
+
 import '@arco-design/web-vue/dist/arco.css'
 import 'nprogress/nprogress.css'
 import './common.css'
@@ -89,6 +91,9 @@ window.NProgress.configure({
   trickleSpeed: 200,  // 自动递增间隔
   minimum: 0.3        // 初始化时的最小百分比
 });
+
+// 打印
+app.use(print)
 
 app.use(VueApexCharts)
 
