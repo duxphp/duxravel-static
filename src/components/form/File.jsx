@@ -125,6 +125,14 @@ export default defineComponent({
           {this.value && <a-button
             type="primary"
             onClick={() => {
+              window.open(this.value)
+            }}
+          >
+            下载
+          </a-button>}
+          {this.value && <a-button
+            type="primary"
+            onClick={() => {
               this.$emit('update:value', undefined)
               this.$emit('upload', undefined)
             }}
