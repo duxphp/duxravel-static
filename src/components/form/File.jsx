@@ -102,7 +102,7 @@ export default defineComponent({
           </svg>
         </div>
         <div class="text-gray-600 dark:text-gray-400 mt-2">请点击上传或者拖动文件到该处</div>
-        {this.type !== 'manage' ? <div class="mt-2 relative">
+        {this.type !== 'manage' ? <div class="flex mt-2 relative gap-2">
 
           <a-upload
             action={getUrl(this.upload)}
@@ -122,6 +122,15 @@ export default defineComponent({
               }
             }
           </a-upload>
+          {this.value && <a-button
+            type="primary"
+            onClick={() => {
+              this.$emit('update:value', undefined)
+              this.$emit('upload', undefined)
+            }}
+          >
+            删除
+          </a-button>}
         </div> : <div class="mt-2 relative">
           <a-button
             type="primary"
@@ -130,6 +139,7 @@ export default defineComponent({
           >
             {this.progress.status ? <span>上传中 {this.progress.progress}%</span> : (this.value ? '已上传' : '上传文件')}
           </a-button>
+          
         </div>}
       </div>
     } else {
@@ -148,12 +158,12 @@ export default defineComponent({
             width: this.size + 'px',
             height: this.size + 'px',
           }}>
-            <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
+            {!!this.value && <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
               onClick={() => {
                 this.visible = true
               }}>
               <icon-eye />
-            </div>
+            </div>}
             {this.type !== 'manage' ? <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
               <a-upload
                 action={getUrl(this.upload)}
@@ -191,6 +201,13 @@ export default defineComponent({
                 </div>
               </a-modal>
 
+            </div>}
+            {!!this.value && <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
+              onClick={() => {
+                this.$emit('update:value', undefined)
+                this.$emit('upload', undefined)
+              }}>
+              <icon-delete />
             </div>}
           </div>
           : <div class="flex-grow flex justify-center items-center text-center w-full h-full opacity-0 hover:opacity-100 hover:bg-white  bg-opacity-30 dark:bg-blackgray-1 dark:bg-opacity-80 dark:hover:bg-blackgray-2 rounded cursor-pointer">

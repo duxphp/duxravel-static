@@ -1,7 +1,7 @@
-import {defineComponent} from 'vue'
-import {getUrl} from '../../utils/request'
-import {formatType} from '../../utils/component'
-import {getLocalUserInfo} from "../../utils/user";
+import { defineComponent } from 'vue'
+import { getUrl } from '../../utils/request'
+import { formatType } from '../../utils/component'
+import { getLocalUserInfo } from "../../utils/user";
 
 export default defineComponent({
   props: {
@@ -23,6 +23,7 @@ export default defineComponent({
       type: String,
       default: 'manage'
     },
+    image: Boolean
   },
   data() {
     return {
@@ -100,12 +101,16 @@ export default defineComponent({
         class="rounded divide-y divide-gray-3 dark:divide-blackgray-3 overflow-hidden "
       >
         {{
-          item: (item) => <div class="p-3 py-2 flex items-center justify-between text-sm bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1">
+          item: (item) => <div class="p-3 mb-3 py-2 flex items-center justify-between text-sm bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1">
             <div class="w-0 flex-1 flex items-center text-gray-800 dark:text-gray-400">
-              <icon-file class="flex-shrink-0 "/>
+              {
+                this.image
+                  ? <a-image className='w-12 h-12' src={item.element.url} />
+                  : <icon-file class="flex-shrink-0 " />
+              }
               <span class="ml-2 flex-1 w-0 truncate">
-                  {item.element.name}
-                </span>
+                {item.element.name}
+              </span>
             </div>
             <div class="ml-4 flex-shrink-0 flex gap-4">
               <a-link href={item.element.url} target="_blank">
