@@ -37,7 +37,8 @@ export default defineComponent({
     'link': {
       type: Boolean,
       default: true
-    }
+    },
+    disabled: Boolean
   },
   data() {
     return {
@@ -110,6 +111,7 @@ export default defineComponent({
             headers={this.headers}
             onChange={this.fileChange}
             showFileList={false}
+            disabled={this.disabled}
           >
             {
               {
@@ -130,7 +132,7 @@ export default defineComponent({
           >
             下载
           </a-button>}
-          {this.value && <a-button
+          {this.value && !this.disabled && <a-button
             type="primary"
             onClick={() => {
               this.$emit('update:value', undefined)
@@ -147,7 +149,7 @@ export default defineComponent({
           >
             {this.progress.status ? <span>上传中 {this.progress.progress}%</span> : (this.value ? '已上传' : '上传文件')}
           </a-button>
-          
+
         </div>}
       </div>
     } else {
@@ -179,6 +181,7 @@ export default defineComponent({
                 headers={this.headers}
                 onChange={this.fileChange}
                 showFileList={false}
+                disabled={this.disabled}
               >
                 {
                   {
@@ -190,7 +193,7 @@ export default defineComponent({
               : <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer" onClick={this.fileManage}>
                 <icon-upload />
               </div>}
-            {this.link && <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
+            {this.link && !this.disabled && <div class="flex-grow flex justify-center text-center hover:text-blue-600 cursor-pointer">
               <icon-share-alt type="primary" ghost size="small" onClick={() => {
                 this.prompt = true
               }}>
@@ -210,7 +213,7 @@ export default defineComponent({
               </a-modal>
 
             </div>}
-            {!!this.value && <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
+            {!!this.value && !this.disabled && <div class="flex-grow flex justify-center text-center  hover:text-blue-600 cursor-pointer"
               onClick={() => {
                 this.$emit('update:value', undefined)
                 this.$emit('upload', undefined)
@@ -225,6 +228,7 @@ export default defineComponent({
               headers={this.headers}
               onChange={this.fileChange}
               showFileList={false}
+              disabled={this.disabled}
             >
               {
                 {

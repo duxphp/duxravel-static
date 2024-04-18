@@ -23,7 +23,8 @@ export default defineComponent({
       type: String,
       default: 'manage'
     },
-    image: Boolean
+    image: Boolean,
+    disabled: Boolean
   },
   data() {
     return {
@@ -89,6 +90,8 @@ export default defineComponent({
   },
   render() {
 
+    console.log(this.disabled)
+
     return <div class="w-full">
       <draggable
         modelValue={this.list}
@@ -116,16 +119,19 @@ export default defineComponent({
               <a-link href={item.element.url} target="_blank">
                 下载
               </a-link>
-              <a-link status="danger" onClick={() => {
+              {!this.disabled && <a-link status="danger" onClick={() => {
                 this.list.splice(item.index, 1)
               }}>
                 删除
-              </a-link>
+              </a-link>}
             </div>
           </div>,
-          footer: () => this.type !== 'manage'
-            ? <div>
-              <a-upload
+          footer: () => {
+            if (this.disabled) {
+              return
+            }
+            return this.type !== 'manage'
+              ? <a-upload
                 action={getUrl(this.upload)}
                 accept={this.accept}
                 headers={this.headers}
@@ -141,10 +147,10 @@ export default defineComponent({
                   }
                 }
               </a-upload>
-            </div>
-            : <div class="p-3 py-2 flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 text-gray-600 dark:text-gray-400 " onClick={this.fileManage}>
-              上传附件
-            </div>
+              : <div class="p-3 py-2 flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-blackgray-1 dark:hover:bg-blackgray-2 text-gray-600 dark:text-gray-400 " onClick={this.fileManage}>
+                上传附件
+              </div>
+          }
         }}
 
       </draggable>
