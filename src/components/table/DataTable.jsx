@@ -1,4 +1,4 @@
-import { defineComponent, ref, watch, getCurrentInstance } from 'vue'
+import { defineComponent, ref, watch, getCurrentInstance, nextTick } from 'vue'
 import { vExec } from '../route/Create'
 import { getUrl, request, searchQuick } from '../../utils/request'
 import { event, requestEvent } from '../../utils/event'
@@ -191,6 +191,10 @@ export default defineComponent({
             proxy.$refs.tableRef.expandAll(true)
           }, 10)
         }
+        // 更新分页位置
+        nextTick(() => {
+          checkPaginationPosition()
+        })
 
       }).catch(() => {
         loading.value = false
@@ -374,6 +378,70 @@ export default defineComponent({
     const columns = props.columns.map(item => vExec.call({ listData: data, colSortable, columnsData: props.columnsData }, item, { editValue, editStatus }))
 
 
+    // 分页固定在底部
+    const scrollContainer = ref({})
+    const findScrollContainer = () => {
+      let parent = proxy.$refs.tab.parentElement;
+      while (parent) {
+        if (parent.classList.contains('overflow-y-auto') &&
+          parent.classList.contains('app-scrollbar')) {
+          parent.addEventListener('scroll', checkPaginationPosition)
+          scrollContainer.value = parent
+          return parent;
+        }
+        parent = parent.parentElement;
+      }
+      return null;
+    }
+
+    const removeScrollEvent = () => {
+      if (scrollContainer.value) {
+        scrollContainer.value.removeEventListener?.('scroll', checkPaginationPosition)
+      }
+    }
+
+    const checkPaginationPosition = () => {
+      if (!scrollContainer.value || !findScrollContainer()) {
+        return
+      }
+
+      // 使用requestAnimationFrame确保在正确时机计算
+      requestAnimationFrame(() => {
+        const container = proxy.$refs.tab;
+        if (!container) return;
+
+        const pagination = container.querySelector('.arco-table-pagination');
+        if (!pagination) return;
+
+        // 获取关键元素的位置信息
+        const paginationRect = pagination.getBoundingClientRect();
+        const scrollContainerRect = scrollContainer.value.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        const offset = paginationRect.bottom - scrollContainerRect.top - scrollContainerRect.height
+
+        // 当分页器底部开始离开可视区域时（距离<=0）
+
+        const page = pagination.children[0]
+
+        pagination.style.height = '32px'
+
+        page.style.position = 'fixed'
+        if (offset > 0) {
+          const finalOffset = Math.min(offset, containerRect.height);
+          page.style.top = (paginationRect.top - finalOffset) + 'px'
+          page.style.boxShadow = '0 0 4px 2px #ccc'
+          page.style.backgroundColor = '#fff'
+          page.style.right = '16px'
+        } else {
+          page.style.top = paginationRect.top + 'px'
+          page.style.boxShadow = ''
+          page.style.right = '36px'
+        }
+        page.style.zIndex = 10
+      });
+    }
+
     return {
       formatData,
       sorter,
@@ -386,7 +454,8 @@ export default defineComponent({
       routerChange,
       checkedRowKeys,
       requestEventCallBack,
-      tableAction
+      tableAction,
+      removeScrollEvent
     }
   },
 
@@ -394,10 +463,11 @@ export default defineComponent({
     event.remove('router-change', this.routerChange)
     requestEvent.remove(this.requestEventName, this.requestEventCallBack)
     event.remove('table-action-' + this.requestEventName, this.tableAction)
+    this.removeScrollEvent()
   },
 
   render() {
-    return <div class="relative">
+    return <div class="relative" ref="tab">
       <a-table
         ref="tableRef"
         loading={this.loading}
@@ -410,6 +480,7 @@ export default defineComponent({
           this.checkedRowKeys = value
         }}
         pagination={this.defaultData ? false : this.pagination}
+        // pagePosition='tr'
         data={this.data}
         columns={this.columnsRender}
         onSorterChange={this.sorter}
@@ -421,7 +492,7 @@ export default defineComponent({
           }
         }}
       </a-table>
-      <div class="absolute bottom-0 z-10 ">
+      <div class="absolute bottom-0 z-10">
         {this.$slots.footer?.(this.childData)}
       </div>
     </div>

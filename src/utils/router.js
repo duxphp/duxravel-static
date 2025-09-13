@@ -332,7 +332,7 @@ export const resource = {
     delete this.pageLoads[page]
   },
   loadScriptString(list) {
-    list.forEach(item => new Function(item))
+    list.forEach(item => new Function(item)())
     return Promise.resolve([])
   },
   // 异步加载多个js

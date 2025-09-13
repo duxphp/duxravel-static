@@ -1,6 +1,6 @@
 {
   "src/assets/images/logo.svg": {
-    "file": "static/manage/logo.5d56d6f7.svg",
+    "file": "static/manage/logo.d66db2fc.svg",
     "src": "src/assets/images/logo.svg"
   },
   "src/assets/images/login-foot.png": {
@@ -12,20 +12,20 @@
     "src": "src/assets/images/login-side.png"
   },
   "src/main.js": {
-    "file": "static/manage/main.d1848f37.js",
+    "file": "static/manage/main.7947c1ec.js",
     "src": "src/main.js",
     "isEntry": true,
     "css": [
-      "static/manage/main.8b3cc4c8.css"
+      "static/manage/main.887cbedb.css"
     ],
     "assets": [
-      "static/manage/logo.5d56d6f7.svg",
+      "static/manage/logo.d66db2fc.svg",
       "static/manage/login-foot.1c6cc2f5.png",
       "static/manage/login-side.19d425f0.png"
     ]
   },
   "src/main.css": {
-    "file": "static/manage/main.8b3cc4c8.css",
+    "file": "static/manage/main.887cbedb.css",
     "src": "src/main.css"
   }
 }
